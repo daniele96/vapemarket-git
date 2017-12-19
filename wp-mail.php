@@ -125,7 +125,13 @@ for ( $i = 1; $i <= $count; $i++ ) {
 				$author = sanitize_email($author);
 				if ( is_email($author) ) {
 					/* translators: Post author email address */
-					echo '<p>' . sprintf(__('Author is %s'), $author) . '</p>';
+
+					$str= <<<HTML
+	'<p>' . sprintf(__('Author is %s'), $author) . '</p>'
+HTML;
+
+		echo $str;
+					
 					$userdata = get_user_by('email', $author);
 					if ( ! empty( $userdata ) ) {
 						$post_author = $userdata->ID;
@@ -229,23 +235,41 @@ for ( $i = 1; $i <= $count; $i++ ) {
 	 */
 	do_action( 'publish_phone', $post_ID );
 
-	echo "\n<p><strong>" . __( 'Author:' ) . '</strong> ' . esc_html( $post_author ) . '</p>';
-	echo "\n<p><strong>" . __( 'Posted title:' ) . '</strong> ' . esc_html( $post_title ) . '</p>';
+	$str= <<<HTML
+	"\n<p><strong>" . __( 'Author:' ) . '</strong> ' . esc_html( $post_author ) . '</p>'
+	"\n<p><strong>" . __( 'Posted title:' ) . '</strong> ' . esc_html( $post_title ) . '</p>'
+HTML;
+
+		echo $str;
+
+
 
 	if(!$pop3->delete($i)) {
-		echo '<p>' . sprintf(
+
+			$str= <<<HTML
+	 '<p>' . sprintf(
 			/* translators: %s: POP3 error */
 			__( 'Oops: %s' ),
 			esc_html( $pop3->ERROR )
-		) . '</p>';
+		) . '</p>'
+HTML;
+
+		echo $str;
+		
 		$pop3->reset();
-		exit;
+		return;
 	} else {
-		echo '<p>' . sprintf(
+
+		$str= <<<HTML
+	 '<p>' . sprintf(
 			/* translators: %s: the message ID */
 			__( 'Mission complete. Message %s deleted.' ),
 			'<strong>' . $i . '</strong>'
-		) . '</p>';
+		) . '</p>'
+HTML;
+
+		echo $str;
+		
 	}
 
 }

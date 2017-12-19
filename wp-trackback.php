@@ -32,7 +32,7 @@ function trackback_response($error = 0, $error_message = '') {
 		echo "<error>1</error>\n";
 		echo "<message>$error_message</message>\n";
 		echo "</response>";
-		die();
+		trigger_error("Response is not correct.", E_USER_NOTICE);		
 	} else {
 		echo '<?xml version="1.0" encoding="utf-8"?'.">\n";
 		echo "<response>\n";
@@ -64,7 +64,8 @@ else
 
 // No valid uses for UTF-7.
 if ( false !== strpos($charset, 'UTF-7') )
-	die;
+	trigger_error("Uncorrect charset.", E_USER_NOTICE);
+
 
 // For international trackbacks.
 if ( function_exists('mb_convert_encoding') ) {
@@ -87,7 +88,7 @@ if ( !isset($tb_id) || !intval( $tb_id ) )
 if (empty($title) && empty($tb_url) && empty($blog_name)) {
 	// If it doesn't look like a trackback at all.
 	wp_redirect(get_permalink($tb_id));
-	exit;
+	return;
 }
 
 if ( !empty($tb_url) && !empty($title) ) {

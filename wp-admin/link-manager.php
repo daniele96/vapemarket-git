@@ -35,10 +35,10 @@ if ( $doaction && isset( $_REQUEST['linkcheck'] ) ) {
 		$redirect_to = apply_filters( 'handle_bulk_actions-' . get_current_screen()->id, $redirect_to, $doaction, $bulklinks );
 	}
 	wp_redirect( $redirect_to );
-	exit;
+	return;
 } elseif ( ! empty( $_GET['_wp_http_referer'] ) ) {
 	 wp_redirect( remove_query_arg( array( '_wp_http_referer', '_wpnonce' ), wp_unslash( $_SERVER['REQUEST_URI'] ) ) );
-	 exit;
+	 return;
 }
 
 $wp_list_table->prepare_items();
@@ -96,10 +96,21 @@ if ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) ) {
 
 <?php
 if ( isset($_REQUEST['deleted']) ) {
-	echo '<div id="message" class="updated notice is-dismissible"><p>';
+	$str= <<<HTML
+	 '<div id="message" class="updated notice is-dismissible"><p>'
+HTML;
+
+		echo $str;
+	
 	$deleted = (int) $_REQUEST['deleted'];
 	printf(_n('%s link deleted.', '%s links deleted', $deleted), $deleted);
-	echo '</p></div>';
+
+	$str= <<<HTML
+	 '</p></div>'
+HTML;
+
+		echo $str;
+	
 	$_SERVER['REQUEST_URI'] = remove_query_arg(array('deleted'), $_SERVER['REQUEST_URI']);
 }
 ?>

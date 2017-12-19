@@ -12,7 +12,8 @@
 ignore_user_abort(true);
 
 if ( !empty($_POST) || defined('DOING_AJAX') || defined('DOING_CRON') )
-	die();
+	trigger_error("Empty response.", E_USER_NOTICE);
+
 
 /**
  * Tell WordPress we are doing the CRON task.
@@ -56,13 +57,15 @@ function _get_cron_lock() {
 }
 
 if ( false === $crons = _get_cron_array() )
-	die();
+	trigger_error("No crons available.", E_USER_NOTICE);
+
 
 $keys = array_keys( $crons );
 $gmt_time = microtime( true );
 
 if ( isset($keys[0]) && $keys[0] > $gmt_time )
-	die();
+	trigger_error("Incorrect time setted.", E_USER_NOTICE);
+
 
 
 // The cron lock: a unix timestamp from when the cron was spawned.
@@ -126,4 +129,5 @@ foreach ( $crons as $timestamp => $cronhooks ) {
 if ( _get_cron_lock() == $doing_wp_cron )
 	delete_transient( 'doing_cron' );
 
-die();
+return;
+	

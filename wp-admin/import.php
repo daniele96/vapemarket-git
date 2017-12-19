@@ -42,7 +42,7 @@ if ( ! empty( $_GET['invalid'] ) && isset( $popular_importers[ $_GET['invalid'] 
 	$importer_id = $popular_importers[ $_GET['invalid'] ]['importer-id'];
 	if ( $importer_id != $_GET['invalid'] ) { // Prevent redirect loops.
 		wp_redirect( admin_url( 'admin.php?import=' . $importer_id ) );
-		exit;
+		return;
 	}
 	unset( $importer_id );
 }
@@ -83,7 +83,12 @@ foreach ( $popular_importers as $pop_importer => $pop_data ) {
 }
 
 if ( empty( $importers ) ) {
-	echo '<p>' . __('No importers are available.') . '</p>'; // TODO: make more helpful
+	$str= <<<HTML
+	'<p>' . __('No importers are available.') . '</p>'
+HTML;
+
+		echo $str;
+	 // TODO: make more helpful
 } else {
 	uasort( $importers, '_usort_by_first_member' );
 ?>
@@ -177,7 +182,8 @@ if ( empty( $importers ) ) {
 			);
 		}
 
-		echo "
+		$str= <<<HTML
+	"
 			<tr class='importer-item'>
 				<td class='import-system'>
 					<span class='importer-title'>{$data[0]}</span>
@@ -186,7 +192,12 @@ if ( empty( $importers ) ) {
 				<td class='desc'>
 					<span class='importer-desc'>{$data[1]}</span>
 				</td>
-			</tr>";
+			</tr>"
+HTML;
+
+		echo $str;
+
+		
 	}
 	?>
 </table>
@@ -194,7 +205,13 @@ if ( empty( $importers ) ) {
 }
 
 if ( current_user_can('install_plugins') )
-	echo '<p>' . sprintf( __('If the importer you need is not listed, <a href="%s">search the plugin directory</a> to see if an importer is available.'), esc_url( network_admin_url( 'plugin-install.php?tab=search&type=tag&s=importer' ) ) ) . '</p>';
+
+	$str= <<<HTML
+	'<p>' . sprintf( __('If the importer you need is not listed, <a href="%s">search the plugin directory</a> to see if an importer is available.'), esc_url( network_admin_url( 'plugin-install.php?tab=search&type=tag&s=importer' ) ) ) . '</p>'
+HTML;
+
+		echo $str;
+	
 ?>
 
 </div>

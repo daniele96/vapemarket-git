@@ -15,7 +15,7 @@ require( dirname( __FILE__ ) . '/wp-blog-header.php' );
 
 if ( !is_multisite() ) {
 	wp_redirect( wp_registration_url() );
-	die();
+	return;
 }
 
 if ( is_object( $wp_object_cache ) )
@@ -117,7 +117,13 @@ get_header( 'wp-activate' );
 						wp_lostpassword_url()
 					);
 				}
-				echo '</p>';
+
+				$str= <<<HTML
+	'</p>'
+HTML;
+
+		echo $str;
+				
 			} else {
 				?>
 				<h2><?php _e( 'An error occurred during the activation' ); ?></h2>

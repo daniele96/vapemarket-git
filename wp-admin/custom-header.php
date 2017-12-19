@@ -274,11 +274,16 @@ class Custom_Image_Header {
 		}
 
 		if ( 1 < count( $headers ) ) {
-			echo '<div class="random-header">';
-			echo '<label><input name="default-header" type="radio" value="random-' . $type . '-image"' . checked( is_random_header_image( $type ), true, false ) . ' />';
-			_e( '<strong>Random:</strong> Show a different image on each page.' );
-			echo '</label>';
-			echo '</div>';
+			$str= <<<HTML
+	 '<div class="random-header">'
+	 '<label><input name="default-header" type="radio" value="random-' . $type . '-image"' . checked( is_random_header_image( $type ), true, false ) . ' />'
+	 _e( '<strong>Random:</strong> Show a different image on each page.' )
+	 '</label>'
+	 '</div>'
+HTML;
+
+		echo $str;
+			
 		}
 
 		echo '<div class="available-headers">';
@@ -286,15 +291,30 @@ class Custom_Image_Header {
 			$header_thumbnail = $header['thumbnail_url'];
 			$header_url = $header['url'];
 			$header_alt_text = empty( $header['alt_text'] ) ? '' : $header['alt_text'];
-			echo '<div class="default-header">';
-			echo '<label><input name="default-header" type="radio" value="' . esc_attr( $header_key ) . '" ' . checked( $header_url, get_theme_mod( 'header_image' ), false ) . ' />';
+
+			$str= <<<HTML
+	 '<div class="default-header">'
+	 '<label><input name="default-header" type="radio" value="' . esc_attr( $header_key ) . '" ' . checked( $header_url, get_theme_mod( 'header_image' ), false ) . ' />'
+HTML;
+
+		echo $str;
+
 			$width = '';
 			if ( !empty( $header['attachment_id'] ) )
 				$width = ' width="230"';
-			echo '<img src="' . set_url_scheme( $header_thumbnail ) . '" alt="' . esc_attr( $header_alt_text ) .'"' . $width . ' /></label>';
-			echo '</div>';
-		}
-		echo '<div class="clear"></div></div>';
+			$str= <<<HTML
+	'<img src="' . set_url_scheme( $header_thumbnail ) . '" alt="' . esc_attr( $header_alt_text ) .'"' . $width . ' /></label>'
+	'</div>'
+HTML;
+
+		echo $str;
+					}
+					$str= <<<HTML
+	'<div class="clear"></div></div>'
+HTML;
+
+		echo $str;
+		
 	}
 
 	/**
@@ -689,7 +709,13 @@ class Custom_Image_Header {
 
 	echo '<input type="text" name="text-color" id="text-color" value="' . esc_attr( $header_textcolor ) . '"' . $default_color_attr . ' />';
 	if ( $default_color ) {
-		echo ' <span class="description hide-if-js">' . sprintf( _x( 'Default: %s', 'color' ), esc_html( $default_color ) ) . '</span>';
+
+		$str= <<<HTML
+	' <span class="description hide-if-js">' . sprintf( _x( 'Default: %s', 'color' ), esc_html( $default_color ) ) . '</span>'
+HTML;
+
+		echo $str;
+		
 	}
 	?>
 	</p>

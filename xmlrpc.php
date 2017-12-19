@@ -56,7 +56,7 @@ header('Content-Type: text/xml; charset=' . get_option('blog_charset'), true);
   </service>
 </rsd>
 <?php
-exit;
+return;
 }
 
 include_once(ABSPATH . 'wp-admin/includes/admin.php');
@@ -83,7 +83,7 @@ $wp_xmlrpc_server = new $wp_xmlrpc_server_class;
 // Fire off the request
 $wp_xmlrpc_server->serve_request();
 
-exit;
+return;
 
 /**
  * logIO() - Writes logging info to a file.

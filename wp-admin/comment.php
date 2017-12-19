@@ -83,18 +83,18 @@ case 'spam'    :
 
 	if ( ! $comment = get_comment( $comment_id ) ) {
 		wp_redirect( admin_url('edit-comments.php?error=1') );
-		die();
+		return;
 	}
 
 	if ( !current_user_can( 'edit_comment', $comment->comment_ID ) ) {
 		wp_redirect( admin_url('edit-comments.php?error=2') );
-		die();
+		return;
 	}
 
 	// No need to re-approve/re-trash/re-spam a comment.
 	if ( $action == str_replace( '1', 'approve', $comment->comment_approved ) ) {
 		wp_redirect( admin_url( 'edit-comments.php?same=' . $comment_id ) );
-		die();
+		return;
  	}
 
 	require_once( ABSPATH . 'wp-admin/admin-header.php' );
@@ -142,7 +142,13 @@ if ( $comment->comment_approved != '0' ) { // if not unapproved
 			break;
 	}
 	if ( $message ) {
-		echo '<div id="message" class="notice notice-info"><p>' . $message . '</p></div>';
+
+		$str= <<<HTML
+	'<div id="message" class="notice notice-info"><p>' . $message . '</p></div>'
+HTML;
+
+		echo $str;
+		
 	}
 }
 ?>
@@ -202,7 +208,13 @@ if ( $comment->comment_approved != '0' ) { // if not unapproved
 			get_comment_date( __( 'g:i a' ), $comment )
 		);
 		if ( 'approved' === wp_get_comment_status( $comment ) && ! empty ( $comment->comment_post_ID ) ) {
-			echo '<a href="' . esc_url( get_comment_link( $comment ) ) . '">' . $submitted . '</a>';
+
+			$str= <<<HTML
+	'<a href="' . esc_url( get_comment_link( $comment ) ) . '">' . $submitted . '</a>'
+HTML;
+
+		echo $str;
+			
 		} else {
 			echo $submitted;
 		}
@@ -299,7 +311,7 @@ case 'unapprovecomment' :
 	}
 
 	wp_redirect( $redir );
-	die;
+	return;
 
 case 'editedcomment' :
 
@@ -323,7 +335,7 @@ case 'editedcomment' :
 	$location = apply_filters( 'comment_edit_redirect', $location, $comment_id );
 	wp_redirect( $location );
 
-	exit();
+	return;
 
 default:
 	wp_die( __('Unknown action.') );

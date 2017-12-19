@@ -8,7 +8,8 @@
 
 // don't load directly
 if ( !defined('ABSPATH') )
-	die('-1');
+trigger_error("Absolute path not defined.", E_USER_NOTICE);
+
 ?>
 <form name="post" action="comment.php" method="post" id="post">
 <?php wp_nonce_field('update-comment_' . $comment->comment_ID) ?>
@@ -64,7 +65,12 @@ if ( 'approved' === wp_get_comment_status( $comment ) && $comment->comment_post_
 
 <div id="postdiv" class="postarea">
 <?php
-	echo '<label for="content" class="screen-reader-text">' . __( 'Comment' ) . '</label>';
+$str= <<<HTML
+	'<label for="content" class="screen-reader-text">' . __( 'Comment' ) . '</label>'
+HTML;
+
+		echo $str;
+	
 	$quicktags_settings = array( 'buttons' => 'strong,em,link,block,del,ins,img,ul,ol,li,code,close' );
 	wp_editor( $comment->comment_content, 'content', array( 'media_buttons' => false, 'tinymce' => false, 'quicktags' => $quicktags_settings ) );
 	wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
@@ -159,7 +165,13 @@ endif; ?>
 
 <div id="major-publishing-actions">
 <div id="delete-action">
-<?php echo "<a class='submitdelete deletion' href='" . wp_nonce_url("comment.php?action=" . ( !EMPTY_TRASH_DAYS ? 'deletecomment' : 'trashcomment' ) . "&amp;c=$comment->comment_ID&amp;_wp_original_http_referer=" . urlencode(wp_get_referer()), 'delete-comment_' . $comment->comment_ID) . "'>" . ( !EMPTY_TRASH_DAYS ? __('Delete Permanently') : __('Move to Trash') ) . "</a>\n"; ?>
+<?php 
+$str= <<<HTML
+	 "<a class='submitdelete deletion' href='" . wp_nonce_url("comment.php?action=" . ( !EMPTY_TRASH_DAYS ? 'deletecomment' : 'trashcomment' ) . "&amp;c=$comment->comment_ID&amp;_wp_original_http_referer=" . urlencode(wp_get_referer()), 'delete-comment_' . $comment->comment_ID) . "'>" . ( !EMPTY_TRASH_DAYS ? __('Delete Permanently') : __('Move to Trash') ) . "</a>\n"; ?>
+HTML;
+
+		echo $str;
+	
 </div>
 <div id="publishing-action">
 <?php submit_button( __( 'Update' ), 'primary large', 'save', false ); ?>

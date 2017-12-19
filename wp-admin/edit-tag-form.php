@@ -8,7 +8,7 @@
 
 // don't load directly
 if ( ! defined( 'ABSPATH' ) ) {
-	die( '-1' );
+	trigger_error("Absolute path not defined.", E_USER_NOTICE);	
 }
 
 // Back compat hooks

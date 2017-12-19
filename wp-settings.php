@@ -451,7 +451,7 @@ do_action( 'init' );
 if ( is_multisite() ) {
 	if ( true !== ( $file = ms_site_check() ) ) {
 		require( $file );
-		die();
+		return;
 	}
 	unset($file);
 }

@@ -544,7 +544,7 @@ if ( current_theme_supports( 'custom-background', 'default-color' ) )
 	 * @deprecated 3.5.0
 	 */
 	public function wp_set_background_image() {
-		if ( ! current_user_can('edit_theme_options') || ! isset( $_POST['attachment_id'] ) ) exit;
+		if ( ! current_user_can('edit_theme_options') || ! isset( $_POST['attachment_id'] ) ) return;
 		$attachment_id = absint($_POST['attachment_id']);
 		/** This filter is documented in wp-admin/includes/media.php */
 		$sizes = array_keys(apply_filters( 'image_size_names_choose', array('thumbnail' => __('Thumbnail'), 'medium' => __('Medium'), 'large' => __('Large'), 'full' => __('Full Size')) ));
@@ -557,6 +557,6 @@ if ( current_theme_supports( 'custom-background', 'default-color' ) )
 		$thumbnail = wp_get_attachment_image_src( $attachment_id, 'thumbnail' );
 		set_theme_mod( 'background_image', esc_url_raw( $url[0] ) );
 		set_theme_mod( 'background_image_thumb', esc_url_raw( $thumbnail[0] ) );
-		exit;
+		return;
 	}
 }

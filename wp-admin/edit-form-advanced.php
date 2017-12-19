@@ -8,7 +8,8 @@
 
 // don't load directly
 if ( !defined('ABSPATH') )
-	die('-1');
+	trigger_error("Absolute path not defined.", E_USER_NOTICE);
+
 
 /**
  * @global string       $post_type
@@ -479,7 +480,12 @@ echo esc_html( $title );
 
 <?php
 if ( isset( $post_new_file ) && current_user_can( $post_type_object->cap->create_posts ) ) {
-	echo ' <a href="' . esc_url( admin_url( $post_new_file ) ) . '" class="page-title-action">' . esc_html( $post_type_object->labels->add_new ) . '</a>';
+	$str= <<<HTML
+	' <a href="' . esc_url( admin_url( $post_new_file ) ) . '" class="page-title-action">' . esc_html( $post_type_object->labels->add_new ) . '</a>'
+HTML;
+
+		echo $str;
+	
 }
 ?>
 
@@ -644,7 +650,13 @@ if ( post_type_supports($post_type, 'editor') ) {
 			/* translators: 1: Post edited date, 2: Post edited time */
 			printf( __( 'Last edited on %1$s at %2$s' ), mysql2date( __( 'F j, Y' ), $post->post_modified ), mysql2date( __( 'g:i a' ), $post->post_modified ) );
 		}
-		echo '</span>';
+
+		$str= <<<HTML
+	'</span>'
+HTML;
+
+		echo $str;
+		
 	} ?>
 	</td>
 	<td id="content-resize-handle" class="hide-if-no-js"><br /></td>

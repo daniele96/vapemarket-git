@@ -18,7 +18,7 @@ if ( ! in_array( $typenow, get_post_types( array( 'show_ui' => true ) ) ) ) {
 
 if ( 'attachment' === $typenow ) {
 	if ( wp_redirect( admin_url( 'upload.php' ) ) ) {
-		exit;
+		return;
 	}
 }
 
@@ -49,7 +49,7 @@ $pagenum = $wp_list_table->get_pagenum();
 foreach ( array( 'p', 'attachment_id', 'page_id' ) as $_redirect ) {
 	if ( ! empty( $_REQUEST[ $_redirect ] ) ) {
 		wp_redirect( admin_url( 'edit-comments.php?p=' . absint( $_REQUEST[ $_redirect ] ) ) );
-		exit;
+		return;
 	}
 }
 unset( $_redirect );
@@ -94,7 +94,7 @@ if ( $doaction ) {
 
 	if ( !isset( $post_ids ) ) {
 		wp_redirect( $sendback );
-		exit;
+		return;
 	}
 
 	switch ( $doaction ) {
@@ -171,10 +171,10 @@ if ( $doaction ) {
 	$sendback = remove_query_arg( array('action', 'action2', 'tags_input', 'post_author', 'comment_status', 'ping_status', '_status', 'post', 'bulk_edit', 'post_view'), $sendback );
 
 	wp_redirect($sendback);
-	exit();
+	return;
 } elseif ( ! empty($_REQUEST['_wp_http_referer']) ) {
 	 wp_redirect( remove_query_arg( array('_wp_http_referer', '_wpnonce'), wp_unslash($_SERVER['REQUEST_URI']) ) );
-	 exit;
+	 return;
 }
 
 $wp_list_table->prepare_items();
@@ -309,7 +309,12 @@ echo esc_html( $post_type_object->labels->name );
 
 <?php
 if ( current_user_can( $post_type_object->cap->create_posts ) ) {
-	echo ' <a href="' . esc_url( admin_url( $post_new_file ) ) . '" class="page-title-action">' . esc_html( $post_type_object->labels->add_new ) . '</a>';
+	$str= <<<HTML
+	 ' <a href="' . esc_url( admin_url( $post_new_file ) ) . '" class="page-title-action">' . esc_html( $post_type_object->labels->add_new ) . '</a>'
+HTML;
+
+		echo $str;
+	
 }
 
 if ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) ) {
@@ -336,7 +341,12 @@ foreach ( $bulk_counts as $message => $count ) {
 }
 
 if ( $messages )
-	echo '<div id="message" class="updated notice is-dismissible"><p>' . join( ' ', $messages ) . '</p></div>';
+	$str= <<<HTML
+	 '<div id="message" class="updated notice is-dismissible"><p>' . join( ' ', $messages ) . '</p></div>'
+HTML;
+
+		echo $str;
+	
 unset( $messages );
 
 $_SERVER['REQUEST_URI'] = remove_query_arg( array( 'locked', 'skipped', 'updated', 'deleted', 'trashed', 'untrashed' ), $_SERVER['REQUEST_URI'] );

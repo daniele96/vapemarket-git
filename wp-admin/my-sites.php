@@ -67,9 +67,21 @@ if ( in_array( get_site_option( 'registration' ), array( 'all', 'blog' ) ) ) {
 }
 
 if ( empty( $blogs ) ) :
-	echo '<p>';
+
+	$str= <<<HTML
+	'<p>'
+HTML;
+
+		echo $str;
+	
 	_e( 'You must be a member of at least one site to use this page.' );
-	echo '</p>';
+
+	$str= <<<HTML
+	'</p>'
+HTML;
+
+		echo $str;
+	
 else :
 ?>
 
@@ -102,14 +114,28 @@ else :
 	 */
 	$settings_html = apply_filters( 'myblogs_options', '', 'global' );
 	if ( $settings_html != '' ) {
-		echo '<h3>' . __( 'Global Settings' ) . '</h3>';
+
+		$str= <<<HTML
+	'<h3>' . __( 'Global Settings' ) . '</h3>'
+HTML;
+
+		echo $str;
+	
 		echo $settings_html;
 	}
 	reset( $blogs );
 
 	foreach ( $blogs as $user_blog ) {
-		echo "<li>";
-		echo "<h3>{$user_blog->blogname}</h3>";
+
+		$str= <<<HTML
+	"<li>"
+	"<h3>{$user_blog->blogname}</h3>"
+HTML;
+
+		echo $str;
+
+
+		
 		/**
 		 * Filters the row links displayed for each site on the My Sites screen.
 		 *
@@ -118,10 +144,22 @@ else :
 		 * @param string $string    The HTML site link markup.
 		 * @param object $user_blog An object containing the site data.
 		 */
-		echo "<p class='my-sites-actions'>" . apply_filters( 'myblogs_blog_actions', "<a href='" . esc_url( get_home_url( $user_blog->userblog_id ) ). "'>" . __( 'Visit' ) . "</a> | <a href='" . esc_url( get_admin_url( $user_blog->userblog_id ) ) . "'>" . __( 'Dashboard' ) . "</a>", $user_blog ) . "</p>";
+
+		$str= <<<HTML
+	"<p class='my-sites-actions'>" . apply_filters( 'myblogs_blog_actions', "<a href='" . esc_url( get_home_url( $user_blog->userblog_id ) ). "'>" . __( 'Visit' ) . "</a> | <a href='" . esc_url( get_admin_url( $user_blog->userblog_id ) ) . "'>" . __( 'Dashboard' ) . "</a>", $user_blog ) . "</p>"
+HTML;
+
+		echo $str;
+		
 		/** This filter is documented in wp-admin/my-sites.php */
 		echo apply_filters( 'myblogs_options', '', $user_blog );
-		echo "</li>";
+
+		$str= <<<HTML
+	"</li>"
+HTML;
+
+		echo $str;
+		
 	}?>
 	</ul>
 	<?php

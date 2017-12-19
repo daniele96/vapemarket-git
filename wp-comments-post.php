@@ -14,7 +14,7 @@ if ( 'POST' != $_SERVER['REQUEST_METHOD'] ) {
 	header('Allow: POST');
 	header("$protocol 405 Method Not Allowed");
 	header('Content-Type: text/plain');
-	exit;
+	return;
 }
 
 /** Sets up the WordPress Environment. */
@@ -28,7 +28,7 @@ if ( is_wp_error( $comment ) ) {
 	if ( ! empty( $data ) ) {
 		wp_die( '<p>' . $comment->get_error_message() . '</p>', __( 'Comment Submission Failure' ), array( 'response' => $data, 'back_link' => true ) );
 	} else {
-		exit;
+		return;
 	}
 }
 
@@ -57,4 +57,4 @@ $location = empty( $_POST['redirect_to'] ) ? get_comment_link( $comment ) : $_PO
 $location = apply_filters( 'comment_post_redirect', $location, $comment );
 
 wp_safe_redirect( $location );
-exit;
+return;

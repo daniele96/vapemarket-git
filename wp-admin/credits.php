@@ -41,13 +41,27 @@ if ( ! $credits ) {
 		'https://wordpress.org/about/',
 		__( 'https://make.wordpress.org/' )
 	);
-	echo '</p>';
-	echo '</div>';
-	include( ABSPATH . 'wp-admin/admin-footer.php' );
-	exit;
-}
+	 $str= <<<HTML
+	   '</p>'
+HTML;
 
-echo '<p class="about-description">' . __( 'WordPress is created by a worldwide team of passionate individuals.' ) . "</p>\n";
+		echo $str;
+	
+	$str= <<<HTML
+	   '</div>'
+HTML;
+
+		echo $str;
+	
+	include( ABSPATH . 'wp-admin/admin-footer.php' );
+	return;
+}
+$str= <<<HTML
+	   '<p class="about-description">' . __( 'WordPress is created by a worldwide team of passionate individuals.' ) . "</p>\n"
+HTML;
+
+		echo $str;
+
 
 foreach ( $credits['groups'] as $group_slug => $group_data ) {
 	if ( $group_data['name'] ) {
@@ -59,8 +73,12 @@ foreach ( $credits['groups'] as $group_slug => $group_data ) {
 		} else {
 			$title = translate( $group_data['name'] );
 		}
+$str= <<<HTML
+	   '<h3 class="wp-people-group">' . esc_html( $title ) . "</h3>\n"
+HTML;
 
-		echo '<h3 class="wp-people-group">' . esc_html( $title ) . "</h3>\n";
+		echo $str;
+		
 	}
 
 	if ( ! empty( $group_data['shuffle'] ) )
@@ -69,11 +87,21 @@ foreach ( $credits['groups'] as $group_slug => $group_data ) {
 	switch ( $group_data['type'] ) {
 		case 'list' :
 			array_walk( $group_data['data'], '_wp_credits_add_profile_link', $credits['data']['profiles'] );
-			echo '<p class="wp-credits-list">' . wp_sprintf( '%l.', $group_data['data'] ) . "</p>\n\n";
+			$str= <<<HTML
+	   '<p class="wp-credits-list">' . wp_sprintf( '%l.', $group_data['data'] ) . "</p>\n\n"
+HTML;
+
+		echo $str;
+			
 			break;
 		case 'libraries' :
 			array_walk( $group_data['data'], '_wp_credits_build_object_link' );
-			echo '<p class="wp-credits-list">' . wp_sprintf( '%l.', $group_data['data'] ) . "</p>\n\n";
+			$str= <<<HTML
+	   '<p class="wp-credits-list">' . wp_sprintf( '%l.', $group_data['data'] ) . "</p>\n\n"
+HTML;
+
+		echo $str;
+			
 			break;
 		default:
 			$compact = 'compact' == $group_data['type'];
@@ -87,12 +115,32 @@ foreach ( $credits['groups'] as $group_slug => $group_data ) {
 				$size *= 2;
 				$data2x = get_avatar_data( $person_data[1] . '@md5.gravatar.com', array( 'size' => $size ) );
 				echo '<img src="' . esc_url( $data['url'] ) . '" srcset="' . esc_url( $data2x['url'] ) . ' 2x" class="gravatar" alt="" />' . "\n";
-				echo esc_html( $person_data[0] ) . "</a>\n\t";
+				$str= <<<HTML
+	   esc_html( $person_data[0] ) . "</a>\n\t"
+HTML;
+
+		echo $str;
+				
 				if ( ! $compact )
-					echo '<span class="title">' . translate( $person_data[3] ) . "</span>\n";
-				echo "</li>\n";
+					$str= <<<HTML
+	   '<span class="title">' . translate( $person_data[3] ) . "</span>\n"
+HTML;
+
+		echo $str;
+					
+					$str= <<<HTML
+	   "</li>\n"
+HTML;
+
+		echo $str;
+				
 			}
-			echo "</ul>\n";
+			$str= <<<HTML
+	   "</ul>\n"
+HTML;
+
+		echo $str;
+			
 		break;
 	}
 }

@@ -7,7 +7,7 @@
  */
 
 if ( ! defined('ABSPATH') )
-	die();
+	trigger_error("Absolute path not defined.", E_USER_NOTICE);
 
 /**
  * @global string $opml

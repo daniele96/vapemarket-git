@@ -335,7 +335,7 @@ switch ( $action ) {
 
 					// $messages[] = '<div id="message" class="updated"><p>' . sprintf( __( '<strong>%s</strong> has been created.' ), $nav_menu_selected_title ) . '</p></div>';
 					wp_redirect( admin_url( 'nav-menus.php?menu=' . $_nav_menu_selected_id ) );
-					exit();
+					return;
 				}
 			} else {
 				$messages[] = '<div id="message" class="error notice is-dismissible"><p>' . __( 'Please enter a valid menu name.' ) . '</p></div>';
@@ -370,7 +370,7 @@ switch ( $action ) {
 				// If the menu ID changed, redirect to the new URL.
 				if ( $nav_menu_selected_id != $_nav_menu_selected_id ) {
 					wp_redirect( admin_url( 'nav-menus.php?menu=' . intval( $_nav_menu_selected_id ) ) );
-					exit();
+					return;
 				}
 			}
 		}
@@ -378,7 +378,7 @@ switch ( $action ) {
 	case 'locations':
 		if ( ! $num_locations ) {
 			wp_redirect( admin_url( 'nav-menus.php' ) );
-			exit();
+			return;
 		}
 
 		add_filter( 'screen_options_show_screen', '__return_false' );
@@ -609,9 +609,19 @@ require_once( ABSPATH . 'wp-admin/admin-header.php' );
 	<?php
 	if ( $locations_screen ) :
 		if ( 1 == $num_locations ) {
-			echo '<p>' . __( 'Your theme supports one menu. Select which menu you would like to use.' ) . '</p>';
+			$str= <<<HTML
+	'<p>' . __( 'Your theme supports one menu. Select which menu you would like to use.' ) . '</p>'
+HTML;
+
+		echo $str;
+			
 		} else {
-			echo '<p>' .  sprintf( _n( 'Your theme supports %s menu. Select which menu appears in each location.', 'Your theme supports %s menus. Select which menu appears in each location.', $num_locations ), number_format_i18n( $num_locations ) ) . '</p>';
+			$str= <<<HTML
+	'<p>' .  sprintf( _n( 'Your theme supports %s menu. Select which menu appears in each location.', 'Your theme supports %s menus. Select which menu appears in each location.', $num_locations ), number_format_i18n( $num_locations ) ) . '</p>'
+HTML;
+
+		echo $str;
+			
 		}
 	?>
 	<div id="menu-locations-wrap">

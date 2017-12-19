@@ -45,7 +45,7 @@ if ( get_option('db_upgraded') ) {
 } elseif ( get_option('db_version') != $wp_db_version && empty($_POST) ) {
 	if ( !is_multisite() ) {
 		wp_redirect( admin_url( 'upgrade.php?_wp_http_referer=' . urlencode( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) );
-		exit;
+		return;
 
 	/**
 	 * Filters whether to attempt to perform the multisite DB upgrade routine.
@@ -169,7 +169,7 @@ if ( isset($plugin_page) ) {
 			else
 				$query_string = 'page=' . $plugin_page;
 			wp_redirect( admin_url('tools.php?' . $query_string) );
-			exit;
+			return;
 		}
 	}
 	unset($the_parent);
@@ -253,7 +253,7 @@ if ( isset($plugin_page) ) {
 
 	include(ABSPATH . 'wp-admin/admin-footer.php');
 
-	exit();
+	return;
 } elseif ( isset( $_GET['import'] ) ) {
 
 	$importer = $_GET['import'];
@@ -264,12 +264,12 @@ if ( isset($plugin_page) ) {
 
 	if ( validate_file($importer) ) {
 		wp_redirect( admin_url( 'import.php?invalid=' . $importer ) );
-		exit;
+		return;
 	}
 
 	if ( ! isset($wp_importers[$importer]) || ! is_callable($wp_importers[$importer][2]) ) {
 		wp_redirect( admin_url( 'import.php?invalid=' . $importer ) );
-		exit;
+		return;
 	}
 
 	/**
@@ -313,7 +313,7 @@ if ( isset($plugin_page) ) {
 	// Make sure rules are flushed
 	flush_rewrite_rules(false);
 
-	exit();
+	return;
 } else {
 	/**
 	 * Fires before a particular screen is loaded.

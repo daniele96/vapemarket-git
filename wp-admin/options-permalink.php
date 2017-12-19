@@ -145,7 +145,7 @@ if ( isset($_POST['permalink_structure']) || isset($_POST['category_base']) ) {
 	set_transient( 'settings_errors', get_settings_errors(), 30 );
 
 	wp_redirect( admin_url( 'options-permalink.php?settings-updated=true' ) );
-	exit;
+	return;
 }
 
 flush_rewrite_rules();

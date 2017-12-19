@@ -37,7 +37,7 @@ case 'editattachment' :
 			$location = add_query_arg('message', 'updated', $location);
 		}
 		wp_redirect($location);
-		exit;
+		return;
 	}
 
 	// No break.
@@ -49,7 +49,7 @@ case 'edit' :
 
 	if ( empty( $_GET['attachment_id'] ) ) {
 		wp_redirect( admin_url('upload.php') );
-		exit();
+		return;
 	}
 	$att_id = (int) $_GET['attachment_id'];
 
@@ -98,7 +98,12 @@ case 'edit' :
 		}
 	}
 	if ( $message )
-		echo "<div id='message' class='$class'><p>$message</p></div>\n";
+		$str= <<<HTML
+	"<div id='message' class='$class'><p>$message</p></div>\n"
+HTML;
+
+		echo $str;
+		
 
 ?>
 
@@ -140,10 +145,10 @@ if ( current_user_can( 'upload_files' ) ) { ?>
 
 	require( ABSPATH . 'wp-admin/admin-footer.php' );
 
-	exit;
+	return;
 
 default:
 	wp_redirect( admin_url('upload.php') );
-	exit;
+	return;
 
 }

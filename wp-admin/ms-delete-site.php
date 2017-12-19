@@ -31,8 +31,13 @@ $title = __( 'Delete Site' );
 $parent_file = 'tools.php';
 require_once( ABSPATH . 'wp-admin/admin-header.php' );
 
-echo '<div class="wrap">';
-echo '<h1>' . esc_html( $title ) . '</h1>';
+$str= <<<HTML
+	 '<div class="wrap">'
+	 '<h1>' . esc_html( $title ) . '</h1>'
+HTML;
+
+		echo $str;
+
 
 if ( isset( $_POST['action'] ) && $_POST['action'] == 'deleteblog' && isset( $_POST['confirmdelete'] ) && $_POST['confirmdelete'] == '1' ) {
 	check_admin_referer( 'delete-blog' );
@@ -102,6 +107,11 @@ Webmaster
 	</form>
  	<?php
 }
-echo '</div>';
+$str= <<<HTML
+	'</div>'
+HTML;
+
+		echo $str;
+
 
 include( ABSPATH . 'wp-admin/admin-footer.php' );

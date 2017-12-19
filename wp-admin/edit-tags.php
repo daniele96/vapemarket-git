@@ -144,7 +144,7 @@ case 'edit':
 	}
 
 	wp_redirect( esc_url_raw( get_edit_term_link( $term_id, $taxonomy, $post_type ) ) );
-	exit;
+	return;
 
 case 'editedtag':
 	$tag_ID = (int) $_POST['tag_ID'];
@@ -199,7 +199,7 @@ if ( $location ) {
 	 * @param object $tax      The taxonomy object.
 	 */
 	wp_redirect( apply_filters( 'redirect_term_location', $location, $tax ) );
-	exit;
+	return;
 }
 
 $wp_list_table->prepare_items();
@@ -207,7 +207,7 @@ $total_pages = $wp_list_table->get_pagination_arg( 'total_pages' );
 
 if ( $pagenum > $total_pages && $total_pages > 0 ) {
 	wp_redirect( add_query_arg( 'paged', $total_pages ) );
-	exit;
+	return;
 }
 
 wp_enqueue_script('admin-tags');
@@ -539,7 +539,13 @@ do_action( "{$taxonomy}_add_form", $taxonomy );
 <div class="form-wrap edit-term-notes">
 <p>
 	<?php
-	echo '<strong>' . __( 'Note:' ) . '</strong><br />';
+
+	$str= <<<HTML
+	'<strong>' . __( 'Note:' ) . '</strong><br />'
+HTML;
+
+		echo $str;
+	
 	printf(
 		/* translators: %s: default category */
 		__( 'Deleting a category does not delete the posts in that category. Instead, posts that were only assigned to the deleted category are set to the category %s.' ),

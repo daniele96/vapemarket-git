@@ -112,7 +112,7 @@ if ( isset( $_GET['download'] ) ) {
 	$args = apply_filters( 'export_args', $args );
 
 	export_wp( $args );
-	die();
+	return;
 }
 
 require_once( ABSPATH . 'wp-admin/admin-header.php' );
@@ -146,7 +146,13 @@ function export_date_options( $post_type = 'post' ) {
 			continue;
 
 		$month = zeroise( $date->month, 2 );
-		echo '<option value="' . $date->year . '-' . $month . '">' . $wp_locale->get_month( $month ) . ' ' . $date->year . '</option>';
+
+		$str= <<<HTML
+	'<option value="' . $date->year . '-' . $month . '">' . $wp_locale->get_month( $month ) . ' ' . $date->year . '</option>'
+HTML;
+
+		echo $str;
+		
 	}
 }
 ?>

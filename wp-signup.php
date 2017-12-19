@@ -9,7 +9,7 @@ require( dirname( __FILE__ ) . '/wp-blog-header.php' );
 
 if ( is_array( get_site_option( 'illegal_names' )) && isset( $_GET[ 'new' ] ) && in_array( $_GET[ 'new' ], get_site_option( 'illegal_names' ) ) ) {
 	wp_redirect( network_home_url() );
-	die();
+	return;
 }
 
 /**
@@ -29,12 +29,12 @@ add_action( 'wp_head', 'do_signup_header' );
 
 if ( !is_multisite() ) {
 	wp_redirect( wp_registration_url() );
-	die();
+	return;
 }
 
 if ( !is_main_site() ) {
 	wp_redirect( network_site_url( 'wp-signup.php' ) );
-	die();
+	return;
 }
 
 // Fix for page title
@@ -103,18 +103,33 @@ function show_blog_form( $blogname = '', $blog_title = '', $errors = '' ) {
 	$current_network = get_network();
 	// Blog name
 	if ( !is_subdomain_install() )
-		echo '<label for="blogname">' . __('Site Name:') . '</label>';
+		$str= <<<HTML
+	    '<label for="blogname">' . __('Site Name:') . '</label>'
+HTML;
+
+		echo $str;
 	else
-		echo '<label for="blogname">' . __('Site Domain:') . '</label>';
+		$str= <<<HTML
+	    '<label for="blogname">' . __('Site Domain:') . '</label>'
+HTML;	
+		echo $str;
 
 	if ( $errmsg = $errors->get_error_message('blogname') ) { ?>
 		<p class="error"><?php echo $errmsg ?></p>
 	<?php }
 
 	if ( !is_subdomain_install() )
-		echo '<span class="prefix_address">' . $current_network->domain . $current_network->path . '</span><input name="blogname" type="text" id="blogname" value="'. esc_attr($blogname) .'" maxlength="60" /><br />';
+				$str= <<<HTML
+	    '<span class="prefix_address">' . $current_network->domain . $current_network->path . '</span><input name="blogname" type="text" id="blogname" value="'. esc_attr($blogname) .'" maxlength="60" /><br />'
+HTML;	
+		echo $str;
+		
 	else
-		echo '<input name="blogname" type="text" id="blogname" value="'.esc_attr($blogname).'" maxlength="60" /><span class="suffix_address">.' . ( $site_domain = preg_replace( '|^www\.|', '', $current_network->domain ) ) . '</span><br />';
+		$str= <<<HTML
+	    '<input name="blogname" type="text" id="blogname" value="'.esc_attr($blogname).'" maxlength="60" /><span class="suffix_address">.' . ( $site_domain = preg_replace( '|^www\.|', '', $current_network->domain ) ) . '</span><br />'
+HTML;	
+		echo $str;
+		
 
 	if ( ! is_user_logged_in() ) {
 		if ( ! is_subdomain_install() ) {
@@ -124,7 +139,10 @@ function show_blog_form( $blogname = '', $blog_title = '', $errors = '' ) {
 		}
 
 		/* translators: %s: site address */
-		echo '<p>(<strong>' . sprintf( __( 'Your address will be %s.' ), $site ) . '</strong>) ' . __( 'Must be at least 4 characters, letters and numbers only. It cannot be changed, so choose carefully!' ) . '</p>';
+		$str= <<<HTML
+	    '<p>(<strong>' . sprintf( __( 'Your address will be %s.' ), $site ) . '</strong>) ' . __( 'Must be at least 4 characters, letters and numbers only. It cannot be changed, so choose carefully!' ) . '</p>'
+HTML;	
+		echo $str ;
 	}
 
 	// Blog Title
@@ -225,9 +243,20 @@ function show_user_form($user_name = '', $user_email = '', $errors = '') {
 	}
 
 	// User name
-	echo '<label for="user_name">' . __('Username:') . '</label>';
+	
+	$str= <<<HTML
+	    '<label for="user_name">' . __('Username:') . '</label>'
+HTML;
+
+		echo $str;
+	 
 	if ( $errmsg = $errors->get_error_message('user_name') ) {
-		echo '<p class="error">'.$errmsg.'</p>';
+		$str= <<<HTML
+	    '<p class="error">'.$errmsg.'</p>'
+HTML;
+
+		echo $str;
+	
 	}
 	echo '<input name="user_name" type="text" id="user_name" value="'. esc_attr( $user_name ) .'" autocapitalize="none" autocorrect="off" maxlength="60" /><br />';
 	_e( '(Must be at least 4 characters, letters and numbers only.)' );
@@ -240,7 +269,12 @@ function show_user_form($user_name = '', $user_email = '', $errors = '') {
 	<input name="user_email" type="email" id="user_email" value="<?php  echo esc_attr($user_email) ?>" maxlength="200" /><br /><?php _e('We send your registration email to this address. (Double-check your email address before continuing.)') ?>
 	<?php
 	if ( $errmsg = $errors->get_error_message('generic') ) {
-		echo '<p class="error">' . $errmsg . '</p>';
+		$str= <<<HTML
+	    '<p class="error">' . $errmsg . '</p>'
+HTML;
+
+		echo $str;
+		
 	}
 	/**
 	 * Fires at the end of the user registration form on the site sign-up form.
@@ -304,10 +338,21 @@ function signup_another_blog( $blogname = '', $blog_title = '', $errors = '' ) {
 	$blog_title = $filtered_results['blog_title'];
 	$errors = $filtered_results['errors'];
 
-	echo '<h2>' . sprintf( __( 'Get <em>another</em> %s site in seconds' ), get_network()->site_name ) . '</h2>';
+		$str= <<<HTML
+	    '<h2>' . sprintf( __( 'Get <em>another</em> %s site in seconds' ), get_network()->site_name ) . '</h2>'
+HTML;
+
+		echo $str;
+
+	
 
 	if ( $errors->get_error_code() ) {
-		echo '<p>' . __( 'There was a problem, please correct the form below and try again.' ) . '</p>';
+		$str= <<<HTML
+	    '<p>' . __( 'There was a problem, please correct the form below and try again.' ) . '</p>''
+HTML;
+
+		echo $str;
+		
 	}
 	?>
 	<p><?php printf( __( 'Welcome back, %s. By filling out the form below, you can <strong>add another site to your account</strong>. There is no limit to the number of sites you can have, so create to your heart&#8217;s content, but write responsibly!' ), $current_user->display_name ) ?></p>
@@ -320,7 +365,12 @@ function signup_another_blog( $blogname = '', $blog_title = '', $errors = '' ) {
 			<ul>
 				<?php foreach ( $blogs as $blog ) {
 					$home_url = get_home_url( $blog->userblog_id );
-					echo '<li><a href="' . esc_url( $home_url ) . '">' . $home_url . '</a></li>';
+					$str= <<<HTML
+	    '<li><a href="' . esc_url( $home_url ) . '">' . $home_url . '</a></li>'
+HTML;
+
+		echo $str;
+		
 				} ?>
 			</ul>
 	<?php } ?>
@@ -357,7 +407,7 @@ function validate_another_blog_signup() {
 	global $wpdb, $blogname, $blog_title, $errors, $domain, $path;
 	$current_user = wp_get_current_user();
 	if ( ! is_user_logged_in() ) {
-		die();
+		return;
 	}
 
 	$result = validate_blog_form();
@@ -840,7 +890,12 @@ if ( current_user_can( 'manage_network' ) ) {
 
 	/* translators: %s: network settings URL */
 	printf( __( 'To change or disable registration go to your <a href="%s">Options page</a>.' ), esc_url( network_admin_url( 'settings.php' ) ) );
-	echo '</div>';
+	$str= <<<HTML
+	    '</div>'
+HTML;
+
+		echo $str;
+	
 }
 
 $newblogname = isset($_GET['new']) ? strtolower(preg_replace('/^-|-$|[^-a-zA-Z0-9]/', '', $_GET['new'])) : null;

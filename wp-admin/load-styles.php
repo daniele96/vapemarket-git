@@ -26,7 +26,7 @@ $load = preg_replace( '/[^a-z0-9,_-]+/i', '', $load );
 $load = array_unique( explode( ',', $load ) );
 
 if ( empty($load) )
-	exit;
+	return;
 
 $compress = ( isset($_GET['c']) && $_GET['c'] );
 $force_gzip = ( $compress && 'gzip' == $_GET['c'] );
@@ -43,7 +43,7 @@ if ( isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) && stripslashes( $_SERVER['HTTP_IF_
 		$protocol = 'HTTP/1.0';
 	}
 	header( "$protocol 304 Not Modified" );
-	exit();
+	return;
 }
 
 foreach ( $load as $handle ) {
@@ -92,4 +92,4 @@ if ( $compress && ! ini_get('zlib.output_compression') && 'ob_gzhandler' != ini_
 }
 
 echo $out;
-exit;
+return;

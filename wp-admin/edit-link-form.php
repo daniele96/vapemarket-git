@@ -8,7 +8,8 @@
 
 // don't load directly
 if ( !defined('ABSPATH') )
-	die('-1');
+	trigger_error("Absolute path not defined.", E_USER_NOTICE);
+
 
 if ( ! empty($link_id) ) {
 	$heading = sprintf( __( '<a href="%s">Links</a> / Edit Link' ), 'link-manager.php' );

@@ -15,10 +15,10 @@ require( dirname(__FILE__) . '/wp-load.php' );
 if ( force_ssl_admin() && ! is_ssl() ) {
 	if ( 0 === strpos($_SERVER['REQUEST_URI'], 'http') ) {
 		wp_redirect( set_url_scheme( $_SERVER['REQUEST_URI'], 'https' ) );
-		exit();
+		return;
 	} else {
 		wp_redirect( 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
-		exit();
+		return;
 	}
 }
 
@@ -200,7 +200,13 @@ function login_header( $title = 'Log In', $message = '', $wp_error = '' ) {
 			 *
 			 * @param string $errors Login error message.
 			 */
-			echo '<div id="login_error">' . apply_filters( 'login_errors', $errors ) . "</div>\n";
+
+			$str= <<<HTML
+	'<div id="login_error">' . apply_filters( 'login_errors', $errors ) . "</div>\n"
+HTML;
+
+		echo $str;
+			
 		}
 		if ( ! empty( $messages ) ) {
 			/**
@@ -210,7 +216,13 @@ function login_header( $title = 'Log In', $message = '', $wp_error = '' ) {
 			 *
 			 * @param string $messages Login messages.
 			 */
-			echo '<p class="message">' . apply_filters( 'login_messages', $messages ) . "</p>\n";
+
+			$str= <<<HTML
+	'<p class="message">' . apply_filters( 'login_messages', $messages ) . "</p>\n"
+HTML;
+
+		echo $str;
+			
 		}
 	}
 } // End of login_header()
@@ -435,7 +447,7 @@ switch ($action) {
 case 'postpass' :
 	if ( ! array_key_exists( 'post_password', $_POST ) ) {
 		wp_safe_redirect( wp_get_referer() );
-		exit();
+		return;
 	}
 
 	require_once ABSPATH . WPINC . '/class-phpass.php';
@@ -461,7 +473,7 @@ case 'postpass' :
 	setcookie( 'wp-postpass_' . COOKIEHASH, $hasher->HashPassword( wp_unslash( $_POST['post_password'] ) ), $expire, COOKIEPATH, COOKIE_DOMAIN, $secure );
 
 	wp_safe_redirect( wp_get_referer() );
-	exit();
+	return;
 
 case 'logout' :
 	check_admin_referer('log-out');
@@ -488,7 +500,7 @@ case 'logout' :
 	 */
 	$redirect_to = apply_filters( 'logout_redirect', $redirect_to, $requested_redirect_to, $user );
 	wp_safe_redirect( $redirect_to );
-	exit();
+	return;
 
 case 'lostpassword' :
 case 'retrievepassword' :
@@ -498,7 +510,7 @@ case 'retrievepassword' :
 		if ( !is_wp_error($errors) ) {
 			$redirect_to = !empty( $_REQUEST['redirect_to'] ) ? $_REQUEST['redirect_to'] : 'wp-login.php?checkemail=confirm';
 			wp_safe_redirect( $redirect_to );
-			exit();
+			return;
 		}
 	}
 
@@ -573,7 +585,7 @@ case 'rp' :
 		$value = sprintf( '%s:%s', wp_unslash( $_GET['login'] ), wp_unslash( $_GET['key'] ) );
 		setcookie( $rp_cookie, $value, 0, $rp_path, COOKIE_DOMAIN, is_ssl(), true );
 		wp_safe_redirect( remove_query_arg( array( 'key', 'login' ) ) );
-		exit;
+		return;
 	}
 
 	if ( isset( $_COOKIE[ $rp_cookie ] ) && 0 < strpos( $_COOKIE[ $rp_cookie ], ':' ) ) {
@@ -592,7 +604,7 @@ case 'rp' :
 			wp_redirect( site_url( 'wp-login.php?action=lostpassword&error=expiredkey' ) );
 		else
 			wp_redirect( site_url( 'wp-login.php?action=lostpassword&error=invalidkey' ) );
-		exit;
+		return;
 	}
 
 	$errors = new WP_Error();
@@ -615,7 +627,7 @@ case 'rp' :
 		setcookie( $rp_cookie, ' ', time() - YEAR_IN_SECONDS, $rp_path, COOKIE_DOMAIN, is_ssl(), true );
 		login_header( __( 'Password Reset' ), '<p class="message reset-pass">' . __( 'Your password has been reset.' ) . ' <a href="' . esc_url( wp_login_url() ) . '">' . __( 'Log in' ) . '</a></p>' );
 		login_footer();
-		exit;
+		return;
 	}
 
 	wp_enqueue_script('utils');
@@ -688,12 +700,12 @@ case 'register' :
 		 * @param string $sign_up_url The sign up URL.
 		 */
 		wp_redirect( apply_filters( 'wp_signup_location', network_site_url( 'wp-signup.php' ) ) );
-		exit;
+		return;
 	}
 
 	if ( !get_option('users_can_register') ) {
 		wp_redirect( site_url('wp-login.php?registration=disabled') );
-		exit();
+		return;
 	}
 
 	$user_login = '';
@@ -705,7 +717,7 @@ case 'register' :
 		if ( !is_wp_error($errors) ) {
 			$redirect_to = !empty( $_POST['redirect_to'] ) ? $_POST['redirect_to'] : 'wp-login.php?checkemail=registered';
 			wp_safe_redirect( $redirect_to );
-			exit();
+			return;
 		}
 	}
 
@@ -827,7 +839,7 @@ default:
 				<script type="text/javascript">setTimeout( function(){ new wp.customize.Messenger({ url: '<?php echo wp_customize_url(); ?>', channel: 'login' }).send('login') }, 1000 );</script>
 			<?php endif; ?>
 			</body></html>
-<?php		exit;
+<?php		return;
 		}
 
 		if ( ( empty( $redirect_to ) || $redirect_to == 'wp-admin/' || $redirect_to == admin_url() ) ) {
@@ -840,10 +852,10 @@ default:
 				$redirect_to = $user->has_cap( 'read' ) ? admin_url( 'profile.php' ) : home_url();
 
 			wp_redirect( $redirect_to );
-			exit();
+			return;
 		}
 		wp_safe_redirect($redirect_to);
-		exit();
+		return;
 	}
 
 	$errors = $user;

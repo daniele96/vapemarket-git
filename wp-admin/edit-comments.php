@@ -36,7 +36,7 @@ if ( $doaction ) {
 		$comment_ids = array_map( 'absint', explode( ',', $_REQUEST['ids'] ) );
 	} elseif ( wp_get_referer() ) {
 		wp_safe_redirect( wp_get_referer() );
-		exit;
+		return;
 	}
 
 	$approved = $unapproved = $spammed = $unspammed = $trashed = $untrashed = $deleted = 0;
@@ -122,10 +122,10 @@ if ( $doaction ) {
 		$redirect_to = add_query_arg( 'ids', join( ',', $comment_ids ), $redirect_to );
 
 	wp_safe_redirect( $redirect_to );
-	exit;
+	return;
 } elseif ( ! empty( $_GET['_wp_http_referer'] ) ) {
 	 wp_redirect( remove_query_arg( array( '_wp_http_referer', '_wpnonce' ), wp_unslash( $_SERVER['REQUEST_URI'] ) ) );
-	 exit;
+	 return;
 }
 
 $wp_list_table->prepare_items();
@@ -219,7 +219,13 @@ if ( isset($_REQUEST['s']) && strlen( $_REQUEST['s'] ) ) {
 	printf( __( 'Search results for &#8220;%s&#8221;' ),
 		wp_html_excerpt( esc_html( wp_unslash( $_REQUEST['s'] ) ), 50, '&hellip;' )
 	);
-	echo '</span>';
+
+	$str= <<<HTML
+	'</span>'
+HTML;
+
+		echo $str;
+
 }
 ?>
 
@@ -238,7 +244,13 @@ if ( isset( $_REQUEST['error'] ) ) {
 			break;
 	}
 	if ( $error_msg )
-		echo '<div id="moderated" class="error"><p>' . $error_msg . '</p></div>';
+
+		$str= <<<HTML
+	'<div id="moderated" class="error"><p>' . $error_msg . '</p></div>'
+HTML;
+
+		echo $str;
+		
 }
 
 if ( isset($_REQUEST['approved']) || isset($_REQUEST['deleted']) || isset($_REQUEST['trashed']) || isset($_REQUEST['untrashed']) || isset($_REQUEST['spammed']) || isset($_REQUEST['unspammed']) || isset($_REQUEST['same']) ) {
@@ -297,7 +309,15 @@ if ( isset($_REQUEST['approved']) || isset($_REQUEST['deleted']) || isset($_REQU
 			}
 		}
 
-		echo '<div id="moderated" class="updated notice is-dismissible"><p>' . implode( "<br/>\n", $messages ) . '</p></div>';
+		
+		$str= <<<HTML
+	'<div id="moderated" class="updated notice is-dismissible"><p>' . implode( "<br/>\n", $messages ) . '</p></div>'
+HTML;
+
+		echo $str;
+		
+
+	
 	}
 }
 ?>

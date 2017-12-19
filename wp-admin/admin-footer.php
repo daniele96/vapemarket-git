@@ -8,7 +8,7 @@
 
 // don't load directly
 if ( !defined('ABSPATH') )
-	die('-1');
+	return -1;
 
 /**
  * @global string $hook_suffix
@@ -39,7 +39,12 @@ global $hook_suffix;
 		 *
 		 * @param string $text The content that will be printed.
 		 */
-		echo apply_filters( 'admin_footer_text', '<span id="footer-thankyou">' . $text . '</span>' );
+		$str= <<<HTML
+	apply_filters( 'admin_footer_text', '<span id="footer-thankyou">' . $text . '</span>' )
+HTML;
+
+		echo $str;
+		
 		?>
 	</p>
 	<p id="footer-upgrade" class="alignright">

@@ -140,7 +140,12 @@ function _wp_menu_output( $menu, $submenu, $submenu_as_parent = true ) {
 		echo "\n\t<li$class$id$aria_hidden>";
 
 		if ( $is_separator ) {
-			echo '<div class="separator"></div>';
+				$str= <<<HTML
+	    '<div class="separator"></div>'
+HTML;
+
+		echo $str;
+			
 		} elseif ( $submenu_as_parent && ! empty( $submenu_items ) ) {
 			$submenu_items = array_values( $submenu_items );  // Re-index.
 			$menu_hook = get_plugin_page_hook( $submenu_items[0][2], $item[2] );
@@ -149,9 +154,19 @@ function _wp_menu_output( $menu, $submenu, $submenu_as_parent = true ) {
 				$menu_file = substr( $menu_file, 0, $pos );
 			if ( ! empty( $menu_hook ) || ( ( 'index.php' != $submenu_items[0][2] ) && file_exists( WP_PLUGIN_DIR . "/$menu_file" ) && ! file_exists( ABSPATH . "/wp-admin/$menu_file" ) ) ) {
 				$admin_is_parent = true;
-				echo "<a href='admin.php?page={$submenu_items[0][2]}'$class $aria_attributes>$arrow<div class='wp-menu-image$img_class'$img_style>$img</div><div class='wp-menu-name'>$title</div></a>";
+				$str= <<<HTML
+	    "<a href='admin.php?page={$submenu_items[0][2]}'$class $aria_attributes>$arrow<div class='wp-menu-image$img_class'$img_style>$img</div><div class='wp-menu-name'>$title</div></a>"
+HTML;
+
+		echo $str;
+				
 			} else {
-				echo "\n\t<a href='{$submenu_items[0][2]}'$class $aria_attributes>$arrow<div class='wp-menu-image$img_class'$img_style>$img</div><div class='wp-menu-name'>$title</div></a>";
+				$str= <<<HTML
+	    "\n\t<a href='{$submenu_items[0][2]}'$class $aria_attributes>$arrow<div class='wp-menu-image$img_class'$img_style>$img</div><div class='wp-menu-name'>$title</div></a>"
+HTML;
+
+		echo $str;
+				
 			}
 		} elseif ( ! empty( $item[2] ) && current_user_can( $item[1] ) ) {
 			$menu_hook = get_plugin_page_hook( $item[2], 'admin.php' );
@@ -160,15 +175,30 @@ function _wp_menu_output( $menu, $submenu, $submenu_as_parent = true ) {
 				$menu_file = substr( $menu_file, 0, $pos );
 			if ( ! empty( $menu_hook ) || ( ( 'index.php' != $item[2] ) && file_exists( WP_PLUGIN_DIR . "/$menu_file" ) && ! file_exists( ABSPATH . "/wp-admin/$menu_file" ) ) ) {
 				$admin_is_parent = true;
-				echo "\n\t<a href='admin.php?page={$item[2]}'$class $aria_attributes>$arrow<div class='wp-menu-image$img_class'$img_style>$img</div><div class='wp-menu-name'>{$item[0]}</div></a>";
+				$str= <<<HTML
+	    "\n\t<a href='admin.php?page={$item[2]}'$class $aria_attributes>$arrow<div class='wp-menu-image$img_class'$img_style>$img</div><div class='wp-menu-name'>{$item[0]}</div></a>"
+HTML;
+
+		echo $str;
+				
 			} else {
-				echo "\n\t<a href='{$item[2]}'$class $aria_attributes>$arrow<div class='wp-menu-image$img_class'$img_style>$img</div><div class='wp-menu-name'>{$item[0]}</div></a>";
+				$str= <<<HTML
+	    "\n\t<a href='{$item[2]}'$class $aria_attributes>$arrow<div class='wp-menu-image$img_class'$img_style>$img</div><div class='wp-menu-name'>{$item[0]}</div></a>"
+HTML;
+
+		echo $str;
+				
 			}
 		}
 
 		if ( ! empty( $submenu_items ) ) {
 			echo "\n\t<ul class='wp-submenu wp-submenu-wrap'>";
-			echo "<li class='wp-submenu-head' aria-hidden='true'>{$item[0]}</li>";
+			$str= <<<HTML
+	    "<li class='wp-submenu-head' aria-hidden='true'>{$item[0]}</li>"
+HTML;
+
+		echo $str;
+			
 
 			$first = true;
 
@@ -224,22 +254,46 @@ function _wp_menu_output( $menu, $submenu, $submenu_as_parent = true ) {
 						$sub_item_url = add_query_arg( array( 'page' => $sub_item[2] ), 'admin.php' );
 
 					$sub_item_url = esc_url( $sub_item_url );
-					echo "<li$class><a href='$sub_item_url'$class>$title</a></li>";
+						$str= <<<HTML
+	    "<li$class><a href='$sub_item_url'$class>$title</a></li>"
+HTML;
+
+		echo $str;
+					
 				} else {
-					echo "<li$class><a href='{$sub_item[2]}'$class>$title</a></li>";
+					$str= <<<HTML
+	    "<li$class><a href='{$sub_item[2]}'$class>$title</a></li>"
+HTML;
+
+		echo $str;
+					
 				}
 			}
-			echo "</ul>";
+			$str= <<<HTML
+	    "</ul>"
+HTML;
+
+		echo $str;
+			
 		}
-		echo "</li>";
+		$str= <<<HTML
+	    "</li>"
+HTML;
+
+		echo $str;
+		
 	}
 
-	echo '<li id="collapse-menu" class="hide-if-no-js">' .
+        $str= <<<HTML
+	    '<li id="collapse-menu" class="hide-if-no-js">' .
 		'<button type="button" id="collapse-button" aria-label="' . esc_attr__( 'Collapse Main menu' ) . '" aria-expanded="true">' .
 		'<span class="collapse-button-icon" aria-hidden="true"></span>' .
 		'<span class="collapse-button-label">' . __( 'Collapse menu' ) . '</span>' .
-		'</button></li>';
-}
+		'</button></li>'
+HTML;
+
+		echo $str;
+	
 
 ?>
 
