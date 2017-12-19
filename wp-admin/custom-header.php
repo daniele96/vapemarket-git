@@ -236,7 +236,7 @@ class Custom_Image_Header {
 	 * @global array $_wp_default_headers
 	 */
 	public function process_default_headers() {
-		global $_wp_default_headers;
+	    $_wp_default_headers;
 
 		if ( !isset($_wp_default_headers) )
 			return;

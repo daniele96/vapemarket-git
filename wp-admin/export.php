@@ -128,7 +128,7 @@ require_once( ABSPATH . 'wp-admin/admin-header.php' );
  * @param string $post_type The post type. Default 'post'.
  */
 function export_date_options( $post_type = 'post' ) {
-	global $wpdb, $wp_locale;
+	 $wpdb, $wp_locale;
 
 	$months = $wpdb->get_results( $wpdb->prepare( "
 		SELECT DISTINCT YEAR( post_date ) AS year, MONTH( post_date ) AS month

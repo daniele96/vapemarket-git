@@ -31,7 +31,7 @@ if ( force_ssl_admin() && ! is_ssl() ) {
  * @param WP_Error $wp_error Optional. The error to pass. Default empty.
  */
 function login_header( $title = 'Log In', $message = '', $wp_error = '' ) {
-	global $error, $interim_login, $action;
+    $error, $interim_login, $action;
 
 	// Don't index any of these forms
 	add_action( 'login_head', 'wp_no_robots' );
@@ -233,7 +233,7 @@ HTML;
  * @param string $input_id Which input to auto-focus
  */
 function login_footer($input_id = '') {
-	global $interim_login;
+    $interim_login;
 
 	// Don't allow interim logins to navigate away from the page.
 	if ( ! $interim_login ): ?>

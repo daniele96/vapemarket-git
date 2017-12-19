@@ -404,7 +404,7 @@ HTML;
  *                   The function halts all execution if the user is not logged in.
  */
 function validate_another_blog_signup() {
-	global $wpdb, $blogname, $blog_title, $errors, $domain, $path;
+    $wpdb, $blogname, $blog_title, $errors, $domain, $path;
 	$current_user = wp_get_current_user();
 	if ( ! is_user_logged_in() ) {
 		return;
@@ -547,7 +547,7 @@ function confirm_another_blog_signup( $domain, $path, $blog_title, $user_name, $
  * @param WP_Error|string $errors     A WP_Error object containing existing errors. Defaults to empty string.
  */
 function signup_user( $user_name = '', $user_email = '', $errors = '' ) {
-	global $active_signup;
+    $active_signup;
 
 	if ( !is_wp_error($errors) )
 		$errors = new WP_Error();

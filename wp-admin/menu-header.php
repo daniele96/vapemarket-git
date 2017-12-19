@@ -66,7 +66,7 @@ get_admin_page_parent();
  * @param bool  $submenu_as_parent
  */
 function _wp_menu_output( $menu, $submenu, $submenu_as_parent = true ) {
-	global $self, $parent_file, $submenu_file, $plugin_page, $typenow;
+	$self, $parent_file, $submenu_file, $plugin_page, $typenow;
 
 	$first = true;
 	// 0 = menu_title, 1 = capability, 2 = menu_slug, 3 = page_title, 4 = classes, 5 = hookname, 6 = icon_url

@@ -90,7 +90,7 @@ function display_header( $body_classes = '' ) {
  * @param string|null $error
  */
 function display_setup_form( $error = null ) {
-	global $wpdb;
+    $wpdb;
 
 	$sql = $wpdb->prepare( "SHOW TABLES LIKE %s", $wpdb->esc_like( $wpdb->users ) );
 	$user_table = ( $wpdb->get_var( $sql ) != null );

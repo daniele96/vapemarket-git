@@ -31,7 +31,7 @@ global $opml;
  * @param array $attrs XML element attributes.
  */
 function startElement($parser, $tagName, $attrs) {
-	global $names, $urls, $targets, $descriptions, $feeds;
+	 $names, $urls, $targets, $descriptions, $feeds;
 
 	if ( 'OUTLINE' === $tagName ) {
 		$name = '';
