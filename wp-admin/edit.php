@@ -309,8 +309,13 @@ echo esc_html( $post_type_object->labels->name );
 
 <?php
 if ( current_user_can( $post_type_object->cap->create_posts ) ) {
+
+
+	$var= esc_html( $post_type_object->labels->add_new );
+	$var2= esc_url( admin_url( $post_new_file ) );
+
 	$str= <<<HTML
-	 ' <a href="' . esc_url( admin_url( $post_new_file ) ) . '" class="page-title-action">' . esc_html( $post_type_object->labels->add_new ) . '</a>'
+	  <a href="$var2" class="page-title-action">' $var  </a>
 HTML;
 
 		echo $str;
@@ -341,8 +346,11 @@ foreach ( $bulk_counts as $message => $count ) {
 }
 
 if ( $messages )
+
+
+	$var= join( ' ', $messages );
 	$str= <<<HTML
-	 '<div id="message" class="updated notice is-dismissible"><p>' . join( ' ', $messages ) . '</p></div>'
+	 <div id="message" class="updated notice is-dismissible"><p> $var </p></div>
 HTML;
 
 		echo $str;

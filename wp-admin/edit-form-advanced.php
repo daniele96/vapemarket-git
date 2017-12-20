@@ -480,8 +480,12 @@ echo esc_html( $title );
 
 <?php
 if ( isset( $post_new_file ) && current_user_can( $post_type_object->cap->create_posts ) ) {
+
+
+	$var=  esc_url( admin_url( $post_new_file ) );
+	$var2= esc_html( $post_type_object->labels->add_new );
 	$str= <<<HTML
-	' <a href="' . esc_url( admin_url( $post_new_file ) ) . '" class="page-title-action">' . esc_html( $post_type_object->labels->add_new ) . '</a>'
+	 <a href=" $var" class="page-title-action"> $var2 </a>
 HTML;
 
 		echo $str;
@@ -652,7 +656,7 @@ if ( post_type_supports($post_type, 'editor') ) {
 		}
 
 		$str= <<<HTML
-	'</span>'
+	</span>
 HTML;
 
 		echo $str;

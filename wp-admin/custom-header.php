@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 /**
  * The custom header image script.
  *
@@ -274,12 +275,15 @@ class Custom_Image_Header {
 		}
 
 		if ( 1 < count( $headers ) ) {
+			
+			$var=checked( is_random_header_image( $type ), true, false ); 
+
 			$str= <<<HTML
-	 '<div class="random-header">'
-	 '<label><input name="default-header" type="radio" value="random-' . $type . '-image"' . checked( is_random_header_image( $type ), true, false ) . ' />'
-	 _e( '<strong>Random:</strong> Show a different image on each page.' )
-	 '</label>'
-	 '</div>'
+	 			<div class="random-header">
+	 			<label><input name="default-header" type="radio" value="random-' . $type . '-image"' . $var />
+	 			_e( '<strong>Random:</strong> Show a different image on each page.' )
+	 			</label>
+	 			</div>
 HTML;
 
 		echo $str;
@@ -292,9 +296,13 @@ HTML;
 			$header_url = $header['url'];
 			$header_alt_text = empty( $header['alt_text'] ) ? '' : $header['alt_text'];
 
+
+			$var=  esc_attr( $header_key );
+			$var2 = checked( $header_url, get_theme_mod( 'header_image' ), false );
+
 			$str= <<<HTML
-	 '<div class="default-header">'
-	 '<label><input name="default-header" type="radio" value="' . esc_attr( $header_key ) . '" ' . checked( $header_url, get_theme_mod( 'header_image' ), false ) . ' />'
+	 <div class="default-header">
+	 <label><input name="default-header" type="radio" value="$var" '$var2' />
 HTML;
 
 		echo $str;
@@ -302,15 +310,18 @@ HTML;
 			$width = '';
 			if ( !empty( $header['attachment_id'] ) )
 				$width = ' width="230"';
+
+			$var= set_url_scheme( $header_thumbnail );
+			$var2= esc_attr( $header_alt_text );
 			$str= <<<HTML
-	'<img src="' . set_url_scheme( $header_thumbnail ) . '" alt="' . esc_attr( $header_alt_text ) .'"' . $width . ' /></label>'
-	'</div>'
+			<img src="$var" alt="$var2"' . $width . ' /></label>
+			</div>
 HTML;
 
 		echo $str;
 					}
 					$str= <<<HTML
-	'<div class="clear"></div></div>'
+	<div class="clear"></div></div>
 HTML;
 
 		echo $str;
@@ -710,8 +721,11 @@ HTML;
 	echo '<input type="text" name="text-color" id="text-color" value="' . esc_attr( $header_textcolor ) . '"' . $default_color_attr . ' />';
 	if ( $default_color ) {
 
+
+		$var= sprintf( _x( 'Default: %s', 'color' ), esc_html( $default_color ) );
+
 		$str= <<<HTML
-	' <span class="description hide-if-js">' . sprintf( _x( 'Default: %s', 'color' ), esc_html( $default_color ) ) . '</span>'
+	 <span class="description hide-if-js"> $var  </span>
 HTML;
 
 		echo $str;
@@ -1186,7 +1200,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 		$parent_url = wp_get_attachment_url( $parent->ID );
 		$url = str_replace( basename( $parent_url ), basename( $cropped ), $parent_url );
 
-		$size = @getimagesize( $cropped );
+		$size = getimagesize( $cropped );
 		$image_type = ( $size ) ? $size['mime'] : 'image/jpeg';
 
 		$object = array(

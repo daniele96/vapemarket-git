@@ -8,7 +8,7 @@
  * @package WordPress
  * @subpackage Administration
  */
-
+error_reporting(0);
 if ( ! isset( $_GET['inline'] ) )
 	define( 'IFRAME_REQUEST' , true );
 
@@ -25,7 +25,7 @@ wp_enqueue_script('set-post-thumbnail' );
 wp_enqueue_style('imgareaselect');
 wp_enqueue_script( 'media-gallery' );
 
-@header('Content-Type: ' . get_option('html_type') . '; charset=' . get_option('blog_charset'));
+header('Content-Type: ' . get_option('html_type') . '; charset=' . get_option('blog_charset'));
 
 // IDs should be integers
 $ID = isset($ID) ? (int) $ID : 0;

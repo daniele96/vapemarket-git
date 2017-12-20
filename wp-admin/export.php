@@ -147,8 +147,11 @@ function export_date_options( $post_type = 'post' ) {
 
 		$month = zeroise( $date->month, 2 );
 
+		$var=$wp_locale->get_month( $month );
+		$var2=$date->year; 
+
 		$str= <<<HTML
-	'<option value="' . $date->year . '-' . $month . '">' . $wp_locale->get_month( $month ) . ' ' . $date->year . '</option>'
+	<option value="'$date->year'-'$month'"> $var '' $var2 </option>
 HTML;
 
 		echo $str;

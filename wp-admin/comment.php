@@ -144,7 +144,7 @@ if ( $comment->comment_approved != '0' ) { // if not unapproved
 	if ( $message ) {
 
 		$str= <<<HTML
-	'<div id="message" class="notice notice-info"><p>' . $message . '</p></div>'
+	<div id="message" class="notice notice-info"><p> $message </p></div>
 HTML;
 
 		echo $str;
@@ -209,8 +209,10 @@ HTML;
 		);
 		if ( 'approved' === wp_get_comment_status( $comment ) && ! empty ( $comment->comment_post_ID ) ) {
 
+			$var=esc_url( get_comment_link( $comment ) );
+
 			$str= <<<HTML
-	'<a href="' . esc_url( get_comment_link( $comment ) ) . '">' . $submitted . '</a>'
+	<a href="$var">$submitted </a>
 HTML;
 
 		echo $str;

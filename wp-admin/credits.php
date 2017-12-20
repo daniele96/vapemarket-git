@@ -42,13 +42,13 @@ if ( ! $credits ) {
 		__( 'https://make.wordpress.org/' )
 	);
 	 $str= <<<HTML
-	   '</p>'
+	   </p>
 HTML;
 
 		echo $str;
 	
 	$str= <<<HTML
-	   '</div>'
+	   </div>
 HTML;
 
 		echo $str;
@@ -57,7 +57,7 @@ HTML;
 	return;
 }
 $str= <<<HTML
-	   '<p class="about-description">' . __( 'WordPress is created by a worldwide team of passionate individuals.' ) . "</p>\n"
+	   <p class="about-description"> 'WordPress is created by a worldwide team of passionate individuals.' </p>\n
 HTML;
 
 		echo $str;
@@ -73,8 +73,10 @@ foreach ( $credits['groups'] as $group_slug => $group_data ) {
 		} else {
 			$title = translate( $group_data['name'] );
 		}
+
+		$var=  esc_html( $title );
 $str= <<<HTML
-	   '<h3 class="wp-people-group">' . esc_html( $title ) . "</h3>\n"
+	   <h3 class="wp-people-group"> $var </h3>\n
 HTML;
 
 		echo $str;
@@ -87,8 +89,10 @@ HTML;
 	switch ( $group_data['type'] ) {
 		case 'list' :
 			array_walk( $group_data['data'], '_wp_credits_add_profile_link', $credits['data']['profiles'] );
+
+			$var = wp_sprintf( '%l.', $group_data['data'] ); 
 			$str= <<<HTML
-	   '<p class="wp-credits-list">' . wp_sprintf( '%l.', $group_data['data'] ) . "</p>\n\n"
+	   <p class="wp-credits-list"> $var </p>\n\n
 HTML;
 
 		echo $str;
@@ -96,8 +100,10 @@ HTML;
 			break;
 		case 'libraries' :
 			array_walk( $group_data['data'], '_wp_credits_build_object_link' );
+
+			$var=  wp_sprintf( '%l.', $group_data['data'] );
 			$str= <<<HTML
-	   '<p class="wp-credits-list">' . wp_sprintf( '%l.', $group_data['data'] ) . "</p>\n\n"
+	   <p class="wp-credits-list"> $var </p>\n\n
 HTML;
 
 		echo $str;
@@ -115,28 +121,32 @@ HTML;
 				$size *= 2;
 				$data2x = get_avatar_data( $person_data[1] . '@md5.gravatar.com', array( 'size' => $size ) );
 				echo '<img src="' . esc_url( $data['url'] ) . '" srcset="' . esc_url( $data2x['url'] ) . ' 2x" class="gravatar" alt="" />' . "\n";
+
+				$var= esc_html( $person_data[0] ) ;
 				$str= <<<HTML
-	   esc_html( $person_data[0] ) . "</a>\n\t"
+	   $var </a>\n\t
 HTML;
 
 		echo $str;
 				
 				if ( ! $compact )
+
+					$var= translate( $person_data[3] );
 					$str= <<<HTML
-	   '<span class="title">' . translate( $person_data[3] ) . "</span>\n"
+	   <span class="title"> $var </span>\n
 HTML;
 
 		echo $str;
 					
 					$str= <<<HTML
-	   "</li>\n"
+	   </li>\n
 HTML;
 
 		echo $str;
 				
 			}
 			$str= <<<HTML
-	   "</ul>\n"
+	   </ul>\n
 HTML;
 
 		echo $str;

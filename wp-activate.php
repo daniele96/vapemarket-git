@@ -119,7 +119,7 @@ get_header( 'wp-activate' );
 				}
 
 				$str= <<<HTML
-	'</p>'
+				</p>
 HTML;
 
 		echo $str;

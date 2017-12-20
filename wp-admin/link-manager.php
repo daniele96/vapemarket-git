@@ -88,7 +88,7 @@ echo esc_html( $title );
 <?php
 if ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) ) {
 	/* translators: %s: search keywords */
-	printf( '<span class="subtitle">' . __( 'Search results for &#8220;%s&#8221;' ) . '</span>', esc_html( wp_unslash( $_REQUEST['s'] ) ) );
+	printf( '<span class="subtitle">' . __( 'Search results for &#8220;%s&#8221;' ) . '</span>', htmlspecialchars( wp_unslash( $_REQUEST['s'] ) ) );
 }
 ?>
 
@@ -97,7 +97,7 @@ if ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) ) {
 <?php
 if ( isset($_REQUEST['deleted']) ) {
 	$str= <<<HTML
-	 '<div id="message" class="updated notice is-dismissible"><p>'
+	 <div id="message" class="updated notice is-dismissible"><p>
 HTML;
 
 		echo $str;
@@ -106,7 +106,7 @@ HTML;
 	printf(_n('%s link deleted.', '%s links deleted', $deleted), $deleted);
 
 	$str= <<<HTML
-	 '</p></div>'
+	 </p></div>
 HTML;
 
 		echo $str;

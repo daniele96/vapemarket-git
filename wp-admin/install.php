@@ -297,7 +297,7 @@ switch($step) {
 			wp_install_language_form( $languages );
 
 			$str= <<<HTML
-	'</form>'
+	</form>
 HTML;
 
 		echo $str;

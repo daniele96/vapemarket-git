@@ -287,8 +287,10 @@ if ( empty($tzstring) ) { // Create a UTC+- zone if no timezone string exists
 	$custom = true;
 
 	foreach ( $date_formats as $format ) {
+
+		$var= esc_attr( $format );
 		$str= <<<HTML
-	   "\t<label><input type='radio' name='date_format' value='" . esc_attr( $format ) . "'>"
+	   \t<label><input type='radio' name='date_format' value='$var'>
 HTML;
 
 		echo $str;
@@ -297,8 +299,11 @@ HTML;
 			echo " checked='checked'";
 			$custom = false;
 		}
+
+		$var= date_i18n( $format );
+		$var2= esc_html( $format );
 		$str= <<<HTML
-	   ' /> <span class="date-time-text format-i18n">' . date_i18n( $format ) . '</span><code>' . esc_html( $format ) . "</code></label><br />\n"
+	    /> <span class="date-time-text format-i18n"> $var </span><code> $var2 </code></label><br />\n
 HTML;
 
 		echo $str;
@@ -306,19 +311,22 @@ HTML;
 	}
 
 	$str= <<<HTML
-	   '<label><input type="radio" name="date_format" id="date_format_custom_radio" value="\c\u\s\t\o\m">'
+	   <label><input type="radio" name="date_format" id="date_format_custom_radio" value="\c\u\s\t\o\m">
 HTML;
 
 		echo $str;
 
 	
 	checked( $custom );
+
+	$var= esc_attr( get_option( 'date_format' ) ) ;
+	$var2= date_i18n( get_option( 'date_format' ) );
 	$str= <<<HTML
-	  '/> <span class="date-time-text date-time-custom-text">' . __( 'Custom:' ) . '<span class="screen-reader-text"> ' . __( 'enter a custom date format in the following field' ) . '</span></span></label>' .
-		'<label for="date_format_custom" class="screen-reader-text">' . __( 'Custom date format:' ) . '</label>' .
-		'<input type="text" name="date_format_custom" id="date_format_custom" value="' . esc_attr( get_option( 'date_format' ) ) . '" class="small-text" />' .
-		'<span class="screen-reader-text">' . __( 'example:' ) . ' </span> <span class="example">' . date_i18n( get_option( 'date_format' ) ) . '</span>' .
-		"<span class='spinner'></span>\n"
+	  /> <span class="date-time-text date-time-custom-text"> __( 'Custom:' ) <span class="screen-reader-text">  __( 'enter a custom date format in the following field' ) </span></span></label>' .
+		<label for="date_format_custom" class="screen-reader-text"> __( 'Custom date format:' ) </label>
+		<input type="text" name="date_format_custom" id="date_format_custom" value="var" class="small-text" />
+		<span class="screen-reader-text"> 'example:' ) </span> <span class="example">'$var2'</span> 
+		<span class='spinner'></span>\n
 HTML;
 
 		echo $str;
@@ -346,7 +354,7 @@ HTML;
 	foreach ( $time_formats as $format ) {
 
 		$str= <<<HTML
-	  "\t<label><input type='radio' name='time_format' value='" . esc_attr( $format ) . "'>"
+	  \t<label><input type='radio' name='time_format' value='" . esc_attr( $format ) . "'>
 HTML;
 
 		echo $str;
@@ -355,8 +363,11 @@ HTML;
 			echo " checked='checked'";
 			$custom = false;
 		}
+
+		$var= date_i18n( $format );
+		$var2= esc_html( $format );
 		$str= <<<HTML
-	   ' /> <span class="date-time-text format-i18n">' . date_i18n( $format ) . '</span><code>' . esc_html( $format ) . "</code></label><br />\n"
+	    /> <span class="date-time-text format-i18n"> $var </span><code> $var2 </code></label><br />\n
 HTML;
 
 		echo $str;
@@ -364,7 +375,7 @@ HTML;
 	}
 
 	$str= <<<HTML
-	   '<label><input type="radio" name="time_format" id="time_format_custom_radio" value="\c\u\s\t\o\m">'
+	   <label><input type="radio" name="time_format" id="time_format_custom_radio" value="\c\u\s\t\o\m">
 HTML;
 
 		echo $str;
@@ -372,18 +383,22 @@ HTML;
 	
 	checked( $custom );
 
+	$var= esc_attr( get_option( 'time_format' ) );
+	$var2= date_i18n( get_option( 'time_format' ) ) ;
+
 	$str= <<<HTML
-	   '/> <span class="date-time-text date-time-custom-text">' . __( 'Custom:' ) . '<span class="screen-reader-text"> ' . __( 'enter a custom time format in the following field' ) . '</span></span></label>' .
-		'<label for="time_format_custom" class="screen-reader-text">' . __( 'Custom time format:' ) . '</label>' .
-		'<input type="text" name="time_format_custom" id="time_format_custom" value="' . esc_attr( get_option( 'time_format' ) ) . '" class="small-text" />' .
-		'<span class="screen-reader-text">' . __( 'example:' ) . ' </span> <span class="example">' . date_i18n( get_option( 'time_format' ) ) . '</span>' .
-		"<span class='spinner'></span>\n"
+	   /> <span class="date-time-text date-time-custom-text">'Custom:' <span class="screen-reader-text">  'enter a custom time format in the following field' 
+	    </span></span></label>' .
+		<label for="time_format_custom" class="screen-reader-text">'Custom time format:'</label>
+		<input type="text" name="time_format_custom" id="time_format_custom" value="$var" class="small-text" />
+		<span class="screen-reader-text">'example:' </span> <span class="example"> $var2 </span>
+		<span class='spinner'></span>\n
 HTML;
 
 		echo $str;
 	
 	$str= <<<HTML
-	  "\t<p class='date-time-doc'>" . __('<a href="https://codex.wordpress.org/Formatting_Date_and_Time">Documentation on date and time formatting</a>.') . "</p>\n"
+	  \t<p class='date-time-doc'> ('<a href="https://codex.wordpress.org/Formatting_Date_and_Time">Documentation on date and time formatting</a>.') </p>\n
 HTML;
 
 		echo $str;
@@ -405,8 +420,11 @@ global $wp_locale;
 for ($day_index = 0; $day_index <= 6; $day_index++) :
 	$selected = (get_option('start_of_week') == $day_index) ? 'selected="selected"' : '';
 
+
+    $var= esc_attr($day_index);
+    $var2= $wp_locale->get_weekday($day_index);
 	$str= <<<HTML
-	 "\n\t<option value='" . esc_attr($day_index) . "' $selected>" . $wp_locale->get_weekday($day_index) . '</option>'
+	 \n\t<option value='$var' $selected> $var2 </option>
 HTML;
 
 		echo $str;

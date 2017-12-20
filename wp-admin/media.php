@@ -99,7 +99,7 @@ case 'edit' :
 	}
 	if ( $message )
 		$str= <<<HTML
-	"<div id='message' class='$class'><p>$message</p></div>\n"
+	<div id='message' class='$class'><p>$message</p></div>\n
 HTML;
 
 		echo $str;

@@ -60,9 +60,14 @@ if ( isset($_REQUEST['attachment_id']) && ($id = intval($_REQUEST['attachment_id
 		case 3 :
 			if ( $thumb_url = wp_get_attachment_image_src( $id, 'thumbnail', true ) )
 
+
+				$var=esc_url( $thumb_url[0] );
+			    $var2= esc_url( get_edit_post_link( $id ) );
+			    $var3= _x( 'Edit', 'media item' );
+
 				$str= <<<HTML
-	 '<img class="pinkynail" src="' . esc_url( $thumb_url[0] ) . '" alt="" />'
-	 '<a class="edit-attachment" href="' . esc_url( get_edit_post_link( $id ) ) . '" target="_blank">' . _x( 'Edit', 'media item' ) . '</a>'
+	 <img class="pinkynail" src=" $var" alt="" />
+	 <a class="edit-attachment" href="$var2" target="_blank"> $var3 </a>
 HTML;
 
 		echo $str;
@@ -71,8 +76,11 @@ HTML;
 			$file = get_attached_file( $post->ID );
 			$title = $post->post_title ? $post->post_title : wp_basename( $file );
 
+
+			$var= esc_html( wp_html_excerpt( $title, 60, '&hellip;' ) );
+
 			$str= <<<HTML
-	 '<div class="filename new"><span class="title">' . esc_html( wp_html_excerpt( $title, 60, '&hellip;' ) ) . '</span></div>'
+	 <div class="filename new"><span class="title">$var </span></div>
 HTML;
 
 		echo $str;
@@ -131,5 +139,5 @@ if ( $_REQUEST['short'] ) {
 	 *
 	 * @param int $id Uploaded attachment ID.
 	 */
-	echo apply_filters( "async_upload_{$type}", $id );
+	echo htmlspecialchars(apply_filters( "async_upload_{$type}", $id ));
 }

@@ -217,11 +217,11 @@ if ( isset($_REQUEST['s']) && strlen( $_REQUEST['s'] ) ) {
 	echo '<span class="subtitle">';
 	/* translators: %s: search keywords */
 	printf( __( 'Search results for &#8220;%s&#8221;' ),
-		wp_html_excerpt( esc_html( wp_unslash( $_REQUEST['s'] ) ), 50, '&hellip;' )
+		wp_html_excerpt( htmlspecialchars( wp_unslash( $_REQUEST['s'] ) ), 50, '&hellip;' )
 	);
 
 	$str= <<<HTML
-	'</span>'
+	</span>
 HTML;
 
 		echo $str;
@@ -246,7 +246,7 @@ if ( isset( $_REQUEST['error'] ) ) {
 	if ( $error_msg )
 
 		$str= <<<HTML
-	'<div id="moderated" class="error"><p>' . $error_msg . '</p></div>'
+	<div id="moderated" class="error"><p> $error_msg </p></div>
 HTML;
 
 		echo $str;
@@ -310,8 +310,10 @@ if ( isset($_REQUEST['approved']) || isset($_REQUEST['deleted']) || isset($_REQU
 		}
 
 		
+
+		$var= implode( "<br/>\n", $messages );
 		$str= <<<HTML
-	'<div id="moderated" class="updated notice is-dismissible"><p>' . implode( "<br/>\n", $messages ) . '</p></div>'
+	<div id="moderated" class="updated notice is-dismissible"><p> $var </p></div>
 HTML;
 
 		echo $str;

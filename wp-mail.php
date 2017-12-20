@@ -126,8 +126,11 @@ for ( $i = 1; $i <= $count; $i++ ) {
 				if ( is_email($author) ) {
 					/* translators: Post author email address */
 
+
+					$var= sprintf(__('Author is %s'), $author);
+
 					$str= <<<HTML
-	'<p>' . sprintf(__('Author is %s'), $author) . '</p>'
+					<p> $var </p>
 HTML;
 
 		echo $str;
@@ -235,9 +238,12 @@ HTML;
 	 */
 	do_action( 'publish_phone', $post_ID );
 
+	$var= esc_html( $post_author );
+	$var2= esc_html( $post_title );
+
 	$str= <<<HTML
-	"\n<p><strong>" . __( 'Author:' ) . '</strong> ' . esc_html( $post_author ) . '</p>'
-	"\n<p><strong>" . __( 'Posted title:' ) . '</strong> ' . esc_html( $post_title ) . '</p>'
+	\n<p><strong> __( 'Author:' )</strong> $var </p>
+	\n<p><strong> __( 'Posted title:' ) </strong> $var2</p>
 HTML;
 
 		echo $str;
@@ -246,12 +252,13 @@ HTML;
 
 	if(!$pop3->delete($i)) {
 
-			$str= <<<HTML
-	 '<p>' . sprintf(
+
+		    $var= sprintf(
 			/* translators: %s: POP3 error */
-			__( 'Oops: %s' ),
-			esc_html( $pop3->ERROR )
-		) . '</p>'
+			__( 'Oops: %s' ),esc_html( $pop3->ERROR ));
+
+			$str= <<<HTML
+	 <p> $var</p>
 HTML;
 
 		echo $str;
@@ -260,12 +267,15 @@ HTML;
 		return;
 	} else {
 
-		$str= <<<HTML
-	 '<p>' . sprintf(
+
+		$var= sprintf(
 			/* translators: %s: the message ID */
-			__( 'Mission complete. Message %s deleted.' ),
-			'<strong>' . $i . '</strong>'
-		) . '</p>'
+			__( 'Mission complete. Message %s deleted.' );
+
+		$str= <<<HTML
+	     <p> $var,
+			<strong> $i </strong>
+		</p>
 HTML;
 
 		echo $str;

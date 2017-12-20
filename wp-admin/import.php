@@ -61,7 +61,7 @@ $parent_file = 'tools.php';
 	<div class="error">
 		<p><strong><?php _e( 'ERROR:' ); ?></strong> <?php
 			/* translators: %s: importer slug */
-			printf( __( 'The %s importer is invalid or is not installed.' ), '<strong>' . esc_html( $_GET['invalid'] ) . '</strong>' );
+			printf( __( 'The %s importer is invalid or is not installed.' ), htmlspecialchars('<strong>' . esc_html( $_GET['invalid'] ) . '</strong>') );
 		?></p>
 	</div>
 <?php endif; ?>
@@ -84,7 +84,7 @@ foreach ( $popular_importers as $pop_importer => $pop_data ) {
 
 if ( empty( $importers ) ) {
 	$str= <<<HTML
-	'<p>' . __('No importers are available.') . '</p>'
+	<p> No importers are available.</p>
 HTML;
 
 		echo $str;
@@ -183,7 +183,7 @@ HTML;
 		}
 
 		$str= <<<HTML
-	"
+	
 			<tr class='importer-item'>
 				<td class='import-system'>
 					<span class='importer-title'>{$data[0]}</span>
@@ -192,10 +192,10 @@ HTML;
 				<td class='desc'>
 					<span class='importer-desc'>{$data[1]}</span>
 				</td>
-			</tr>"
+			</tr>
 HTML;
 
-		echo $str;
+		echo htmlspecialchars($str);
 
 		
 	}
@@ -206,8 +206,11 @@ HTML;
 
 if ( current_user_can('install_plugins') )
 
+
+	$var=esc_url( network_admin_url( 'plugin-install.php?tab=search&type=tag&s=importer' );
+
 	$str= <<<HTML
-	'<p>' . sprintf( __('If the importer you need is not listed, <a href="%s">search the plugin directory</a> to see if an importer is available.'), esc_url( network_admin_url( 'plugin-install.php?tab=search&type=tag&s=importer' ) ) ) . '</p>'
+	<p> If the importer you need is not listed, <a href="%s">search the plugin directory</a> to see if an importer is available.' $var  </p>
 HTML;
 
 		echo $str;

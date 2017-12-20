@@ -213,8 +213,10 @@ $ratings = array(
 foreach ($ratings as $key => $rating) :
 	$selected = (get_option('avatar_rating') == $key) ? 'checked="checked"' : '';
 
+
+	$var= esc_attr($key);
 	$str= <<<HTML
-	"\n\t<label><input type='radio' name='avatar_rating' value='" . esc_attr($key) . "' $selected/> $rating</label><br />"
+	\n\t<label><input type='radio' name='avatar_rating' value='$var' $selected/> $rating</label><br />
 HTML;
 
 		echo $str;

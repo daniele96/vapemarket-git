@@ -6,6 +6,7 @@
  * @subpackage Customize
  * @since 3.4.0
  */
+error_reporting(0);
 
 define( 'IFRAME_REQUEST', true );
 
@@ -82,7 +83,7 @@ wp_enqueue_style( 'customize-controls' );
 do_action( 'customize_controls_enqueue_scripts' );
 
 // Let's roll.
-@header('Content-Type: ' . get_option('html_type') . '; charset=' . get_option('blog_charset'));
+header('Content-Type: ' . get_option('html_type') . '; charset=' . get_option('blog_charset'));
 
 wp_user_settings();
 _wp_admin_html_begin();
@@ -156,8 +157,12 @@ do_action( 'customize_controls_print_scripts' );
 				<div class="accordion-section-title">
 					<span class="preview-notice"><?php
 
+
+					$var= sprintf( __( You are customizing %s ), <strong class="panel-title site-title"> get_bloginfo( 'name', 'display' )</strong> );
+
 					$str= <<<HTML
-	sprintf( __( 'You are customizing %s' ), '<strong class="panel-title site-title">' . get_bloginfo( 'name', 'display' ) . '</strong>' )
+					$var
+	
 HTML;
 
 		echo $str;

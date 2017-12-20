@@ -104,13 +104,14 @@ function show_blog_form( $blogname = '', $blog_title = '', $errors = '' ) {
 	// Blog name
 	if ( !is_subdomain_install() )
 		$str= <<<HTML
-	    '<label for="blogname">' . __('Site Name:') . '</label>'
+	    <label for="blogname"> $Site Name: </label>
 HTML;
 
 		echo $str;
+
 	else
 		$str= <<<HTML
-	    '<label for="blogname">' . __('Site Domain:') . '</label>'
+	    <label for="blogname"> $Site Domain: </label>
 HTML;	
 		echo $str;
 
@@ -120,13 +121,14 @@ HTML;
 
 	if ( !is_subdomain_install() )
 				$str= <<<HTML
-	    '<span class="prefix_address">' . $current_network->domain . $current_network->path . '</span><input name="blogname" type="text" id="blogname" value="'. esc_attr($blogname) .'" maxlength="60" /><br />'
+	    <span class="prefix_address">$current_network->domain . $current_network->path </span><input name="blogname" type="text" id="blogname" value="'. esc_attr($blogname) .'" maxlength="60" /><br />
 HTML;	
 		echo $str;
 		
 	else
+		$site_domain = preg_replace( '|^www\.|', '', $current_network->domain ) )
 		$str= <<<HTML
-	    '<input name="blogname" type="text" id="blogname" value="'.esc_attr($blogname).'" maxlength="60" /><span class="suffix_address">.' . ( $site_domain = preg_replace( '|^www\.|', '', $current_network->domain ) ) . '</span><br />'
+	    <input name="blogname" type="text" id="blogname" value="'.esc_attr($blogname).'" maxlength="60" /><span class="suffix_address"> $site_domain </span><br />
 HTML;	
 		echo $str;
 		
@@ -139,8 +141,11 @@ HTML;
 		}
 
 		/* translators: %s: site address */
+
+		$var=sprintf( __( 'Your address will be %s.' ), $site );
+		$var2= __( 'Must be at least 4 characters, letters and numbers only. It cannot be changed, so choose carefully!' );
 		$str= <<<HTML
-	    '<p>(<strong>' . sprintf( __( 'Your address will be %s.' ), $site ) . '</strong>) ' . __( 'Must be at least 4 characters, letters and numbers only. It cannot be changed, so choose carefully!' ) . '</p>'
+	    <p>(<strong> $var </strong>) $var2  </p>
 HTML;	
 		echo $str ;
 	}
@@ -245,14 +250,14 @@ function show_user_form($user_name = '', $user_email = '', $errors = '') {
 	// User name
 	
 	$str= <<<HTML
-	    '<label for="user_name">' . __('Username:') . '</label>'
+	    <label for="user_name"> $Username:</label>
 HTML;
 
 		echo $str;
 	 
 	if ( $errmsg = $errors->get_error_message('user_name') ) {
 		$str= <<<HTML
-	    '<p class="error">'.$errmsg.'</p>'
+	    <p class="error"> $errmsg </p>
 HTML;
 
 		echo $str;
@@ -270,7 +275,7 @@ HTML;
 	<?php
 	if ( $errmsg = $errors->get_error_message('generic') ) {
 		$str= <<<HTML
-	    '<p class="error">' . $errmsg . '</p>'
+	    <p class="error"> $errmsg </p>
 HTML;
 
 		echo $str;
@@ -338,8 +343,9 @@ function signup_another_blog( $blogname = '', $blog_title = '', $errors = '' ) {
 	$blog_title = $filtered_results['blog_title'];
 	$errors = $filtered_results['errors'];
 
+        $var= sprintf( __( 'Get <em>another</em> %s site in seconds' ), get_network()->site_name )
 		$str= <<<HTML
-	    '<h2>' . sprintf( __( 'Get <em>another</em> %s site in seconds' ), get_network()->site_name ) . '</h2>'
+	    <h2> $var </h2>
 HTML;
 
 		echo $str;
@@ -348,7 +354,7 @@ HTML;
 
 	if ( $errors->get_error_code() ) {
 		$str= <<<HTML
-	    '<p>' . __( 'There was a problem, please correct the form below and try again.' ) . '</p>''
+	    <p> 'There was a problem, please correct the form below and try again.'</p>
 HTML;
 
 		echo $str;
@@ -365,8 +371,11 @@ HTML;
 			<ul>
 				<?php foreach ( $blogs as $blog ) {
 					$home_url = get_home_url( $blog->userblog_id );
+
+					$var= esc_url( $home_url ) 
 					$str= <<<HTML
-	    '<li><a href="' . esc_url( $home_url ) . '">' . $home_url . '</a></li>'
+
+	    <li><a href="$var">' . $home_url </a></li>
 HTML;
 
 		echo $str;
@@ -516,7 +525,7 @@ function confirm_another_blog_signup( $domain, $path, $blog_title, $user_name, $
 	?>
 	<h2><?php
 		/* translators: %s: site name */
-		printf( __( 'The site %s is yours.' ), $site );
+		printf( __( 'The site %s is yours.' ), htmlspecialchars($site) );
 	?></h2>
 	<p>
 		<?php printf(
@@ -590,7 +599,7 @@ function signup_user( $user_name = '', $user_email = '', $errors = '' ) {
 		/** This action is documented in wp-signup.php */
 		do_action( 'signup_hidden_fields', 'validate-user' );
 		?>
-		<?php show_user_form($user_name, $user_email, $errors); ?>
+		<?php show_user_form(htmlspecialchars($user_name), htmlspecialchars($user_email), htmlspecialchars($errors)); ?>
 
 		<p>
 		<?php if ( $active_signup == 'blog' ) { ?>
@@ -652,7 +661,7 @@ function validate_user_signup() {
 function confirm_user_signup($user_name, $user_email) {
 	?>
 	<h2><?php /* translators: %s: username */
-	printf( __( '%s is your new username' ), $user_name) ?></h2>
+	printf( __( '%s is your new username' ), htmlspecialchars($user_name)) ?></h2>
 	<p><?php _e( 'But, before you can start using your new username, <strong>you must activate it</strong>.' ) ?></p>
 	<p><?php /* translators: %s: email address */
 	printf( __( 'Check your inbox at %s and click the link given.' ), '<strong>' . $user_email . '</strong>' ); ?></p>
@@ -719,7 +728,7 @@ function signup_blog($user_name = '', $user_email = '', $blogname = '', $blog_ti
 		/** This action is documented in wp-signup.php */
 		do_action( 'signup_hidden_fields', 'validate-site' );
 		?>
-		<?php show_blog_form($blogname, $blog_title, $errors); ?>
+		<?php show_blog_form(htmlspecialchars($blogname), htmlspecialchars($blog_title), htmlspecialchars($errors)); ?>
 		<p class="submit"><input type="submit" name="submit" class="submit" value="<?php esc_attr_e('Signup') ?>" /></p>
 	</form>
 	<?php
@@ -797,7 +806,7 @@ function validate_blog_signup() {
 function confirm_blog_signup( $domain, $path, $blog_title, $user_name = '', $user_email = '', $meta = array() ) {
 	?>
 	<h2><?php /* translators: %s: site address */
-	printf( __( 'Congratulations! Your new site, %s, is almost ready.' ), "<a href='http://{$domain}{$path}'>{$blog_title}</a>" ) ?></h2>
+	printf( __( 'Congratulations! Your new site, %s, is almost ready.' ), htmlspecialchars("<a href='http://{$domain}{$path}'>{$blog_title}</a>" )) ?></h2>
 
 	<p><?php _e( 'But, before you can start using your site, <strong>you must activate it</strong>.' ) ?></p>
 	<p><?php /* translators: %s: email address */
@@ -891,7 +900,7 @@ if ( current_user_can( 'manage_network' ) ) {
 	/* translators: %s: network settings URL */
 	printf( __( 'To change or disable registration go to your <a href="%s">Options page</a>.' ), esc_url( network_admin_url( 'settings.php' ) ) );
 	$str= <<<HTML
-	    '</div>'
+	    </div>
 HTML;
 
 		echo $str;

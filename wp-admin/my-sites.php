@@ -69,7 +69,7 @@ if ( in_array( get_site_option( 'registration' ), array( 'all', 'blog' ) ) ) {
 if ( empty( $blogs ) ) :
 
 	$str= <<<HTML
-	'<p>'
+	<p>
 HTML;
 
 		echo $str;
@@ -77,7 +77,7 @@ HTML;
 	_e( 'You must be a member of at least one site to use this page.' );
 
 	$str= <<<HTML
-	'</p>'
+	</p>
 HTML;
 
 		echo $str;
@@ -115,8 +115,11 @@ else :
 	$settings_html = apply_filters( 'myblogs_options', '', 'global' );
 	if ( $settings_html != '' ) {
 
+
+
+        
 		$str= <<<HTML
-	'<h3>' . __( 'Global Settings' ) . '</h3>'
+	<h3>  'Global Settings' </h3>
 HTML;
 
 		echo $str;
@@ -127,9 +130,11 @@ HTML;
 
 	foreach ( $blogs as $user_blog ) {
 
+
+        $var= {$user_blog->blogname}
 		$str= <<<HTML
-	"<li>"
-	"<h3>{$user_blog->blogname}</h3>"
+	<li>
+	<h3>$var</h3>
 HTML;
 
 		echo $str;
@@ -145,8 +150,14 @@ HTML;
 		 * @param object $user_blog An object containing the site data.
 		 */
 
+
+		$var= esc_url( get_home_url( $user_blog->userblog_id ) );
+		$var2=  esc_url( get_admin_url( $user_blog->userblog_id ) );
+
+
 		$str= <<<HTML
-	"<p class='my-sites-actions'>" . apply_filters( 'myblogs_blog_actions', "<a href='" . esc_url( get_home_url( $user_blog->userblog_id ) ). "'>" . __( 'Visit' ) . "</a> | <a href='" . esc_url( get_admin_url( $user_blog->userblog_id ) ) . "'>" . __( 'Dashboard' ) . "</a>", $user_blog ) . "</p>"
+	<p class='my-sites-actions'>" . apply_filters( 'myblogs_blog_actions', <a href='" $var "'>  'Visit'  
+		</a> | <a href='" $var2 "'>  'Dashboard' </a>, $user_blog ) </p>
 HTML;
 
 		echo $str;
@@ -155,7 +166,7 @@ HTML;
 		echo apply_filters( 'myblogs_options', '', $user_blog );
 
 		$str= <<<HTML
-	"</li>"
+	</li>
 HTML;
 
 		echo $str;

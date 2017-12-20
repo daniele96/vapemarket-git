@@ -201,8 +201,10 @@ function login_header( $title = 'Log In', $message = '', $wp_error = '' ) {
 			 * @param string $errors Login error message.
 			 */
 
+			$var= apply_filters( 'login_errors', $errors );
+
 			$str= <<<HTML
-	'<div id="login_error">' . apply_filters( 'login_errors', $errors ) . "</div>\n"
+	<div id="login_error"> $var  </div>\n
 HTML;
 
 		echo $str;
@@ -217,8 +219,10 @@ HTML;
 			 * @param string $messages Login messages.
 			 */
 
+			$var= apply_filters( 'login_messages', $messages ); 
+
 			$str= <<<HTML
-	'<p class="message">' . apply_filters( 'login_messages', $messages ) . "</p>\n"
+	<p class="message"> $var </p>\n
 HTML;
 
 		echo $str;

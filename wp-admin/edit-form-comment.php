@@ -66,7 +66,7 @@ if ( 'approved' === wp_get_comment_status( $comment ) && $comment->comment_post_
 <div id="postdiv" class="postarea">
 <?php
 $str= <<<HTML
-	'<label for="content" class="screen-reader-text">' . __( 'Comment' ) . '</label>'
+	<label for="content" class="screen-reader-text"> 'Comment' </label>
 HTML;
 
 		echo $str;
@@ -166,8 +166,10 @@ endif; ?>
 <div id="major-publishing-actions">
 <div id="delete-action">
 <?php 
+
+$var=wp_nonce_url("comment.php?action=" . ( !EMPTY_TRASH_DAYS ? 'deletecomment' : 'trashcomment' ) . "&amp;c=$comment->comment_ID&amp;_wp_original_http_referer=" . urlencode(wp_get_referer()), 'delete-comment_' . $comment->comment_ID) . "'>" . ( !EMPTY_TRASH_DAYS ? __('Delete Permanently') : __('Move to Trash') ) ;
 $str= <<<HTML
-	 "<a class='submitdelete deletion' href='" . wp_nonce_url("comment.php?action=" . ( !EMPTY_TRASH_DAYS ? 'deletecomment' : 'trashcomment' ) . "&amp;c=$comment->comment_ID&amp;_wp_original_http_referer=" . urlencode(wp_get_referer()), 'delete-comment_' . $comment->comment_ID) . "'>" . ( !EMPTY_TRASH_DAYS ? __('Delete Permanently') : __('Move to Trash') ) . "</a>\n"; ?>
+	 <a class='submitdelete deletion' href='$var' </a> \n>
 HTML;
 
 		echo $str;

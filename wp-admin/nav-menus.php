@@ -580,14 +580,14 @@ require_once( ABSPATH . 'wp-admin/admin-header.php' );
 	<?php
 	if ( current_user_can( 'customize' ) ) :
 		$focus = $locations_screen ? array( 'section' => 'menu_locations' ) : array( 'panel' => 'nav_menus' );
-		printf(
+		printf(htmlspecialchars(
 			' <a class="page-title-action hide-if-no-customize" href="%1$s">%2$s</a>',
 			esc_url( add_query_arg( array(
 				array( 'autofocus' => $focus ),
-				'return' => urlencode( remove_query_arg( wp_removable_query_args(), wp_unslash( $_SERVER['REQUEST_URI'] ) ) ),
+				'return' => urlencode( remove_query_arg( wp_removable_query_args(), htmlspecialchars(wp_unslash( $_SERVER['REQUEST_URI'] )) ) ),
 			), admin_url( 'customize.php' ) ) ),
 			__( 'Manage with Live Preview' )
-		);
+		));
 	endif;
 	?>
 
@@ -610,14 +610,16 @@ require_once( ABSPATH . 'wp-admin/admin-header.php' );
 	if ( $locations_screen ) :
 		if ( 1 == $num_locations ) {
 			$str= <<<HTML
-	'<p>' . __( 'Your theme supports one menu. Select which menu you would like to use.' ) . '</p>'
+	<p> Your theme supports one menu. Select which menu you would like to use.' ) </p>
 HTML;
 
 		echo $str;
 			
 		} else {
+
+			$var = sprintf( _n( 'Your theme supports %s menu. Select which menu appears in each location.', 'Your theme supports %s menus. Select which menu appears in each location.', $num_locations ), number_format_i18n( $num_locations ) );
 			$str= <<<HTML
-	'<p>' .  sprintf( _n( 'Your theme supports %s menu. Select which menu appears in each location.', 'Your theme supports %s menus. Select which menu appears in each location.', $num_locations ), number_format_i18n( $num_locations ) ) . '</p>'
+	   <p> $var </p>
 HTML;
 
 		echo $str;

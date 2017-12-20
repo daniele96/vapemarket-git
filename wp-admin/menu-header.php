@@ -141,7 +141,7 @@ function _wp_menu_output( $menu, $submenu, $submenu_as_parent = true ) {
 
 		if ( $is_separator ) {
 				$str= <<<HTML
-	    '<div class="separator"></div>'
+	    <div class="separator"></div>
 HTML;
 
 		echo $str;
@@ -154,15 +154,23 @@ HTML;
 				$menu_file = substr( $menu_file, 0, $pos );
 			if ( ! empty( $menu_hook ) || ( ( 'index.php' != $submenu_items[0][2] ) && file_exists( WP_PLUGIN_DIR . "/$menu_file" ) && ! file_exists( ABSPATH . "/wp-admin/$menu_file" ) ) ) {
 				$admin_is_parent = true;
+
+				$var=admin.php?page={$submenu_items[0][2]}
+				$var1=wp-menu-image$img_class
 				$str= <<<HTML
-	    "<a href='admin.php?page={$submenu_items[0][2]}'$class $aria_attributes>$arrow<div class='wp-menu-image$img_class'$img_style>$img</div><div class='wp-menu-name'>$title</div></a>"
+
+	    <a href='$var' $class $aria_attributes>$arrow<div class='$var1'$img_style>$img</div><div class='wp-menu-name'>$title</div></a>
 HTML;
 
 		echo $str;
 				
 			} else {
+
+
+				$var= {$submenu_items[0][2]}
+				$var2= wp-menu-image$img_class 
 				$str= <<<HTML
-	    "\n\t<a href='{$submenu_items[0][2]}'$class $aria_attributes>$arrow<div class='wp-menu-image$img_class'$img_style>$img</div><div class='wp-menu-name'>$title</div></a>"
+	    \n\t<a href='$var'$class $aria_attributes>$arrow<div class='$var2'$img_style>$img</div><div class='wp-menu-name'>$title</div></a>
 HTML;
 
 		echo $str;
@@ -175,15 +183,17 @@ HTML;
 				$menu_file = substr( $menu_file, 0, $pos );
 			if ( ! empty( $menu_hook ) || ( ( 'index.php' != $item[2] ) && file_exists( WP_PLUGIN_DIR . "/$menu_file" ) && ! file_exists( ABSPATH . "/wp-admin/$menu_file" ) ) ) {
 				$admin_is_parent = true;
+
+				$var=admin.php?page={$item[2]}
 				$str= <<<HTML
-	    "\n\t<a href='admin.php?page={$item[2]}'$class $aria_attributes>$arrow<div class='wp-menu-image$img_class'$img_style>$img</div><div class='wp-menu-name'>{$item[0]}</div></a>"
+	    \n\t<a href= '$var' $class $aria_attributes>$arrow<div class='wp-menu-image$img_class'$img_style>$img</div><div class='wp-menu-name'>{$item[0]}</div></a>
 HTML;
 
 		echo $str;
 				
 			} else {
 				$str= <<<HTML
-	    "\n\t<a href='{$item[2]}'$class $aria_attributes>$arrow<div class='wp-menu-image$img_class'$img_style>$img</div><div class='wp-menu-name'>{$item[0]}</div></a>"
+	    \n\t<a href='{$item[2]}'$class $aria_attributes>$arrow<div class='wp-menu-image$img_class'$img_style>$img</div><div class='wp-menu-name'>{$item[0]}</div></a>
 HTML;
 
 		echo $str;
@@ -194,7 +204,7 @@ HTML;
 		if ( ! empty( $submenu_items ) ) {
 			echo "\n\t<ul class='wp-submenu wp-submenu-wrap'>";
 			$str= <<<HTML
-	    "<li class='wp-submenu-head' aria-hidden='true'>{$item[0]}</li>"
+	    <li class='wp-submenu-head' aria-hidden='true'>{$item[0]}</li>
 HTML;
 
 		echo $str;
@@ -255,14 +265,14 @@ HTML;
 
 					$sub_item_url = esc_url( $sub_item_url );
 						$str= <<<HTML
-	    "<li$class><a href='$sub_item_url'$class>$title</a></li>"
+	    <li$class><a href='$sub_item_url'$class>$title</a></li>
 HTML;
 
 		echo $str;
 					
 				} else {
 					$str= <<<HTML
-	    "<li$class><a href='{$sub_item[2]}'$class>$title</a></li>"
+	    <li$class><a href='{$sub_item[2]}'$class>$title</a></li>
 HTML;
 
 		echo $str;
@@ -270,26 +280,26 @@ HTML;
 				}
 			}
 			$str= <<<HTML
-	    "</ul>"
+	    </ul>
 HTML;
 
 		echo $str;
 			
 		}
 		$str= <<<HTML
-	    "</li>"
+	    </li>
 HTML;
 
 		echo $str;
 		
 	}
-
+        $var1=  esc_attr__( 'Collapse Main menu' )
         $str= <<<HTML
-	    '<li id="collapse-menu" class="hide-if-no-js">' .
-		'<button type="button" id="collapse-button" aria-label="' . esc_attr__( 'Collapse Main menu' ) . '" aria-expanded="true">' .
-		'<span class="collapse-button-icon" aria-hidden="true"></span>' .
-		'<span class="collapse-button-label">' . __( 'Collapse menu' ) . '</span>' .
-		'</button></li>'
+	    <li id="collapse-menu" class="hide-if-no-js"> .
+		<button type="button" id="collapse-button" aria-label="'$var1'" aria-expanded="true">
+		<span class="collapse-button-icon" aria-hidden="true"></span>
+		<span class="collapse-button-label"> __( 'Collapse menu' )</span>
+		</button></li>
 HTML;
 
 		echo $str;

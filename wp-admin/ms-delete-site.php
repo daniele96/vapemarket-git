@@ -32,8 +32,8 @@ $parent_file = 'tools.php';
 require_once( ABSPATH . 'wp-admin/admin-header.php' );
 
 $str= <<<HTML
-	 '<div class="wrap">'
-	 '<h1>' . esc_html( $title ) . '</h1>'
+	 <div class="wrap">
+	 <h1>$title </h1>
 HTML;
 
 		echo $str;
@@ -108,7 +108,7 @@ Webmaster
  	<?php
 }
 $str= <<<HTML
-	'</div>'
+	</div>
 HTML;
 
 		echo $str;
