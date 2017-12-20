@@ -196,10 +196,15 @@ switch ( $action ) {
 								! empty( $orders_to_dbids[$dbids_to_orders[$parent_db_id] - 1] )
 							) {
 								$_possible_parent_id = (int) get_post_meta( $orders_to_dbids[$dbids_to_orders[$parent_db_id] - 1], '_menu_item_menu_item_parent', true);
-								if ( in_array( $_possible_parent_id, array_keys( $dbids_to_orders ) ) )
-									$menu_item_data['menu_item_parent'] = $_possible_parent_id;
-								else
-									$menu_item_data['menu_item_parent'] = 0;
+
+								function chekthis($_possible_parent_id,$dbids_to_orders){
+
+									if ( in_array( $_possible_parent_id, array_keys( $dbids_to_orders ) ) )
+									return $_possible_parent_id;
+									else
+									return 0;
+							}
+								$menu_item_data= chekthis($_possible_parent_id,$dbids_to_orders);
 
 							// Else there isn't something before the parent.
 							} else {
