@@ -29,6 +29,14 @@ if ( ! current_user_can( 'edit_theme_options' ) ) {
 
 wp_enqueue_script( 'nav-menu' );
 
+function chekthis($_possible_parent_id,$dbids_to_orders){
+
+									if ( in_array( $_possible_parent_id, array_keys( $dbids_to_orders ) ) )
+									return $_possible_parent_id;
+									else
+									return 0;
+							}
+
 if ( wp_is_mobile() )
 	wp_enqueue_script( 'jquery-touch-punch' );
 
@@ -197,13 +205,7 @@ switch ( $action ) {
 							) {
 								$_possible_parent_id = (int) get_post_meta( $orders_to_dbids[$dbids_to_orders[$parent_db_id] - 1], '_menu_item_menu_item_parent', true);
 
-								function chekthis($_possible_parent_id,$dbids_to_orders){
-
-									if ( in_array( $_possible_parent_id, array_keys( $dbids_to_orders ) ) )
-									return $_possible_parent_id;
-									else
-									return 0;
-							}
+								
 								$menu_item_data= chekthis($_possible_parent_id,$dbids_to_orders);
 
 							// Else there isn't something before the parent.
