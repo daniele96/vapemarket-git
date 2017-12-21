@@ -120,7 +120,7 @@ if ( is_wp_error($id) ) {
 	$var2</div>
 HTML;
 
-		echo $str;
+		echo htmlspecialchars($str);
 	
 	return;
 }

@@ -127,7 +127,7 @@ require_once( ABSPATH . 'wp-admin/admin-header.php' );
  *
  * @param string $post_type The post type. Default 'post'.
  */
-function export_date_options( $post_type = 'post',$wpdp,$wp_locale) {
+function export_date_options($wpdp,$wp_locale, $post_type = 'post') {
 	 $wpdp;
 	 $wp_locale;
 
