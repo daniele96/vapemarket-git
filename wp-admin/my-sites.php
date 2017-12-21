@@ -131,7 +131,7 @@ HTML;
 	foreach ( $blogs as $user_blog ) {
 
 
-        $var= {$user_blog->blogname}
+        $var= $user_blog->blogname;
 		$str= <<<HTML
 	<li>
 	<h3>$var</h3>

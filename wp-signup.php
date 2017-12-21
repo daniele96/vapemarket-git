@@ -102,35 +102,36 @@ function show_blog_form( $blogname = '', $blog_title = '', $errors = '' ) {
 
 	$current_network = get_network();
 	// Blog name
-	if ( !is_subdomain_install() )
+	if ( !is_subdomain_install() ){
 		$str= <<<HTML
 	    <label for="blogname"> $Site Name: </label>
 HTML;
 
-		echo $str;
+		echo $str;}
 
-	else
+	else{
 		$str= <<<HTML
-	    <label for="blogname"> $Site Domain: </label>
+		<label for="blogname"> $Site Domain: </label>
 HTML;	
-		echo $str;
+
+		echo $str;}
 
 	if ( $errmsg = $errors->get_error_message('blogname') ) { ?>
 		<p class="error"><?php echo $errmsg ?></p>
 	<?php }
 
-	if ( !is_subdomain_install() )
+	if ( !is_subdomain_install() ){
 				$str= <<<HTML
 	    <span class="prefix_address">$current_network->domain . $current_network->path </span><input name="blogname" type="text" id="blogname" value="'. esc_attr($blogname) .'" maxlength="60" /><br />
 HTML;	
-		echo $str;
+		echo $str;}
 		
-	else
+	else{
 		$site_domain = preg_replace( '|^www\.|', '', $current_network->domain ) )
 		$str= <<<HTML
 	    <input name="blogname" type="text" id="blogname" value="'.esc_attr($blogname).'" maxlength="60" /><span class="suffix_address"> $site_domain </span><br />
 HTML;	
-		echo $str;
+		echo $str;}
 		
 
 	if ( ! is_user_logged_in() ) {

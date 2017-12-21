@@ -270,11 +270,11 @@ HTML;
 
 		$var= sprintf(
 			/* translators: %s: the message ID */
-			__( 'Mission complete. Message %s deleted.' );
+			__( 'Mission complete. Message %s deleted.' ),$i);
 
 		$str= <<<HTML
-	     <p> $var,
-			<strong> $i </strong>
+	     <p> $var
+			
 		</p>
 HTML;
 

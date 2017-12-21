@@ -110,11 +110,14 @@ if ( isset( $_REQUEST['post_id'] ) ) {
 $id = media_handle_upload( 'async-upload', $post_id );
 if ( is_wp_error($id) ) {
 
+	$var=sprintf(__('&#8220;%s&#8221; has failed to upload.'), $_FILES['async-upload']['name']);
+	$var2= $id->get_error_message();
+
 	$str= <<<HTML
-	'<div class="error-div error">
-	<a class="dismiss" href="#" onclick="jQuery(this).parents(\'div.media-item\').slideUp(200, function(){jQuery(this).remove();});">' . __('Dismiss') . '</a>
-	<strong>' . sprintf(__('&#8220;%s&#8221; has failed to upload.'), esc_html($_FILES['async-upload']['name']) ) . '</strong><br />' .
-	esc_html($id->get_error_message()) . '</div>'
+	<div class="error-div error">
+	<a class="dismiss" href="#" onclick="jQuery(this).parents(\'div.media-item\').slideUp(200, function(){jQuery(this).remove();});">'Dismiss'</a>
+	<strong>$var</strong><br />
+	$var2</div>
 HTML;
 
 		echo $str;

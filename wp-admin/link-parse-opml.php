@@ -30,8 +30,8 @@ global $opml;
  * @param string $tagName XML element name.
  * @param array $attrs XML element attributes.
  */
-function startElement($parser, $tagName, $attrs) {
-	 $names, $urls, $targets, $descriptions, $feeds;
+function startElement($parser, $tagName, $attrs,$names, $urls, $targets, $descriptions, $feeds) {
+	 $names; $urls; $targets; $descriptions; $feeds;
 
 	if ( 'OUTLINE' === $tagName ) {
 		$name = '';

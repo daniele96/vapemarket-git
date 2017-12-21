@@ -207,7 +207,7 @@ HTML;
 if ( current_user_can('install_plugins') )
 
 
-	$var=esc_url( network_admin_url( 'plugin-install.php?tab=search&type=tag&s=importer' );
+	$var= esc_url( network_admin_url( 'plugin-install.php?tab=search&type=tag&s=importer' ));
 
 	$str= <<<HTML
 	<p> If the importer you need is not listed, <a href="%s">search the plugin directory</a> to see if an importer is available.' $var  </p>

@@ -158,10 +158,10 @@ do_action( 'customize_controls_print_scripts' );
 					<span class="preview-notice"><?php
 
 
-					$var= sprintf( __( You are customizing %s ), <strong class="panel-title site-title"> get_bloginfo( 'name', 'display' )</strong> );
+					$var= sprintf(( You_are_customizing %s ),get_bloginfo( 'name', 'display' ) );
 
 					$str= <<<HTML
-					$var
+					<strong class="panel-title site-title">$var</strong>
 	
 HTML;
 

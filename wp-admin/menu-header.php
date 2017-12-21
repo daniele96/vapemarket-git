@@ -65,8 +65,8 @@ get_admin_page_parent();
  * @param array $submenu
  * @param bool  $submenu_as_parent
  */
-function _wp_menu_output( $menu, $submenu, $submenu_as_parent = true ) {
-	$self, $parent_file, $submenu_file, $plugin_page, $typenow;
+function _wp_menu_output( $menu, $submenu, $submenu_as_parent = true,$self, $parent_file, $submenu_file, $plugin_page, $typenow ) {
+	$self; $parent_file; $submenu_file; $plugin_page; $typenow;
 
 	$first = true;
 	// 0 = menu_title, 1 = capability, 2 = menu_slug, 3 = page_title, 4 = classes, 5 = hookname, 6 = icon_url
@@ -155,11 +155,11 @@ HTML;
 			if ( ! empty( $menu_hook ) || ( ( 'index.php' != $submenu_items[0][2] ) && file_exists( WP_PLUGIN_DIR . "/$menu_file" ) && ! file_exists( ABSPATH . "/wp-admin/$menu_file" ) ) ) {
 				$admin_is_parent = true;
 
-				$var=admin.php?page={$submenu_items[0][2]}
-				$var1=wp-menu-image$img_class
+				$var= $submenu_items[0][2];
+				$var1=$img_class;
 				$str= <<<HTML
 
-	    <a href='$var' $class $aria_attributes>$arrow<div class='$var1'$img_style>$img</div><div class='wp-menu-name'>$title</div></a>
+	    <a href=admin.php?page='$var' $class $aria_attributes>$arrow<div class=wp-menu-image'$var1'$img_style>$img</div><div class='wp-menu-name'>$title</div></a>
 HTML;
 
 		echo $str;
@@ -167,10 +167,10 @@ HTML;
 			} else {
 
 
-				$var= {$submenu_items[0][2]}
-				$var2= wp-menu-image$img_class 
+				$var= $submenu_items[0][2];
+				$var2= $img_class; 
 				$str= <<<HTML
-	    \n\t<a href='$var'$class $aria_attributes>$arrow<div class='$var2'$img_style>$img</div><div class='wp-menu-name'>$title</div></a>
+	    \n\t<a href='$var'$class $aria_attributes>$arrow<div class=wp-menu-image'$var2'$img_style>$img</div><div class='wp-menu-name'>$title</div></a>
 HTML;
 
 		echo $str;
@@ -184,9 +184,9 @@ HTML;
 			if ( ! empty( $menu_hook ) || ( ( 'index.php' != $item[2] ) && file_exists( WP_PLUGIN_DIR . "/$menu_file" ) && ! file_exists( ABSPATH . "/wp-admin/$menu_file" ) ) ) {
 				$admin_is_parent = true;
 
-				$var=admin.php?page={$item[2]}
+				$var=$item[2];
 				$str= <<<HTML
-	    \n\t<a href= '$var' $class $aria_attributes>$arrow<div class='wp-menu-image$img_class'$img_style>$img</div><div class='wp-menu-name'>{$item[0]}</div></a>
+	    \n\t<a href=admin.php?page= '$var' $class $aria_attributes>$arrow<div class='wp-menu-image$img_class'$img_style>$img</div><div class='wp-menu-name'>{$item[0]}</div></a>
 HTML;
 
 		echo $str;
@@ -293,10 +293,10 @@ HTML;
 		echo $str;
 		
 	}
-        $var1=  esc_attr__( 'Collapse Main menu' )
-        $str= <<<HTML
-	    <li id="collapse-menu" class="hide-if-no-js"> .
-		<button type="button" id="collapse-button" aria-label="'$var1'" aria-expanded="true">
+        $var1=  esc_attr__( 'Collapse Main menu' );
+		$str= <<<HTML
+		<li id="collapse-menu" class="hide-if-no-js">
+		<button type="button" id="collapse-button" aria-label="$var1" aria-expanded="true">
 		<span class="collapse-button-icon" aria-hidden="true"></span>
 		<span class="collapse-button-label"> __( 'Collapse menu' )</span>
 		</button></li>
@@ -328,3 +328,4 @@ do_action( 'adminmenu' );
 </ul>
 </div>
 </div>
+

@@ -40,9 +40,9 @@ global $hook_suffix;
 		 * @param string $text The content that will be printed.
 		 */
 
-		$var= apply_filters( admin_footer_text, <span id="footer-thankyou"> $text </span> )
+		$var= apply_filters( admin_footer_text, $text);
 		$str= <<<HTML
-	   $var
+	     <span id="footer-thankyou">$var</span>
 HTML;
 
 		echo $str;

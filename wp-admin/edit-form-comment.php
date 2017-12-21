@@ -173,7 +173,7 @@ $str= <<<HTML
 HTML;
 
 		echo $str;
-	
+?>	
 </div>
 <div id="publishing-action">
 <?php submit_button( __( 'Update' ), 'primary large', 'save', false ); ?>
