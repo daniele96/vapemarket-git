@@ -597,6 +597,8 @@ case 'rp' :
 
 		$c_domain = rawurlencode(COOKIE_DOMAIN);
 		$rp_path = rawurlencode($rp_path);
+		$value = rawurlencode($value);
+		
 		setcookie( $rp_cookie, $value, 0, $rp_path,$c_domain , is_ssl(), true );
 		wp_safe_redirect( remove_query_arg( array( 'key', 'login' ) ) );
 		return;
