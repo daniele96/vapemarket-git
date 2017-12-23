@@ -476,7 +476,12 @@ case 'postpass' :
 	} else {
 		$secure = false;
 	}
-	setcookie( 'wp-postpass_' . COOKIEHASH, $hasher->HashPassword( wp_unslash( $_POST['post_password'] ) ), $expire, rawurlencode(COOKIEPATH),rawurlencode (COOKIE_DOMAIN), $secure );
+
+	$c_path= rawurlencode(COOKIEPATH);
+	$c_domain= rawurlencode (COOKIE_DOMAIN);
+	$password= rawurlencode($hasher->HashPassword( wp_unslash( $_POST['post_password'] ) ));
+
+	setcookie( 'wp-postpass_' . COOKIEHASH, , $expire, $c_path,$password, $secure );
 
 	wp_safe_redirect( wp_get_referer() );
 	return;
@@ -589,7 +594,10 @@ case 'rp' :
 	$rp_cookie = 'wp-resetpass-' . COOKIEHASH;
 	if ( isset( $_GET['key'] ) ) {
 		$value = sprintf( '%s:%s', wp_unslash( $_GET['login'] ), wp_unslash( $_GET['key'] ) );
-		setcookie( $rp_cookie, $value, 0, $rp_path, rawurlencode(COOKIE_DOMAIN), is_ssl(), true );
+
+		$c_domain = rawurlencode(COOKIE_DOMAIN);
+		$rp_path = rawurlencode($rp_path);
+		setcookie( $rp_cookie, $value, 0, $rp_path,$c_domain , is_ssl(), true );
 		wp_safe_redirect( remove_query_arg( array( 'key', 'login' ) ) );
 		return;
 	}
