@@ -65,7 +65,7 @@ get_admin_page_parent();
  * @param array $submenu
  * @param bool  $submenu_as_parent
  */
-function _wp_menu_output( $menu, $submenu, $submenu_as_parent = true,$self, $parent_file, $submenu_file, $plugin_page, $typenow ) {
+function _wp_menu_output( $menu, $submenu,$self, $parent_file, $submenu_file, $plugin_page, $typenow,$submenu_as_parent = true ) {
 	$self; $parent_file; $submenu_file; $plugin_page; $typenow;
 
 	$first = true;
@@ -265,14 +265,14 @@ HTML;
 
 					$sub_item_url = esc_url( $sub_item_url );
 						$str= <<<HTML
-	    <li$class><a href='$sub_item_url'$class>$title</a></li>
+	    <li $class><a href='$sub_item_url'$class>$title</a></li>
 HTML;
 
 		echo $str;
 					
 				} else {
 					$str= <<<HTML
-	    <li$class><a href='{$sub_item[2]}'$class>$title</a></li>
+	    <li $class><a href='{$sub_item[2]}'$class>$title</a></li>
 HTML;
 
 		echo $str;
@@ -304,7 +304,7 @@ HTML;
 
 		echo $str;
 	
-
+	}
 ?>
 
 <div id="adminmenumain" role="navigation" aria-label="<?php esc_attr_e( 'Main menu' ); ?>">
@@ -323,9 +323,8 @@ _wp_menu_output( $menu, $submenu );
  * @since 2.5.0
  */
 do_action( 'adminmenu' );
-
 ?>
+
 </ul>
 </div>
 </div>
-

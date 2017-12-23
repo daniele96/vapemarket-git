@@ -107,31 +107,36 @@ function show_blog_form( $blogname = '', $blog_title = '', $errors = '' ) {
 	    <label for="blogname"> $Site Name: </label>
 HTML;
 
-		echo $str;}
+		echo $str;
+	}
 
-	else{
+	else {
 		$str= <<<HTML
 		<label for="blogname"> $Site Domain: </label>
-HTML;	
+HTML;
+		echo $str;
+	}
 
-		echo $str;}
-
-	if ( $errmsg = $errors->get_error_message('blogname') ) { ?>
-		<p class="error"><?php echo $errmsg ?></p>
-	<?php }
+	if ( $errmsg = $errors->get_error_message('blogname') ) {
+		$str= <<<HTML
+		<p class='error'> $errmsg</p>
+HTML;
+	}
 
 	if ( !is_subdomain_install() ){
 				$str= <<<HTML
 	    <span class="prefix_address">$current_network->domain . $current_network->path </span><input name="blogname" type="text" id="blogname" value="'. esc_attr($blogname) .'" maxlength="60" /><br />
-HTML;	
-		echo $str;}
+HTML;
+		echo $str;
+	}
 		
-	else{
-		$site_domain = preg_replace( '|^www\.|', '', $current_network->domain ) )
+	else {
+		$site_domain = preg_replace( '|^www\.|', '', $current_network->domain);
 		$str= <<<HTML
 	    <input name="blogname" type="text" id="blogname" value="'.esc_attr($blogname).'" maxlength="60" /><span class="suffix_address"> $site_domain </span><br />
-HTML;	
-		echo $str;}
+HTML;
+		echo $str;
+	}
 		
 
 	if ( ! is_user_logged_in() ) {
@@ -147,8 +152,8 @@ HTML;
 		$var2= __( 'Must be at least 4 characters, letters and numbers only. It cannot be changed, so choose carefully!' );
 		$str= <<<HTML
 	    <p>(<strong> $var </strong>) $var2  </p>
-HTML;	
-		echo $str ;
+HTML;
+		echo $str;
 	}
 
 	// Blog Title
@@ -164,30 +169,29 @@ HTML;
 	// Site Language.
 	$languages = signup_get_available_languages();
 
-	if ( ! empty( $languages ) ) :
-		?>
+	if ( ! empty( $languages ) ) : ?>
 		<p>
 			<label for="site-language"><?php _e( 'Site Language:' ); ?></label>
 			<?php
-			// Network default.
-			$lang = get_site_option( 'WPLANG' );
+				// Network default.
+				$lang = get_site_option( 'WPLANG' );
 
-			if ( isset( $_POST['WPLANG'] ) ) {
-				$lang = $_POST['WPLANG'];
-			}
+				if(isset( $_POST['WPLANG'])) {
+					$lang = $_POST['WPLANG'];
+				}
 
-			// Use US English if the default isn't available.
-			if ( ! in_array( $lang, $languages ) ) {
-				$lang = '';
-			}
+				// Use US English if the default isn't available.
+				if ( ! in_array( $lang, $languages ) ) {
+					$lang = '';
+				}
 
-			wp_dropdown_languages( array(
-				'name'                        => 'WPLANG',
-				'id'                          => 'site-language',
-				'selected'                    => $lang,
-				'languages'                   => $languages,
-				'show_available_translations' => false,
-			) );
+				wp_dropdown_languages( array(
+					'name'                        => 'WPLANG',
+					'id'                          => 'site-language',
+					'selected'                    => $lang,
+					'languages'                   => $languages,
+					'show_available_translations' => false,
+				) );
 			?>
 		</p>
 	<?php endif; // Languages. ?>
@@ -344,7 +348,7 @@ function signup_another_blog( $blogname = '', $blog_title = '', $errors = '' ) {
 	$blog_title = $filtered_results['blog_title'];
 	$errors = $filtered_results['errors'];
 
-        $var= sprintf( __( 'Get <em>another</em> %s site in seconds' ), get_network()->site_name )
+        $var= sprintf( __( 'Get <em>another</em> %s site in seconds' ), get_network()->site_name );
 		$str= <<<HTML
 	    <h2> $var </h2>
 HTML;
@@ -373,9 +377,8 @@ HTML;
 				<?php foreach ( $blogs as $blog ) {
 					$home_url = get_home_url( $blog->userblog_id );
 
-					$var= esc_url( $home_url ) 
+					$var= esc_url( $home_url );
 					$str= <<<HTML
-
 	    <li><a href="$var">' . $home_url </a></li>
 HTML;
 
@@ -399,7 +402,7 @@ HTML;
 		 */
 		do_action( 'signup_hidden_fields', 'create-another-site' );
 		?>
-		<?php show_blog_form($blogname, $blog_title, $errors); ?>
+		<?php htmlspecialchars(show_blog_form($blogname, $blog_title, $errors)); ?>
 		<p class="submit"><input type="submit" name="submit" class="submit" value="<?php esc_attr_e( 'Create Site' ) ?>" /></p>
 	</form>
 	<?php
@@ -414,7 +417,12 @@ HTML;
  *                   The function halts all execution if the user is not logged in.
  */
 function validate_another_blog_signup() {
-    $wpdb, $blogname, $blog_title, $errors, $domain, $path;
+	$wpdb= null;
+	$blogname="";
+	$blog_title="";
+	$errors= null;
+	$domain= null;
+	$path="";
 	$current_user = wp_get_current_user();
 	if ( ! is_user_logged_in() ) {
 		return;
@@ -529,14 +537,14 @@ function confirm_another_blog_signup( $domain, $path, $blog_title, $user_name, $
 		printf( __( 'The site %s is yours.' ), htmlspecialchars($site) );
 	?></h2>
 	<p>
-		<?php printf(
+		<?php htmlspecialchars(printf(
 			/* translators: 1: home URL, 2: site address, 3: login URL, 4: username */
 			__( '<a href="%1$s">%2$s</a> is your new site. <a href="%3$s">Log in</a> as &#8220;%4$s&#8221; using your existing password.' ),
 			esc_url( $home_url ),
 			untrailingslashit( $domain . $path ),
 			esc_url( $login_url ),
 			$user_name
-		); ?>
+		)); ?>
 	</p>
 	<?php
 	/**
@@ -665,7 +673,7 @@ function confirm_user_signup($user_name, $user_email) {
 	printf( __( '%s is your new username' ), htmlspecialchars($user_name)) ?></h2>
 	<p><?php _e( 'But, before you can start using your new username, <strong>you must activate it</strong>.' ) ?></p>
 	<p><?php /* translators: %s: email address */
-	printf( __( 'Check your inbox at %s and click the link given.' ), '<strong>' . $user_email . '</strong>' ); ?></p>
+	htmlspecialchars(printf( __( 'Check your inbox at %s and click the link given.' ), '<strong>' . $user_email . '</strong>' )); ?></p>
 	<p><?php _e( 'If you do not activate your username within two days, you will have to sign up again.' ); ?></p>
 	<?php
 	/** This action is documented in wp-signup.php */
@@ -811,7 +819,7 @@ function confirm_blog_signup( $domain, $path, $blog_title, $user_name = '', $use
 
 	<p><?php _e( 'But, before you can start using your site, <strong>you must activate it</strong>.' ) ?></p>
 	<p><?php /* translators: %s: email address */
-	printf( __( 'Check your inbox at %s and click the link given.' ), '<strong>' . $user_email . '</strong>' ); ?></p>
+	htmlspecialchars(printf( __( 'Check your inbox at %s and click the link given.' ), '<strong>' . $user_email . '</strong>' )); ?></p>
 	<p><?php _e( 'If you do not activate your site within two days, you will have to sign up again.' ); ?></p>
 	<h2><?php _e( 'Still waiting for your email?' ); ?></h2>
 	<p>

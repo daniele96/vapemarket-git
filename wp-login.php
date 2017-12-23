@@ -31,7 +31,9 @@ if ( force_ssl_admin() && ! is_ssl() ) {
  * @param WP_Error $wp_error Optional. The error to pass. Default empty.
  */
 function login_header( $title = 'Log In', $message = '', $wp_error = '' ) {
-    $error, $interim_login, $action;
+	$error = null;
+	$interim_login= null;
+	$action = null;
 
 	// Don't index any of these forms
 	add_action( 'login_head', 'wp_no_robots' );
@@ -474,7 +476,7 @@ case 'postpass' :
 	} else {
 		$secure = false;
 	}
-	setcookie( 'wp-postpass_' . COOKIEHASH, $hasher->HashPassword( wp_unslash( $_POST['post_password'] ) ), $expire, COOKIEPATH, COOKIE_DOMAIN, $secure );
+	setcookie( 'wp-postpass_' . COOKIEHASH, $hasher->HashPassword( wp_unslash( $_POST['post_password'] ) ), $expire, rawurlencode(COOKIEPATH),rawurlencode (COOKIE_DOMAIN), $secure );
 
 	wp_safe_redirect( wp_get_referer() );
 	return;
@@ -587,7 +589,7 @@ case 'rp' :
 	$rp_cookie = 'wp-resetpass-' . COOKIEHASH;
 	if ( isset( $_GET['key'] ) ) {
 		$value = sprintf( '%s:%s', wp_unslash( $_GET['login'] ), wp_unslash( $_GET['key'] ) );
-		setcookie( $rp_cookie, $value, 0, $rp_path, COOKIE_DOMAIN, is_ssl(), true );
+		setcookie( $rp_cookie, $value, 0, $rp_path, rawurlencode(COOKIE_DOMAIN), is_ssl(), true );
 		wp_safe_redirect( remove_query_arg( array( 'key', 'login' ) ) );
 		return;
 	}
