@@ -47,8 +47,8 @@ $pagenum = $wp_list_table->get_pagenum();
 
 // Back-compat for viewing comments of an entry
 foreach ( array( 'p', 'attachment_id', 'page_id' ) as $_redirect ) {
-	if ( ! empty( $_REQUEST[ $_redirect ] ) ) {
-		wp_redirect( admin_url( 'edit-comments.php?p=' . absint( $_REQUEST[ $_redirect ] ) ) );
+	if ( ! empty( $_POST[ $_redirect ] ) ) {
+		wp_redirect( admin_url( 'edit-comments.php?p=' . absint( $_POST[ $_redirect ] ) ) );
 		return;
 	}
 }
@@ -78,18 +78,18 @@ if ( $doaction ) {
 
 	if ( 'delete_all' == $doaction ) {
 		// Prepare for deletion of all posts with a specified post status (i.e. Empty trash).
-		$post_status = preg_replace('/[^a-z0-9_-]+/i', '', $_REQUEST['post_status']);
+		$post_status = preg_replace('/[^a-z0-9_-]+/i', '', $_POST['post_status']);
 		// Validate the post status exists.
 		if ( get_post_status_object( $post_status ) ) {
 			$post_ids = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type=%s AND post_status = %s", $post_type, $post_status ) );
 		}
 		$doaction = 'delete';
-	} elseif ( isset( $_REQUEST['media'] ) ) {
-		$post_ids = $_REQUEST['media'];
-	} elseif ( isset( $_REQUEST['ids'] ) ) {
-		$post_ids = explode( ',', $_REQUEST['ids'] );
-	} elseif ( !empty( $_REQUEST['post'] ) ) {
-		$post_ids = array_map('intval', $_REQUEST['post']);
+	} elseif ( isset( $_POST['media'] ) ) {
+		$post_ids = $_POST['media'];
+	} elseif ( isset( $_POST['ids'] ) ) {
+		$post_ids = explode( ',', $_POST['ids'] );
+	} elseif ( !empty( $_POST['post'] ) ) {
+		$post_ids = array_map('intval', $_POST['post']);
 	}
 
 	if ( !isset( $post_ids ) ) {
@@ -151,8 +151,8 @@ if ( $doaction ) {
 			$sendback = add_query_arg('deleted', $deleted, $sendback);
 			break;
 		case 'edit':
-			if ( isset($_REQUEST['bulk_edit']) ) {
-				$done = bulk_edit_posts($_REQUEST);
+			if ( isset($_POST['bulk_edit']) ) {
+				$done = bulk_edit_posts($_POST);
 
 				if ( is_array($done) ) {
 					$done['updated'] = count( $done['updated'] );
@@ -172,7 +172,7 @@ if ( $doaction ) {
 
 	wp_redirect($sendback);
 	return;
-} elseif ( ! empty($_REQUEST['_wp_http_referer']) ) {
+} elseif ( ! empty($_POST['_wp_http_referer']) ) {
 	 wp_redirect( remove_query_arg( array('_wp_http_referer', '_wpnonce'), wp_unslash($_SERVER['REQUEST_URI']) ) );
 	 return;
 }
@@ -261,11 +261,11 @@ get_current_screen()->set_screen_reader_content( array(
 add_screen_option( 'per_page', array( 'default' => 20, 'option' => 'edit_' . $post_type . '_per_page' ) );
 
 $bulk_counts = array(
-	'updated'   => isset( $_REQUEST['updated'] )   ? absint( $_REQUEST['updated'] )   : 0,
-	'locked'    => isset( $_REQUEST['locked'] )    ? absint( $_REQUEST['locked'] )    : 0,
-	'deleted'   => isset( $_REQUEST['deleted'] )   ? absint( $_REQUEST['deleted'] )   : 0,
-	'trashed'   => isset( $_REQUEST['trashed'] )   ? absint( $_REQUEST['trashed'] )   : 0,
-	'untrashed' => isset( $_REQUEST['untrashed'] ) ? absint( $_REQUEST['untrashed'] ) : 0,
+	'updated'   => isset( $_POST['updated'] )   ? absint( $_POST['updated'] )   : 0,
+	'locked'    => isset( $_POST['locked'] )    ? absint( $_POST['locked'] )    : 0,
+	'deleted'   => isset( $_POST['deleted'] )   ? absint( $_POST['deleted'] )   : 0,
+	'trashed'   => isset( $_POST['trashed'] )   ? absint( $_POST['trashed'] )   : 0,
+	'untrashed' => isset( $_POST['untrashed'] ) ? absint( $_POST['untrashed'] ) : 0,
 );
 
 $bulk_messages = array();
@@ -322,7 +322,7 @@ HTML;
 	
 }
 
-if ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) ) {
+if ( isset( $_POST['s'] ) && strlen( $_POST['s'] ) ) {
 	/* translators: %s: search keywords */
 	printf( ' <span class="subtitle">' . __( 'Search results for &#8220;%s&#8221;' ) . '</span>', get_search_query() );
 }
@@ -339,8 +339,8 @@ foreach ( $bulk_counts as $message => $count ) {
 	elseif ( isset( $bulk_messages['post'][ $message ] ) )
 		$messages[] = sprintf( $bulk_messages['post'][ $message ], number_format_i18n( $count ) );
 
-	if ( $message == 'trashed' && isset( $_REQUEST['ids'] ) ) {
-		$ids = preg_replace( '/[^0-9,]/', '', $_REQUEST['ids'] );
+	if ( $message == 'trashed' && isset( $_POST['ids'] ) ) {
+		$ids = preg_replace( '/[^0-9,]/', '', $_POST['ids'] );
 		$messages[] = '<a href="' . esc_url( wp_nonce_url( "edit.php?post_type=$post_type&doaction=undo&action=untrash&ids=$ids", "bulk-posts" ) ) . '">' . __('Undo') . '</a>';
 	}
 }
@@ -366,14 +366,14 @@ $_SERVER['REQUEST_URI'] = remove_query_arg( array( 'locked', 'skipped', 'updated
 
 <?php $wp_list_table->search_box( $post_type_object->labels->search_items, 'post' ); ?>
 
-<input type="hidden" name="post_status" class="post_status_page" value="<?php echo !empty($_REQUEST['post_status']) ? esc_attr($_REQUEST['post_status']) : 'all'; ?>" />
+<input type="hidden" name="post_status" class="post_status_page" value="<?php echo !empty($_POST['post_status']) ? esc_attr($_POST['post_status']) : 'all'; ?>" />
 <input type="hidden" name="post_type" class="post_type_page" value="<?php echo $post_type; ?>" />
 
-<?php if ( ! empty( $_REQUEST['author'] ) ) { ?>
-<input type="hidden" name="author" value="<?php echo esc_attr( $_REQUEST['author'] ); ?>" />
+<?php if ( ! empty( $_POST['author'] ) ) { ?>
+<input type="hidden" name="author" value="<?php echo esc_attr( $_POST['author'] ); ?>" />
 <?php } ?>
 
-<?php if ( ! empty( $_REQUEST['show_sticky'] ) ) { ?>
+<?php if ( ! empty( $_POST['show_sticky'] ) ) { ?>
 <input type="hidden" name="show_sticky" value="1" />
 <?php } ?>
 

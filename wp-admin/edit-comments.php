@@ -24,16 +24,16 @@ $doaction = $wp_list_table->current_action();
 if ( $doaction ) {
 	check_admin_referer( 'bulk-comments' );
 
-	if ( 'delete_all' == $doaction && !empty( $_REQUEST['pagegen_timestamp'] ) ) {
-		$comment_status = wp_unslash( $_REQUEST['comment_status'] );
-		$delete_time = wp_unslash( $_REQUEST['pagegen_timestamp'] );
+	if ( 'delete_all' == $doaction && !empty( $_POST['pagegen_timestamp'] ) ) {
+		$comment_status = wp_unslash( $_POST['comment_status'] );
+		$delete_time = wp_unslash( $_POST['pagegen_timestamp'] );
 		$comment_ids = $wpdb->get_col( $wpdb->prepare( "SELECT comment_ID FROM $wpdb->comments WHERE comment_approved = %s AND %s > comment_date_gmt", $comment_status, $delete_time ) );
 		$doaction = 'delete';
-	} elseif ( isset( $_REQUEST['delete_comments'] ) ) {
-		$comment_ids = $_REQUEST['delete_comments'];
-		$doaction = ( $_REQUEST['action'] != -1 ) ? $_REQUEST['action'] : $_REQUEST['action2'];
-	} elseif ( isset( $_REQUEST['ids'] ) ) {
-		$comment_ids = array_map( 'absint', explode( ',', $_REQUEST['ids'] ) );
+	} elseif ( isset( $_POST['delete_comments'] ) ) {
+		$comment_ids = $_POST['delete_comments'];
+		$doaction = ( $_GET['action'] != -1 ) ? $_GET['action'] : $_GET['action2'];
+	} elseif ( isset( $_POST['ids'] ) ) {
+		$comment_ids = array_map( 'absint', explode( ',', $_POST['ids'] ) );
 	} elseif ( wp_get_referer() ) {
 		wp_safe_redirect( wp_get_referer() );
 		return;
@@ -213,11 +213,11 @@ if ( $post_id ) {
 ?></h1>
 
 <?php
-if ( isset($_REQUEST['s']) && strlen( $_REQUEST['s'] ) ) {
+if ( isset($_POST['s']) && strlen( $_POST['s'] ) ) {
 	echo '<span class="subtitle">';
 	/* translators: %s: search keywords */
 	printf( __( 'Search results for &#8220;%s&#8221;' ),
-		wp_html_excerpt( htmlspecialchars( wp_unslash( $_REQUEST['s'] ) ), 50, '&hellip;' )
+		wp_html_excerpt( htmlspecialchars( wp_unslash( $_POST['s'] ) ), 50, '&hellip;' )
 	);
 
 	$str= <<<HTML
@@ -232,8 +232,8 @@ HTML;
 <hr class="wp-header-end">
 
 <?php
-if ( isset( $_REQUEST['error'] ) ) {
-	$error = (int) $_REQUEST['error'];
+if ( isset( $_GET['error'] ) ) {
+	$error = (int) $_GET['error'];
 	$error_msg = '';
 	switch ( $error ) {
 		case 1 :
@@ -253,14 +253,14 @@ HTML;
 		
 }
 
-if ( isset($_REQUEST['approved']) || isset($_REQUEST['deleted']) || isset($_REQUEST['trashed']) || isset($_REQUEST['untrashed']) || isset($_REQUEST['spammed']) || isset($_REQUEST['unspammed']) || isset($_REQUEST['same']) ) {
-	$approved  = isset( $_REQUEST['approved']  ) ? (int) $_REQUEST['approved']  : 0;
-	$deleted   = isset( $_REQUEST['deleted']   ) ? (int) $_REQUEST['deleted']   : 0;
-	$trashed   = isset( $_REQUEST['trashed']   ) ? (int) $_REQUEST['trashed']   : 0;
-	$untrashed = isset( $_REQUEST['untrashed'] ) ? (int) $_REQUEST['untrashed'] : 0;
-	$spammed   = isset( $_REQUEST['spammed']   ) ? (int) $_REQUEST['spammed']   : 0;
-	$unspammed = isset( $_REQUEST['unspammed'] ) ? (int) $_REQUEST['unspammed'] : 0;
-	$same      = isset( $_REQUEST['same'] )      ? (int) $_REQUEST['same']      : 0;
+if ( isset($_GET['approved']) || isset($_GET['deleted']) || isset($_GET['trashed']) || isset($_GET['untrashed']) || isset($_GET['spammed']) || isset($_GET['unspammed']) || isset($_GET['same']) ) {
+	$approved  = isset( $_GET['approved']  ) ? (int) $_GET['approved']  : 0;
+	$deleted   = isset( $_GET['deleted']   ) ? (int) $_GET['deleted']   : 0;
+	$trashed   = isset( $_GET['trashed']   ) ? (int) $_GET['trashed']   : 0;
+	$untrashed = isset( $_GET['untrashed'] ) ? (int) $_GET['untrashed'] : 0;
+	$spammed   = isset( $_GET['spammed']   ) ? (int) $_GET['spammed']   : 0;
+	$unspammed = isset( $_GET['unspammed'] ) ? (int) $_GET['unspammed'] : 0;
+	$same      = isset( $_GET['same'] )      ? (int) $_GET['same']      : 0;
 
 	if ( $approved > 0 || $deleted > 0 || $trashed > 0 || $untrashed > 0 || $spammed > 0 || $unspammed > 0 || $same > 0 ) {
 		if ( $approved > 0 ) {
@@ -269,7 +269,7 @@ if ( isset($_REQUEST['approved']) || isset($_REQUEST['deleted']) || isset($_REQU
 		}
 
 		if ( $spammed > 0 ) {
-			$ids = isset($_REQUEST['ids']) ? $_REQUEST['ids'] : 0;
+			$ids = isset($_GET['ids']) ? $_GET['ids'] : 0;
 			/* translators: %s: number of comments marked as spam */
 			$messages[] = sprintf( _n( '%s comment marked as spam.', '%s comments marked as spam.', $spammed ), $spammed ) . ' <a href="' . esc_url( wp_nonce_url( "edit-comments.php?doaction=undo&action=unspam&ids=$ids", "bulk-comments" ) ) . '">' . __('Undo') . '</a><br />';
 		}
@@ -280,7 +280,7 @@ if ( isset($_REQUEST['approved']) || isset($_REQUEST['deleted']) || isset($_REQU
 		}
 
 		if ( $trashed > 0 ) {
-			$ids = isset($_REQUEST['ids']) ? $_REQUEST['ids'] : 0;
+			$ids = isset($_GET['ids']) ? $_GET['ids'] : 0;
 			/* translators: %s: number of comments moved to the Trash */
 			$messages[] = sprintf( _n( '%s comment moved to the Trash.', '%s comments moved to the Trash.', $trashed ), $trashed ) . ' <a href="' . esc_url( wp_nonce_url( "edit-comments.php?doaction=undo&action=untrash&ids=$ids", "bulk-comments" ) ) . '">' . __('Undo') . '</a><br />';
 		}
@@ -340,8 +340,8 @@ HTML;
 <input type="hidden" name="_per_page" value="<?php echo esc_attr( $wp_list_table->get_pagination_arg('per_page') ); ?>" />
 <input type="hidden" name="_page" value="<?php echo esc_attr( $wp_list_table->get_pagination_arg('page') ); ?>" />
 
-<?php if ( isset($_REQUEST['paged']) ) { ?>
-	<input type="hidden" name="paged" value="<?php echo esc_attr( absint( $_REQUEST['paged'] ) ); ?>" />
+<?php if ( isset($_GET['paged']) ) { ?>
+	<input type="hidden" name="paged" value="<?php echo esc_attr( absint( $_GET['paged'] ) ); ?>" />
 <?php } ?>
 
 <?php $wp_list_table->display(); ?>

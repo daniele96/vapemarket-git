@@ -18,8 +18,8 @@ if (!current_user_can('upload_files'))
 wp_enqueue_script('plupload-handlers');
 
 $post_id = 0;
-if ( isset( $_REQUEST['post_id'] ) ) {
-	$post_id = absint( $_REQUEST['post_id'] );
+if ( isset( $_GET['post_id'] ) ) {
+	$post_id = absint( $_GET['post_id'] );
 	if ( ! get_post( $post_id ) || ! current_user_can( 'edit_post', $post_id ) )
 		$post_id = 0;
 }

@@ -87,11 +87,11 @@ case 'add-tag':
 	break;
 
 case 'delete':
-	if ( ! isset( $_REQUEST['tag_ID'] ) ) {
+	if ( ! isset( $_GET['tag_ID'] ) ) {
 		break;
 	}
 
-	$tag_ID = (int) $_REQUEST['tag_ID'];
+	$tag_ID = (int) $_GET['tag_ID'];
 	check_admin_referer( 'delete-tag_' . $tag_ID );
 
 	if ( ! current_user_can( 'delete_term', $tag_ID ) ) {
@@ -122,7 +122,7 @@ case 'bulk-delete':
 		);
 	}
 
-	$tags = (array) $_REQUEST['delete_tags'];
+	$tags = (array) $_POST['delete_tags'];
 	foreach ( $tags as $tag_ID ) {
 		wp_delete_term( $tag_ID, $taxonomy );
 	}
@@ -132,11 +132,11 @@ case 'bulk-delete':
 	break;
 
 case 'edit':
-	if ( ! isset( $_REQUEST['tag_ID'] ) ) {
+	if ( ! isset( $_GET['tag_ID'] ) ) {
 		break;
 	}
 
-	$term_id = (int) $_REQUEST['tag_ID'];
+	$term_id = (int) $_GET['tag_ID'];
 	$term    = get_term( $term_id );
 
 	if ( ! $term instanceof WP_Term ) {
@@ -171,17 +171,17 @@ case 'editedtag':
 	}
 	break;
 default:
-	if ( ! $wp_list_table->current_action() || ! isset( $_REQUEST['delete_tags'] ) ) {
+	if ( ! $wp_list_table->current_action() || ! isset( $_POST['delete_tags'] ) ) {
 		break;
 	}
 	check_admin_referer( 'bulk-tags' );
-	$tags = (array) $_REQUEST['delete_tags'];
+	$tags = (array) $_POST['delete_tags'];
 	/** This action is documented in wp-admin/edit-comments.php */
 	$location = apply_filters( 'handle_bulk_actions-' . get_current_screen()->id, $location, $wp_list_table->current_action(), $tags );
 	break;
 }
 
-if ( ! $location && ! empty( $_REQUEST['_wp_http_referer'] ) ) {
+if ( ! $location && ! empty( $_POST['_wp_http_referer'] ) ) {
 	$location = remove_query_arg( array( '_wp_http_referer', '_wpnonce' ), wp_unslash( $_SERVER['REQUEST_URI'] ) );
 }
 
@@ -281,7 +281,7 @@ require_once( ABSPATH . 'wp-admin/admin-header.php' );
 /** Also used by the Edit Tag  form */
 require_once( ABSPATH . 'wp-admin/includes/edit-tag-messages.php' );
 
-$class = ( isset( $_REQUEST['error'] ) ) ? 'error' : 'updated';
+$class = ( isset( $_GET['error'] ) ) ? 'error' : 'updated';
 
 if ( is_plugin_active( 'wpcat2tag-importer/wpcat2tag-importer.php' ) ) {
 	$import_link = admin_url( 'admin.php?import=wpcat2tag' );
@@ -295,9 +295,9 @@ if ( is_plugin_active( 'wpcat2tag-importer/wpcat2tag-importer.php' ) ) {
 <h1 class="wp-heading-inline"><?php echo esc_html( $title ); ?></h1>
 
 <?php
-if ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) ) {
+if ( isset( $_GET['s'] ) && strlen( $_GET['s'] ) ) {
 	/* translators: %s: search keywords */
-	printf( '<span class="subtitle">' . __( 'Search results for &#8220;%s&#8221;' ) . '</span>', htmlspecialchars( wp_unslash( $_REQUEST['s'] ) ) );
+	printf( '<span class="subtitle">' . __( 'Search results for &#8220;%s&#8221;' ) . '</span>', htmlspecialchars( wp_unslash( $_GET['s'] ) ) );
 }
 ?>
 

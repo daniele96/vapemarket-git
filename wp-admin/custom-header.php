@@ -143,8 +143,8 @@ class Custom_Image_Header {
 
 		$step = (int) $_GET['step'];
 		if ( $step < 1 || 3 < $step ||
-			( 2 == $step && ! wp_verify_nonce( $_REQUEST['_wpnonce-custom-header-upload'], 'custom-header-upload' ) ) ||
-			( 3 == $step && ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'custom-header-crop-image' ) )
+			( 2 == $step && ! wp_verify_nonce( $_POST['_wpnonce-custom-header-upload'], 'custom-header-upload' ) ) ||
+			( 3 == $step && ! wp_verify_nonce( $_POST['_wpnonce'], 'custom-header-crop-image' ) )
 		)
 			return 1;
 

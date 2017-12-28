@@ -16,11 +16,11 @@ $wp_list_table = _get_list_table('WP_Links_List_Table');
 // Handle bulk deletes
 $doaction = $wp_list_table->current_action();
 
-if ( $doaction && isset( $_REQUEST['linkcheck'] ) ) {
+if ( $doaction && isset( $_POST['linkcheck'] ) ) {
 	check_admin_referer( 'bulk-bookmarks' );
 
 	$redirect_to = admin_url( 'link-manager.php' );
-	$bulklinks = (array) $_REQUEST['linkcheck'];
+	$bulklinks = (array) $_POST['linkcheck'];
 
 	if ( 'delete' == $doaction ) {
 		foreach ( $bulklinks as $link_id ) {
@@ -86,23 +86,23 @@ echo esc_html( $title );
 <a href="link-add.php" class="page-title-action"><?php echo esc_html_x( 'Add New', 'link' ); ?></a>
 
 <?php
-if ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) ) {
+if ( isset( $_GET['s'] ) && strlen( $_GET['s'] ) ) {
 	/* translators: %s: search keywords */
-	printf( '<span class="subtitle">' . __( 'Search results for &#8220;%s&#8221;' ) . '</span>', htmlspecialchars( wp_unslash( $_REQUEST['s'] ) ) );
+	printf( '<span class="subtitle">' . __( 'Search results for &#8220;%s&#8221;' ) . '</span>', htmlspecialchars( wp_unslash( $_GET['s'] ) ) );
 }
 ?>
 
 <hr class="wp-header-end">
 
 <?php
-if ( isset($_REQUEST['deleted']) ) {
+if ( isset($_POST['deleted']) ) {
 	$str= <<<HTML
 	 <div id="message" class="updated notice is-dismissible"><p>
 HTML;
 
 		echo $str;
 	
-	$deleted = (int) $_REQUEST['deleted'];
+	$deleted = (int) $_POST['deleted'];
 	printf(_n('%s link deleted.', '%s links deleted', $deleted), $deleted);
 
 	$str= <<<HTML

@@ -27,7 +27,7 @@ require_once( dirname( dirname( __FILE__ ) ) . '/wp-load.php' );
 send_origin_headers();
 
 // Require an action parameter
-if ( empty( $_REQUEST['action'] ) )
+if ( empty( $_GET['action'] ) )
 	return 0;
 
 /** Load WordPress Administration APIs */
@@ -85,22 +85,22 @@ if ( is_user_logged_in() ) {
 	/**
 	 * Fires authenticated Ajax actions for logged-in users.
 	 *
-	 * The dynamic portion of the hook name, `$_REQUEST['action']`,
+	 * The dynamic portion of the hook name, `$_GET['action']`,
 	 * refers to the name of the Ajax action callback being fired.
 	 *
 	 * @since 2.1.0
 	 */
-	do_action( 'wp_ajax_' . $_REQUEST['action'] );
+	do_action( 'wp_ajax_' . $_GET['action'] );
 } else {
 	/**
 	 * Fires non-authenticated Ajax actions for logged-out users.
 	 *
-	 * The dynamic portion of the hook name, `$_REQUEST['action']`,
+	 * The dynamic portion of the hook name, `$_GET['action']`,
 	 * refers to the name of the Ajax action callback being fired.
 	 *
 	 * @since 2.8.0
 	 */
-	do_action( 'wp_ajax_nopriv_' . $_REQUEST['action'] );
+	do_action( 'wp_ajax_nopriv_' . $_GET['action'] );
 }
 // Default status
 return 0;

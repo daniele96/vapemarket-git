@@ -120,13 +120,13 @@ if ( isset($_GET['page']) ) {
 	$plugin_page = plugin_basename($plugin_page);
 }
 
-if ( isset( $_REQUEST['post_type'] ) && post_type_exists( $_REQUEST['post_type'] ) )
-	$typenow = $_REQUEST['post_type'];
+if ( isset( $_POST['post_type'] ) && post_type_exists( $_POST['post_type'] ) )
+	$typenow = $_GET['post_type'];
 else
 	$typenow = '';
 
-if ( isset( $_REQUEST['taxonomy'] ) && taxonomy_exists( $_REQUEST['taxonomy'] ) )
-	$taxnow = $_REQUEST['taxonomy'];
+if ( isset( $_POST['taxonomy'] ) && taxonomy_exists( $_POST['taxonomy'] ) )
+	$taxnow = $_GET['taxonomy'];
 else
 	$taxnow = '';
 
@@ -348,14 +348,14 @@ if ( isset($plugin_page) ) {
 	}
 }
 
-if ( ! empty( $_REQUEST['action'] ) ) {
+if ( ! empty( $_GET['action'] ) ) {
 	/**
 	 * Fires when an 'action' request variable is sent.
 	 *
-	 * The dynamic portion of the hook name, `$_REQUEST['action']`,
+	 * The dynamic portion of the hook name, `$_GET['action']`,
 	 * refers to the action derived from the `GET` or `POST` request.
 	 *
 	 * @since 2.6.0
 	 */
-	do_action( 'admin_action_' . $_REQUEST['action'] );
+	do_action( 'admin_action_' . $_GET['action'] );
 }

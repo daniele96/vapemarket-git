@@ -203,7 +203,7 @@ function display_setup_form( $error = null ) {
 		</tr>
 	</table>
 	<p class="step"><?php submit_button( __( 'Install WordPress' ), 'large', 'Submit', false, array( 'id' => 'submit' ) ); ?></p>
-	<input type="hidden" name="language" value="<?php echo isset( $_REQUEST['language'] ) ? esc_attr( $_REQUEST['language'] ) : ''; ?>" />
+	<input type="hidden" name="language" value="<?php echo isset( $_GET['language'] ) ? esc_attr( $_GET['language'] ) : ''; ?>" />
 </form>
 <?php
 } // end display_setup_form()
@@ -280,8 +280,8 @@ if ( defined( 'DO_NOT_UPGRADE_GLOBAL_TABLES' ) ) {
  * @global WP_Locale $wp_locale
  */
 $language = '';
-if ( ! empty( $_REQUEST['language'] ) ) {
-	$language = preg_replace( '/[^a-zA-Z0-9_]/', '', $_REQUEST['language'] );
+if ( ! empty( $_GET['language'] ) ) {
+	$language = preg_replace( '/[^a-zA-Z0-9_]/', '', $_GET['language'] );
 } elseif ( isset( $GLOBALS['wp_local_package'] ) ) {
 	$language = $GLOBALS['wp_local_package'];
 }

@@ -6,7 +6,7 @@
  * @subpackage Administration
  */
 
-if ( isset( $_REQUEST['action'] ) && 'upload-attachment' === $_REQUEST['action'] ) {
+if ( isset( $_GET['action'] ) && 'upload-attachment' === $_GET['action'] ) {
 	define( 'DOING_AJAX', true );
 }
 
@@ -19,14 +19,14 @@ if ( defined('ABSPATH') )
 else
 	require_once( dirname( dirname( __FILE__ ) ) . '/wp-load.php' );
 
-if ( ! ( isset( $_REQUEST['action'] ) && 'upload-attachment' == $_REQUEST['action'] ) ) {
+if ( ! ( isset( $_GET['action'] ) && 'upload-attachment' == $_GET['action'] ) ) {
 	// Flash often fails to send cookies with the POST or upload, so we need to pass it in GET or POST instead
-	if ( is_ssl() && empty($_COOKIE[SECURE_AUTH_COOKIE]) && !empty($_REQUEST['auth_cookie']) )
-		$_COOKIE[SECURE_AUTH_COOKIE] = $_REQUEST['auth_cookie'];
-	elseif ( empty($_COOKIE[AUTH_COOKIE]) && !empty($_REQUEST['auth_cookie']) )
-		$_COOKIE[AUTH_COOKIE] = $_REQUEST['auth_cookie'];
-	if ( empty($_COOKIE[LOGGED_IN_COOKIE]) && !empty($_REQUEST['logged_in_cookie']) )
-		$_COOKIE[LOGGED_IN_COOKIE] = $_REQUEST['logged_in_cookie'];
+	if ( is_ssl() && empty($_COOKIE[SECURE_AUTH_COOKIE]) && !empty($_POST['auth_cookie']) )
+		$_COOKIE[SECURE_AUTH_COOKIE] = $_POST['auth_cookie'];
+	elseif ( empty($_COOKIE[AUTH_COOKIE]) && !empty($_POST['auth_cookie']) )
+		$_COOKIE[AUTH_COOKIE] = $_POST['auth_cookie'];
+	if ( empty($_COOKIE[LOGGED_IN_COOKIE]) && !empty($_POST['logged_in_cookie']) )
+		$_COOKIE[LOGGED_IN_COOKIE] = $_POST['logged_in_cookie'];
 	unset($current_user);
 }
 
@@ -34,7 +34,7 @@ require_once( ABSPATH . 'wp-admin/admin.php' );
 
 header( 'Content-Type: text/html; charset=' . get_option( 'blog_charset' ) );
 
-if ( isset( $_REQUEST['action'] ) && 'upload-attachment' === $_REQUEST['action'] ) {
+if ( isset( $_GET['action'] ) && 'upload-attachment' === $_GET['action'] ) {
 	include( ABSPATH . 'wp-admin/includes/ajax-actions.php' );
 
 	send_nosniff_header();
@@ -49,14 +49,14 @@ if ( ! current_user_can( 'upload_files' ) ) {
 }
 
 // just fetch the detail form for that attachment
-if ( isset($_REQUEST['attachment_id']) && ($id = intval($_REQUEST['attachment_id'])) && $_REQUEST['fetch'] ) {
+if ( isset($_GET['attachment_id']) && ($id = intval($_GET['attachment_id'])) && $_POST['fetch'] ) {
 	$post = get_post( $id );
 	if ( 'attachment' != $post->post_type )
 		wp_die( __( 'Invalid post type.' ) );
 	if ( ! current_user_can( 'edit_post', $id ) )
 		wp_die( __( 'Sorry, you are not allowed to edit this item.' ) );
 
-	switch ( $_REQUEST['fetch'] ) {
+	switch ( $_POST['fetch'] ) {
 		case 3 :
 			if ( $thumb_url = wp_get_attachment_image_src( $id, 'thumbnail', true ) )
 
@@ -101,8 +101,8 @@ HTML;
 check_admin_referer('media-form');
 
 $post_id = 0;
-if ( isset( $_REQUEST['post_id'] ) ) {
-	$post_id = absint( $_REQUEST['post_id'] );
+if ( isset( $_GET['post_id'] ) ) {
+	$post_id = absint( $_GET['post_id'] );
 	if ( ! get_post( $post_id ) || ! current_user_can( 'edit_post', $post_id ) )
 		$post_id = 0;
 }
@@ -125,12 +125,12 @@ HTML;
 	return;
 }
 
-if ( $_REQUEST['short'] ) {
+if ( $_GET['short'] ) {
 	// Short form response - attachment ID only.
 	echo $id;
 } else {
 	// Long form response - big chunk o html.
-	$type = $_REQUEST['type'];
+	$type = $_GET['type'];
 
 	/**
 	 * Filters the returned ID of an uploaded attachment.

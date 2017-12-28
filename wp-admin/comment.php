@@ -256,14 +256,14 @@ case 'spamcomment'      :
 case 'unspamcomment'    :
 case 'approvecomment'   :
 case 'unapprovecomment' :
-	$comment_id = absint( $_REQUEST['c'] );
+	$comment_id = absint( $_GET['c'] );
 
 	if ( in_array( $action, array( 'approvecomment', 'unapprovecomment' ) ) )
 		check_admin_referer( 'approve-comment_' . $comment_id );
 	else
 		check_admin_referer( 'delete-comment_' . $comment_id );
 
-	$noredir = isset($_REQUEST['noredir']);
+	$noredir = isset($_POST['noredir']);
 
 	if ( !$comment = get_comment($comment_id) )
 		comment_footer_die( __( 'Invalid comment ID.' ) . sprintf(' <a href="%s">' . __('Go back') . '</a>.', 'edit-comments.php') );
