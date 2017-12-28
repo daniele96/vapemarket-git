@@ -522,6 +522,7 @@ HTML;
 		$header_image = get_header_image();
 		
 		$header_image_style = '';
+		echo $header_image_style;
 
 		if ( $header_image ) {
 			$header_image_style = 'background-image:url(' . esc_url( $header_image ) . ');';

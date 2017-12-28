@@ -112,7 +112,7 @@ function display_setup_form( $error = null ) {
 	<table class="form-table">
 		<tr>
 			<th scope="row"><label for="weblog_title"><?php _e( 'Site Title' ); ?></label></th>
-			<td><input name="weblog_title" type="text" id="weblog_title" size="25" value="<?php echo esc_attr( 
+			<td><input name="weblog_title" type="text" id="weblog_title" size="25" value="<?php echo htlmspecialchars( 
 				isset( $_POST['weblog_title'] ) ? trim( wp_unslash( $_POST['weblog_title'] ) ) : '' ); ?>" /></td>
 		</tr>
 		<tr>
@@ -123,7 +123,7 @@ function display_setup_form( $error = null ) {
 				_e('User(s) already exists.');
 				echo '<input name="user_name" type="hidden" value="admin" />';
 			} else {
-				?><input name="user_name" type="text" id="user_login" size="25" value="<?php echo esc_attr( sanitize_user( 
+				?><input name="user_name" type="text" id="user_login" size="25" value="<?php echo htlmspecialchars( sanitize_user( 
 					isset($_POST['user_name']) ? trim( wp_unslash( $_POST['user_name'] ) ) : '', true ) ); ?>" />
 				<p><?php _e( 'Usernames can have only alphanumeric characters, spaces, underscores, hyphens, periods, and the @ symbol.' ); ?></p>
 			<?php
@@ -175,7 +175,7 @@ function display_setup_form( $error = null ) {
 		<?php endif; ?>
 		<tr>
 			<th scope="row"><label for="admin_email"><?php _e( 'Your Email' ); ?></label></th>
-			<td><input name="admin_email" type="email" id="admin_email" size="25" value="<?php echo esc_attr( 
+			<td><input name="admin_email" type="email" id="admin_email" size="25" value="<?php echo htlmspecialchars( 
 				isset( $_POST['admin_email']  ) ? trim( wp_unslash( $_POST['admin_email'] ) ) : '' ); ?>" />
 			<p><?php _e( 'Double-check your email address before continuing.' ); ?></p></td>
 		</tr>
