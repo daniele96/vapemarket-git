@@ -7,7 +7,7 @@
  * @since 3.0.0
  */
 
-require_once( dirname( __FILE__ ) . '/admin.php' );
+require_once dirname( __FILE__ ) . '/admin.php' ;
 
 if ( !is_multisite() )
 	wp_die( __( 'Multisite support is not enabled.' ) );
@@ -29,7 +29,7 @@ $user = wp_get_current_user();
 
 $title = __( 'Delete Site' );
 $parent_file = 'tools.php';
-require_once( ABSPATH . 'wp-admin/admin-header.php' );
+require_once ABSPATH . 'wp-admin/admin-header.php' ;
 
 $str= <<<HTML
 	 <div class="wrap">
@@ -114,4 +114,4 @@ HTML;
 		echo $str;
 
 
-include( ABSPATH . 'wp-admin/admin-footer.php' );
+include ABSPATH . 'wp-admin/admin-footer.php' ;

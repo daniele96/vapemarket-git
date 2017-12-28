@@ -7,14 +7,14 @@
  */
 
 /** WordPress Administration Bootstrap */
-require_once( dirname( __FILE__ ) . '/admin.php' );
-require_once( dirname( __FILE__ ) . '/includes/credits.php' );
+require_once dirname( __FILE__ ) . '/admin.php' ;
+require_once dirname( __FILE__ ) . '/includes/credits.php' ;
 
 $title = __( 'Credits' );
 
 list( $display_version ) = explode( '-', get_bloginfo( 'version' ) );
 
-include( ABSPATH . 'wp-admin/admin-header.php' );
+include ABSPATH . 'wp-admin/admin-header.php' ;
 ?>
 <div class="wrap about-wrap">
 
@@ -53,7 +53,7 @@ HTML;
 
 		echo $str;
 	
-	include( ABSPATH . 'wp-admin/admin-footer.php' );
+	include ABSPATH . 'wp-admin/admin-footer.php' ;
 	return;
 }
 $str= <<<HTML
@@ -166,7 +166,7 @@ HTML;
 </div>
 <?php
 
-include( ABSPATH . 'wp-admin/admin-footer.php' );
+include ABSPATH . 'wp-admin/admin-footer.php' ;
 
 return;
 

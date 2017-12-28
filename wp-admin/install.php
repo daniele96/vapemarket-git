@@ -33,16 +33,16 @@ if ( false ) {
 define( 'WP_INSTALLING', true );
 
 /** Load WordPress Bootstrap */
-require_once( dirname( dirname( __FILE__ ) ) . '/wp-load.php' );
+require_once dirname( dirname( __FILE__ ) ) . '/wp-load.php' ;
 
 /** Load WordPress Administration Upgrade API */
-require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+require_once ABSPATH . 'wp-admin/includes/upgrade.php' ;
 
 /** Load WordPress Translation Install API */
-require_once( ABSPATH . 'wp-admin/includes/translation-install.php' );
+require_once ABSPATH . 'wp-admin/includes/translation-install.php' ;
 
 /** Load wpdb */
-require_once( ABSPATH . WPINC . '/wp-db.php' );
+require_once ABSPATH . WPINC . '/wp-db.php' ;
 
 nocache_headers();
 
@@ -101,10 +101,8 @@ function display_setup_form( $error = null ) {
 		$blog_public = isset( $_POST['blog_public'] );
 	}
 
-	$weblog_title = isset( $_POST['weblog_title'] ) ? trim( wp_unslash( $_POST['weblog_title'] ) ) : '';
-	$user_name = isset($_POST['user_name']) ? trim( wp_unslash( $_POST['user_name'] ) ) : '';
-	$admin_email  = isset( $_POST['admin_email']  ) ? trim( wp_unslash( $_POST['admin_email'] ) ) : '';
-
+	
+	
 	if ( ! is_null( $error ) ) {
 ?>
 <h1><?php _ex( 'Welcome', 'Howdy' ); ?></h1>
@@ -114,7 +112,8 @@ function display_setup_form( $error = null ) {
 	<table class="form-table">
 		<tr>
 			<th scope="row"><label for="weblog_title"><?php _e( 'Site Title' ); ?></label></th>
-			<td><input name="weblog_title" type="text" id="weblog_title" size="25" value="<?php echo esc_attr( $weblog_title ); ?>" /></td>
+			<td><input name="weblog_title" type="text" id="weblog_title" size="25" value="<?php echo esc_attr( 
+				isset( $_POST['weblog_title'] ) ? trim( wp_unslash( $_POST['weblog_title'] ) ) : '' ); ?>" /></td>
 		</tr>
 		<tr>
 			<th scope="row"><label for="user_login"><?php _e('Username'); ?></label></th>
@@ -124,7 +123,8 @@ function display_setup_form( $error = null ) {
 				_e('User(s) already exists.');
 				echo '<input name="user_name" type="hidden" value="admin" />';
 			} else {
-				?><input name="user_name" type="text" id="user_login" size="25" value="<?php echo esc_attr( sanitize_user( $user_name, true ) ); ?>" />
+				?><input name="user_name" type="text" id="user_login" size="25" value="<?php echo esc_attr( sanitize_user( 
+					isset($_POST['user_name']) ? trim( wp_unslash( $_POST['user_name'] ) ) : '', true ) ); ?>" />
 				<p><?php _e( 'Usernames can have only alphanumeric characters, spaces, underscores, hyphens, periods, and the @ symbol.' ); ?></p>
 			<?php
 			} ?>
@@ -139,8 +139,8 @@ function display_setup_form( $error = null ) {
 			</th>
 			<td>
 				<div class="">
-					<?php $initial_password = isset( $_POST['admin_password'] ) ? stripslashes( $_POST['admin_password'] ) : wp_generate_password( 18 ); ?>
-					<input type="password" name="admin_password" id="pass1" class="regular-text" autocomplete="off" data-reveal="1" data-pw="<?php echo esc_attr( $initial_password ); ?>" aria-describedby="pass-strength-result" />
+					<?php  ?>
+					<input type="password" name="admin_password" id="pass1" class="regular-text" autocomplete="off" data-reveal="1" data-pw="<?php echo esc_attr( isset( $_POST['admin_password'] ) ? stripslashes( $_POST['admin_password'] ) : wp_generate_password( 18 ) ); ?>" aria-describedby="pass-strength-result" />
 					<button type="button" class="button wp-hide-pw hide-if-no-js" data-start-masked="<?php echo (int) isset( $_POST['admin_password'] ); ?>" data-toggle="0" aria-label="<?php esc_attr_e( 'Hide password' ); ?>">
 						<span class="dashicons dashicons-hidden"></span>
 						<span class="text"><?php _e( 'Hide' ); ?></span>
@@ -175,7 +175,8 @@ function display_setup_form( $error = null ) {
 		<?php endif; ?>
 		<tr>
 			<th scope="row"><label for="admin_email"><?php _e( 'Your Email' ); ?></label></th>
-			<td><input name="admin_email" type="email" id="admin_email" size="25" value="<?php echo esc_attr( $admin_email ); ?>" />
+			<td><input name="admin_email" type="email" id="admin_email" size="25" value="<?php echo esc_attr( 
+				isset( $_POST['admin_email']  ) ? trim( wp_unslash( $_POST['admin_email'] ) ) : '' ); ?>" />
 			<p><?php _e( 'Double-check your email address before continuing.' ); ?></p></td>
 		</tr>
 		<tr>

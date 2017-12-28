@@ -280,4 +280,4 @@ $compat = array(
 	'themes' => 'appearance',
 	);
 
-require_once(ABSPATH . 'wp-admin/includes/menu.php');
+require_once ABSPATH . 'wp-admin/includes/menu.php';

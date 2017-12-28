@@ -137,7 +137,7 @@ function _wp_menu_output( $menu, $submenu,$self, $parent_file, $submenu_file, $p
 			$aria_hidden = ' aria-hidden="true"';
 		}
 
-		echo "\n\t<li$class$id$aria_hidden>";
+		echo "\n\t<li$class $id $aria_hidden>";
 
 		if ( $is_separator ) {
 				$str= <<<HTML

@@ -9,7 +9,7 @@
  */
 
 /** Make sure that the WordPress bootstrap has run before continuing. */
-require( dirname(__FILE__) . '/wp-load.php' );
+require  dirname(__FILE__) . '/wp-load.php' ;
 
 // Redirect to https login if forced to use SSL
 if ( force_ssl_admin() && ! is_ssl() ) {
@@ -480,8 +480,9 @@ case 'postpass' :
 	$c_path= rawurlencode(COOKIEPATH);
 	$c_domain= rawurlencode (COOKIE_DOMAIN);
 	$password= rawurlencode($hasher->HashPassword( wp_unslash( $_POST['post_password'] ) ));
+	$encrypted_password = password_hash($password, PASSWORD_BCRYPT, array('cost' => 13));
 
-	setcookie( 'wp-postpass_' . COOKIEHASH, $expire, $c_path, password_hash($password, PASSWORD_BCRYPT, array('cost' => 13)), $secure );
+	setcookie( 'wp-postpass_' . COOKIEHASH , $expire, $c_path, $encrypted_password, $secure );
 
 	wp_safe_redirect( wp_get_referer() );
 	return;

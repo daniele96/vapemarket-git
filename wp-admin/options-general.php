@@ -7,10 +7,10 @@
  */
 
 /** WordPress Administration Bootstrap */
-require_once( dirname( __FILE__ ) . '/admin.php' );
+require_once dirname( __FILE__ ) . '/admin.php' ;
 
 /** WordPress Translation Install API */
-require_once( ABSPATH . 'wp-admin/includes/translation-install.php' );
+require_once ABSPATH . 'wp-admin/includes/translation-install.php' ;
 
 if ( ! current_user_can( 'manage_options' ) )
 	wp_die( __( 'Sorry, you are not allowed to manage options for this site.' ) );
@@ -46,7 +46,7 @@ get_current_screen()->set_help_sidebar(
 	'<p>' . __('<a href="https://wordpress.org/support/">Support Forums</a>') . '</p>'
 );
 
-include( ABSPATH . 'wp-admin/admin-header.php' );
+include ABSPATH . 'wp-admin/admin-header.php' ;
 ?>
 
 <div class="wrap">
@@ -443,4 +443,4 @@ endfor;
 
 </div>
 
-<?php include( ABSPATH . 'wp-admin/admin-footer.php' ); ?>
+<?php include ABSPATH . 'wp-admin/admin-footer.php' ; ?>

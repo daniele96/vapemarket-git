@@ -24,7 +24,7 @@ define('DOING_CRON', true);
 
 if ( !defined('ABSPATH') ) {
 	/** Set up WordPress environment */
-	require_once( dirname( __FILE__ ) . '/wp-load.php' );
+	require_once dirname( __FILE__ ) . '/wp-load.php' ;
 }
 
 /**

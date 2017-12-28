@@ -7,7 +7,7 @@
  */
 
 /** WordPress Administration Bootstrap */
-require_once( dirname( __FILE__ ) . '/admin.php' );
+require_once dirname( __FILE__ ) . '/admin.php' ;
 
 if ( ! current_user_can( 'manage_options' ) )
 	wp_die( __( 'Sorry, you are not allowed to manage options for this site.' ) );
@@ -35,7 +35,7 @@ get_current_screen()->set_help_sidebar(
 	'<p>' . __('<a href="https://wordpress.org/support/">Support Forums</a>') . '</p>'
 );
 
-include( ABSPATH . 'wp-admin/admin-header.php' );
+include ABSPATH . 'wp-admin/admin-header.php' ;
 
 ?>
 
@@ -143,4 +143,4 @@ if ( get_option('upload_url_path') || ( get_option('upload_path') != 'wp-content
 
 </div>
 
-<?php include( ABSPATH . 'wp-admin/admin-footer.php' ); ?>
+<?php include ABSPATH . 'wp-admin/admin-footer.php' ; ?>

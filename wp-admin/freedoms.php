@@ -7,13 +7,13 @@
  */
 
 /** WordPress Administration Bootstrap */
-require_once( dirname( __FILE__ ) . '/admin.php' );
+require_once dirname( __FILE__ ) . '/admin.php' ;
 
 $title = __( 'Freedoms' );
 
 list( $display_version ) = explode( '-', get_bloginfo( 'version' ) );
 
-include( ABSPATH . 'wp-admin/admin-header.php' );
+include ABSPATH . 'wp-admin/admin-header.php' ;
 ?>
 <div class="wrap about-wrap">
 
@@ -50,4 +50,4 @@ printf( __( 'Every plugin and theme in WordPress.org&#8217;s directory is 100%% 
 <p><?php _e( 'Don&#8217;t you wish all software came with these freedoms? So do we! For more information, check out the <a href="https://www.fsf.org/">Free Software Foundation</a>.' ); ?></p>
 
 </div>
-<?php include( ABSPATH . 'wp-admin/admin-footer.php' ); ?>
+<?php include ABSPATH . 'wp-admin/admin-footer.php' ; ?>

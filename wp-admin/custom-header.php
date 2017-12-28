@@ -520,6 +520,8 @@ HTML;
 	} else {
 		$custom_header = get_custom_header();
 		$header_image = get_header_image();
+		
+		$header_image_style = '';
 
 		if ( $header_image ) {
 			$header_image_style = 'background-image:url(' . esc_url( $header_image ) . ');';
@@ -609,17 +611,14 @@ HTML;
 		<?php wp_nonce_field( 'custom-header-upload', '_wpnonce-custom-header-upload' ); ?>
 		<?php submit_button( __( 'Upload' ), '', 'submit', false ); ?>
 	</p>
-	<?php
-		$modal_update_href = esc_url( add_query_arg( array(
-			'page' => 'custom-header',
-			'step' => 2,
-			'_wpnonce-custom-header-upload' => wp_create_nonce('custom-header-upload'),
-		), admin_url('themes.php') ) );
-	?>
 	<p>
 		<label for="choose-from-library-link"><?php _e( 'Or choose an image from your media library:' ); ?></label><br />
 		<button id="choose-from-library-link" class="button"
-			data-update-link="<?php echo esc_attr( $modal_update_href ); ?>"
+			data-update-link="<?php echo esc_attr( esc_url( add_query_arg( array(
+			'page' => 'custom-header',
+			'step' => 2,
+			'_wpnonce-custom-header-upload' => wp_create_nonce('custom-header-upload'),
+		), admin_url('themes.php') ) ) ); ?>"
 			data-choose="<?php esc_attr_e( 'Choose a Custom Header' ); ?>"
 			data-update="<?php esc_attr_e( 'Set as header' ); ?>"><?php _e( 'Choose Image' ); ?></button>
 	</p>
@@ -906,7 +905,9 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 
 		// Save the data
 		$attachment_id = wp_insert_attachment( $object, $file );
-		return compact( 'attachment_id', 'file', 'filename', 'url', 'type' );
+
+		$var= compact( $attachment_id, 'file', 'filename', 'url', 'type' );
+		return $var;
 	}
 
 	/**
@@ -974,7 +975,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 		$attachment_id = $this->insert_attachment( $object, $cropped );
 
 		$url = wp_get_attachment_url( $attachment_id );
-		$this->set_header_image( compact( 'url', 'attachment_id', 'width', 'height' ) );
+		$this->set_header_image( compact( $url, 'attachment_id', 'width', 'height' ) );
 
 		// Cleanup.
 		$medium = str_replace( basename( $original ), 'midsize-' . basename( $original ), $original );

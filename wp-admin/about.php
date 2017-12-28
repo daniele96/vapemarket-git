@@ -7,7 +7,7 @@
  */
 
 /** WordPress Administration Bootstrap */
-require_once( dirname( __FILE__ ) . '/admin.php' );
+require_once dirname( __FILE__ ) . '/admin.php' ;
 
 if ( ! wp_is_mobile() ) {
 	wp_enqueue_style( 'wp-mediaelement' );
@@ -29,7 +29,7 @@ $title = __( 'About' );
 
 list( $display_version ) = explode( '-', get_bloginfo( 'version' ) );
 
-include( ABSPATH . 'wp-admin/admin-header.php' );
+include ABSPATH . 'wp-admin/admin-header.php' ;
 ?>
 	<div class="wrap about-wrap">
 		<h1><?php printf( __( 'Welcome to WordPress&nbsp;%s' ), $display_version ); ?></h1>
@@ -236,7 +236,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 	</div>
 <?php
 
-include( ABSPATH . 'wp-admin/admin-footer.php' );
+include ABSPATH . 'wp-admin/admin-footer.php' ;
 
 // These are strings we may use to describe maintenance/security releases, where we aim for no new strings.
 return;

@@ -255,6 +255,8 @@ class Custom_Background {
 		call_user_func( $this->admin_image_div_callback );
 	} else {
 		$background_styles = '';
+		echo $background_styles; 
+		
 		if ( $bgcolor = get_background_color() )
 			$background_styles .= 'background-color: #' . $bgcolor . ';';
 

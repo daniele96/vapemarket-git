@@ -21,7 +21,7 @@ if ( ! defined( 'WP_ADMIN' ) ) {
 }
 
 /** Load WordPress Bootstrap */
-require_once( dirname( dirname( __FILE__ ) ) . '/wp-load.php' );
+require_once dirname( dirname( __FILE__ ) ) . '/wp-load.php' ;
 
 /** Allow for cross-domain requests (from the front end). */
 send_origin_headers();
@@ -31,10 +31,10 @@ if ( empty( $_GET['action'] ) )
 	return 0;
 
 /** Load WordPress Administration APIs */
-require_once( ABSPATH . 'wp-admin/includes/admin.php' );
+require_once ABSPATH . 'wp-admin/includes/admin.php' ;
 
 /** Load Ajax Handlers for WordPress Core */
-require_once( ABSPATH . 'wp-admin/includes/ajax-actions.php' );
+require_once ABSPATH . 'wp-admin/includes/ajax-actions.php' ;
 
 header( 'Content-Type: text/html; charset=' . get_option( 'blog_charset' ) );
 header( 'X-Robots-Tag: noindex' );
