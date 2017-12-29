@@ -79,7 +79,7 @@ function _wp_menu_output( $menu, $submenu,$self, $parent_file, $submenu_file, $p
 		$aria_hidden = '';
 		$is_separator = false;
 
-		if ( $first ) {
+		if (  isset($first) ) {
 			$class[] = 'wp-first-item';
 			$first = false;
 		}
@@ -135,13 +135,13 @@ function _wp_menu_output( $menu, $submenu,$self, $parent_file, $submenu_file, $p
 		$title = wptexturize( $item[0] );
 
 		// hide separators from screen readers
-		if ( $is_separator ) {
+		if ( isset($is_separator) ) {
 			$aria_hidden = ' aria-hidden="true"';
 		}
 
 		echo "\n\t<li$class $id $aria_hidden>";
 
-		if ( $is_separator ) {
+		if ( isset($is_separator) ) {
 				$str= <<<HTML
 	    <div class="separator"></div>
 HTML;
@@ -220,7 +220,7 @@ HTML;
 					continue;
 
 				$class = array();
-				if ( $first ) {
+				if ( isset($first )) {
 					$class[] = 'wp-first-item';
 					$first = false;
 				}

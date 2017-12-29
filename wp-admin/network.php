@@ -86,7 +86,7 @@ include ABSPATH . 'wp-admin/admin-header.php' ;
 <h1><?php echo esc_html( $title ); ?></h1>
 
 <?php
-if ( $_POST ) {
+if ( isset($_POST) ) {
 
 	check_admin_referer( 'install-network-1' );
 

@@ -196,7 +196,7 @@ $show_avatars = get_option( 'show_avatars' );
 	</label>
 </fieldset></td>
 </tr>
-<tr class="avatar-settings<?php if ( ! $show_avatars ) echo ' hide-if-js'; ?>">
+<tr class="avatar-settings<?php if ( ! isset($show_avatars) ) echo ' hide-if-js'; ?>">
 <th scope="row"><?php _e('Maximum Rating'); ?></th>
 <td><fieldset><legend class="screen-reader-text"><span><?php _e('Maximum Rating'); ?></span></legend>
 
@@ -228,7 +228,7 @@ endforeach;
 
 </fieldset></td>
 </tr>
-<tr class="avatar-settings<?php if ( ! $show_avatars ) echo ' hide-if-js'; ?>">
+<tr class="avatar-settings<?php if ( ! isset($show_avatars) ) echo ' hide-if-js'; ?>">
 <th scope="row"><?php _e('Default Avatar'); ?></th>
 <td class="defaultavatarpicker"><fieldset><legend class="screen-reader-text"><span><?php _e('Default Avatar'); ?></span></legend>
 

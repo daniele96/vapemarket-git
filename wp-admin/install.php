@@ -120,7 +120,7 @@ function display_setup_form( $error = null ) {
 			<th scope="row"><label for="user_login"><?php _e('Username'); ?></label></th>
 			<td>
 			<?php
-			if ( $user_table ) {
+			if ( isset($user_table) ) {
 				_e('User(s) already exists.');
 				echo '<input name="user_name" type="hidden" value="admin" />';
 			} else {
@@ -132,7 +132,7 @@ function display_setup_form( $error = null ) {
 			} ?>
 			</td>
 		</tr>
-		<?php if ( ! $user_table ) : ?>
+		<?php if ( ! isset($user_table) ) : ?>
 		<tr class="form-field form-required user-pass1-wrap">
 			<th scope="row">
 				<label for="pass1">
@@ -236,18 +236,18 @@ $mysql_version  = $wpdb->db_version();
 $php_compat     = version_compare( $php_version, $required_php_version, '>=' );
 $mysql_compat   = version_compare( $mysql_version, $required_mysql_version, '>=' ) || file_exists( WP_CONTENT_DIR . '/db.php' );
 
-if ( !$mysql_compat && !$php_compat ) {
+if ( ! isset($mysql_compat) && ! isset($php_compat) ) {
 	/* translators: 1: WordPress version number, 2: Minimum required PHP version number, 3: Minimum required MySQL version number, 4: Current PHP version number, 5: Current MySQL version number */
 	$compat = sprintf( __( 'You cannot install because <a href="https://codex.wordpress.org/Version_%1$s">WordPress %1$s</a> requires PHP version %2$s or higher and MySQL version %3$s or higher. You are running PHP version %4$s and MySQL version %5$s.' ), $wp_version, $required_php_version, $required_mysql_version, $php_version, $mysql_version );
-} elseif ( !$php_compat ) {
+} elseif ( ! isset($php_compat) ) {
 	/* translators: 1: WordPress version number, 2: Minimum required PHP version number, 3: Current PHP version number */
 	$compat = sprintf( __( 'You cannot install because <a href="https://codex.wordpress.org/Version_%1$s">WordPress %1$s</a> requires PHP version %2$s or higher. You are running version %3$s.' ), $wp_version, $required_php_version, $php_version );
-} elseif ( !$mysql_compat ) {
+} elseif ( ! isset($mysql_compat) ) {
 	/* translators: 1: WordPress version number, 2: Minimum required MySQL version number, 3: Current MySQL version number */
 	$compat = sprintf( __( 'You cannot install because <a href="https://codex.wordpress.org/Version_%1$s">WordPress %1$s</a> requires MySQL version %2$s or higher. You are running version %3$s.' ), $wp_version, $required_mysql_version, $mysql_version );
 }
 
-if ( !$mysql_compat || !$php_compat ) {
+if ( ! isset($mysql_compat) || ! isset($php_compat) ) {
 	display_header();
 	trigger_error(
 		'<h1>' . __( 'Insufficient Requirements' ) . '</h1><p>' . $compat . '</p></body></html>'
@@ -308,13 +308,13 @@ HTML;
 			
 			break;
 		}
-
+		    break;
 		// Deliberately fall through if we can't reach the translations API.
 
 	case 1: // Step 1, direct link or from language chooser.
 		if ( ! empty( $language ) ) {
 			$loaded_language = wp_download_language_pack( $language );
-			if ( $loaded_language ) {
+			if ( isset($loaded_language) ) {
 				load_default_textdomain( $loaded_language );
 				$GLOBALS['wp_locale'] = new WP_Locale();
 			}

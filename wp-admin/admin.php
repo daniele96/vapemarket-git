@@ -160,7 +160,7 @@ if ( isset($plugin_page) ) {
 		$the_parent = $pagenow . '?post_type=' . $typenow;
 	else
 		$the_parent = $pagenow;
-	if ( ! $page_hook = get_plugin_page_hook($plugin_page, $the_parent) ) {
+	if (  isset($page_hook) != get_plugin_page_hook($plugin_page, $the_parent))  {
 		$page_hook = get_plugin_page_hook($plugin_page, $plugin_page);
 
 		// Back-compat for plugins using add_management_page().
@@ -190,7 +190,7 @@ set_current_screen();
 
 // Handle plugin admin pages.
 if ( isset($plugin_page) ) {
-	if ( $page_hook ) {
+	if ( isset($page_hook) ) {
 		/**
 		 * Fires before a particular screen is loaded.
 		 *

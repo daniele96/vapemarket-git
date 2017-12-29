@@ -57,7 +57,7 @@ case 'editcomment' :
 
 	$comment_id = absint( $_GET['c'] );
 
-	if ( !$comment = get_comment( $comment_id ) )
+	if ( ! isset($comment = get_comment( $comment_id )) )
 		comment_footer_die( __( 'Invalid comment ID.' ) . sprintf(' <a href="%s">' . __('Go back') . '</a>.', 'javascript:history.go(-1)') );
 
 	if ( !current_user_can( 'edit_comment', $comment_id ) )
@@ -81,7 +81,7 @@ case 'spam'    :
 
 	$comment_id = absint( $_GET['c'] );
 
-	if ( ! $comment = get_comment( $comment_id ) ) {
+	if ( ! isset($comment = get_comment( $comment_id )) ) {
 		wp_redirect( admin_url('edit-comments.php?error=1') );
 		return;
 	}
@@ -141,7 +141,7 @@ if ( $comment->comment_approved != '0' ) { // if not unapproved
 			$message  = __('This comment is currently in the Trash.');
 			break;
 	}
-	if ( $message ) {
+	if ( isset($message )) {
 
 		$str= <<<HTML
 	<div id="message" class="notice notice-info"><p> $message </p></div>
@@ -265,14 +265,14 @@ case 'unapprovecomment' :
 
 	$noredir = isset($_POST['noredir']);
 
-	if ( !$comment = get_comment($comment_id) )
+	if ( ! isset($comment = get_comment($comment_id)) )
 		comment_footer_die( __( 'Invalid comment ID.' ) . sprintf(' <a href="%s">' . __('Go back') . '</a>.', 'edit-comments.php') );
 	if ( !current_user_can( 'edit_comment', $comment->comment_ID ) )
 		comment_footer_die( __('Sorry, you are not allowed to edit comments on this post.') );
 
 	if ( '' != wp_get_referer() && ! $noredir && false === strpos(wp_get_referer(), 'comment.php') )
 		$redir = wp_get_referer();
-	elseif ( '' != wp_get_original_referer() && ! $noredir )
+	elseif ( ('' != wp_get_original_referer()) && ( ! isset($noredir)) )
 		$redir = wp_get_original_referer();
 	elseif ( in_array( $action, array( 'approvecomment', 'unapprovecomment' ) ) )
 		$redir = admin_url('edit-comments.php?p=' . absint( $comment->comment_post_ID ) );

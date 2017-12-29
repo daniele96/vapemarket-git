@@ -40,7 +40,7 @@ case 'editattachment' :
 		return;
 	}
 
-	// No break.
+	   break;
 case 'edit' :
 	$title = __('Edit Media');
 
@@ -97,7 +97,7 @@ case 'edit' :
 				break;
 		}
 	}
-	if ( $message )
+	if ( isset($message) )
 		$str= <<<HTML
 	<div id='message' class='$class'><p>$message</p></div>\n
 HTML;
@@ -151,4 +151,5 @@ default:
 	wp_redirect( admin_url('upload.php') );
 	return;
 
+	break;
 }

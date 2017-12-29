@@ -111,7 +111,7 @@ include ABSPATH . 'wp-admin/admin-header.php' ;
 	$option = get_user_meta( get_current_user_id(), 'show_welcome_panel', true );
 	// 0 = hide, 1 = toggled to show or single site creator, 2 = multisite site owner
 	$hide = 0 == $option || ( 2 == $option && wp_get_current_user()->user_email != get_option( 'admin_email' ) );
-	if ( $hide )
+	if ( isset($hide ))
 		$classes .= ' hidden'; ?>
 
 	<div id="welcome-panel" class="<?php echo esc_attr( $classes ); ?>">

@@ -310,7 +310,7 @@ switch ( $action ) {
 		if ( 0 == $nav_menu_selected_id ) {
 			$new_menu_title = trim( esc_html( $_POST['menu-name'] ) );
 
-			if ( $new_menu_title ) {
+			if ( isset($new_menu_title) ) {
 				$_nav_menu_selected_id = wp_update_nav_menu_object( 0, array('menu-name' => $new_menu_title) );
 
 				if ( is_wp_error( $_nav_menu_selected_id ) ) {
@@ -354,7 +354,7 @@ switch ( $action ) {
 			$_menu_object = wp_get_nav_menu_object( $nav_menu_selected_id );
 
 			$menu_title = trim( esc_html( $_POST['menu-name'] ) );
-			if ( ! $menu_title ) {
+			if ( ! isset($menu_title )) {
 				$messages[] = '<div id="message" class="error notice is-dismissible"><p>' . __( 'Please enter a valid menu name.' ) . '</p></div>';
 				$menu_title = $_menu_object->name;
 			}
@@ -383,7 +383,7 @@ switch ( $action ) {
 		}
 		break;
 	case 'locations':
-		if ( ! $num_locations ) {
+		if ( ! isset($num_locations )) {
 			wp_redirect( admin_url( 'nav-menus.php' ) );
 			return;
 		}
@@ -456,11 +456,11 @@ if ( empty( $nav_menu_selected_id ) && ! isset( $_GET['menu'] ) && is_nav_menu( 
 	$nav_menu_selected_id = $recently_edited;
 
 // On deletion of menu, if another menu exists, show it.
-if ( ! $add_new_screen && 0 < $menu_count && isset( $_GET['action'] ) && 'delete' == $_GET['action'] )
+if ( ! isset($add_new_screen) && 0 < $menu_count && isset( $_GET['action'] ) && 'delete' == $_GET['action'] )
 	$nav_menu_selected_id = $nav_menus[0]->term_id;
 
 // Set $nav_menu_selected_id to 0 if no menus.
-if ( $one_theme_location_no_menus ) {
+if ( isset($one_theme_location_no_menus) ) {
 	$nav_menu_selected_id = 0;
 } elseif ( empty( $nav_menu_selected_id ) && ! empty( $nav_menus ) && ! $add_new_screen ) {
 	// if we have no selection yet, and we have menus, set to the first one in the list.
@@ -472,7 +472,7 @@ if ( $nav_menu_selected_id != $recently_edited && is_nav_menu( $nav_menu_selecte
 	update_user_meta( $current_user->ID, 'nav_menu_recently_edited', $nav_menu_selected_id );
 
 // If there's a menu, get its name.
-if ( ! $nav_menu_selected_title && is_nav_menu( $nav_menu_selected_id ) ) {
+if ( ! isset($nav_menu_selected_title) && is_nav_menu( $nav_menu_selected_id ) ) {
 	$_menu_object = wp_get_nav_menu_object( $nav_menu_selected_id );
 	$nav_menu_selected_title = ! is_wp_error( $_menu_object ) ? $_menu_object->name : '';
 }
@@ -523,7 +523,7 @@ wp_initial_nav_menu_meta_boxes();
 if ( ! current_theme_supports( 'menus' ) && ! $num_locations )
 	$messages[] = '<div id="message" class="updated"><p>' . sprintf( __( 'Your theme does not natively support menus, but you can use them in sidebars by adding a &#8220;Custom Menu&#8221; widget on the <a href="%s">Widgets</a> screen.' ), admin_url( 'widgets.php' ) ) . '</p></div>';
 
-if ( ! $locations_screen ) : // Main tab
+if ( ! isset($locations_screen) ) : // Main tab
 	$overview  = '<p>' . __( 'This screen is used for managing your custom navigation menus.' ) . '</p>';
 	/* translators: 1: Widgets admin screen URL, 2 and 3: The name of the default themes */
 	$overview .= '<p>' . sprintf( __( 'Menus can be displayed in locations defined by your theme, even used in sidebars by adding a &#8220;Custom Menu&#8221; widget on the <a href="%1$s">Widgets</a> screen. If your theme does not support the custom menus feature (the default themes, %2$s and %3$s, do), you can learn about adding this support by following the Documentation link to the side.' ), admin_url( 'widgets.php' ), 'Twenty Sixteen', 'Twenty Seventeen' ) . '</p>';
@@ -614,7 +614,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php' ;
 	endforeach;
 	?>
 	<?php
-	if ( $locations_screen ) :
+	if ( isset($locations_screen) ) :
 		if ( 1 == $num_locations ) {
 			$str= <<<HTML
 	<p> Your theme supports one menu. Select which menu you would like to use.' ) </p>
@@ -651,7 +651,7 @@ HTML;
 								<option value="0"><?php printf( '&mdash; %s &mdash;', esc_html__( 'Select a Menu' ) ); ?></option>
 								<?php foreach ( $nav_menus as $menu ) : ?>
 									<?php $selected = isset( $menu_locations[$_location] ) && $menu_locations[$_location] == $menu->term_id; ?>
-									<option <?php if ( $selected ) echo 'data-orig="true"'; ?> <?php selected( $selected ); ?> value="<?php echo $menu->term_id; ?>">
+									<option <?php if ( isset($selected) ) echo 'data-orig="true"'; ?> <?php selected( $selected ); ?> value="<?php echo $menu->term_id; ?>">
 										<?php echo wp_html_excerpt( $menu->name, 40, '&hellip;' ); ?>
 									</option>
 								<?php endforeach; ?>
@@ -698,7 +698,7 @@ HTML;
 			<input type="hidden" name="action" value="edit" />
 			<label for="select-menu-to-edit" class="selected-menu"><?php _e( 'Select a menu to edit:' ); ?></label>
 			<select name="menu" id="select-menu-to-edit">
-				<?php if ( $add_new_screen ) : ?>
+				<?php if (  isset($add_new_screen) ) : ?>
 					<option value="0" selected="selected"><?php _e( '&mdash; Select &mdash;' ); ?></option>
 				<?php endif; ?>
 				<?php foreach ( (array) $nav_menus as $_nav_menu ) : ?>
@@ -767,7 +767,7 @@ HTML;
 
 					$menu_name_aria_desc = $add_new_screen ? ' aria-describedby="menu-name-desc"' : '';
 
-					if ( $one_theme_location_no_menus ) {
+					if ( isset($one_theme_location_no_menus) ) {
 						$menu_name_val = 'value="' . esc_attr( 'Menu 1' ) . '"';
 					?>
 						<input type="hidden" name="zero-menu-state" value="true" />
@@ -787,7 +787,7 @@ HTML;
 					</div><!-- END .nav-menu-header -->
 					<div id="post-body">
 						<div id="post-body-content" class="wp-clearfix">
-							<?php if ( ! $add_new_screen ) : ?>
+							<?php if ( ! isset( $add_new_screen )) : ?>
 							<h3><?php _e( 'Menu Structure' ); ?></h3>
 							<?php $starter_copy = ( $one_theme_location_no_menus ) ? __( 'Edit your default menu by adding or removing items. Drag each item into the order you prefer. Click Create Menu to save your changes.' ) : __( 'Drag each item into the order you prefer. Click the arrow on the right of the item to reveal additional configuration options.' ); ?>
 							<div class="drag-instructions post-body-plain" <?php if ( isset( $menu_items ) && 0 == count( $menu_items ) ) { ?>style="display: none;"<?php } ?>>
@@ -801,13 +801,13 @@ HTML;
 							<ul class="menu" id="menu-to-edit"></ul>
 							<?php } ?>
 							<?php endif; ?>
-							<?php if ( $add_new_screen ) : ?>
+							<?php if ( isset($add_new_screen) ) : ?>
 								<p class="post-body-plain" id="menu-name-desc"><?php _e( 'Give your menu a name, then click Create Menu.' ); ?></p>
 								<?php if ( isset( $_GET['use-location'] ) ) : ?>
 									<input type="hidden" name="use-location" value="<?php echo esc_attr( $_GET['use-location'] ); ?>" />
 								<?php endif; ?>
 							<?php endif; ?>
-							<div class="menu-settings" <?php if ( $one_theme_location_no_menus ) { ?>style="display: none;"<?php } ?>>
+							<div class="menu-settings" <?php if (  isset($one_theme_location_no_menus )) { ?>style="display: none;"<?php } ?>>
 								<h3><?php _e( 'Menu Settings' ); ?></h3>
 								<?php
 								if ( ! isset( $auto_add ) ) {
@@ -854,7 +854,7 @@ HTML;
 					</div><!-- /#post-body -->
 					<div id="nav-menu-footer">
 						<div class="major-publishing-actions wp-clearfix">
-							<?php if ( 0 != $menu_count && ! $add_new_screen ) : ?>
+							<?php if ( 0 != isset($menu_count) && ! isset($add_new_screen) ) : ?>
 							<span class="delete-action">
 								<a class="submitdelete deletion menu-delete" href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'delete', 'menu' => $nav_menu_selected_id ), admin_url( 'nav-menus.php' ) ), 'delete-nav_menu-' . $nav_menu_selected_id) ); ?>"><?php _e('Delete Menu'); ?></a>
 							</span><!-- END .delete-action -->

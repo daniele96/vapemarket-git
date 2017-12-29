@@ -36,7 +36,7 @@ if ( !defined('WP_MAIL_INTERVAL') )
 
 $last_checked = get_transient('mailserver_last_checked');
 
-if ( $last_checked )
+if ( isset($last_checked) )
 	wp_die(__('Slow down cowboy, no need to check for new mails so often!'));
 
 set_transient('mailserver_last_checked', true, WP_MAIL_INTERVAL);
@@ -76,7 +76,7 @@ for ( $i = 1; $i <= $count; $i++ ) {
 		// Body signal.
 		if ( strlen($line) < 3 )
 			$bodysignal = true;
-		if ( $bodysignal ) {
+		if ( isset($bodysignal) ) {
 			$content .= $line;
 		} else {
 			if ( preg_match('/Content-Type: /i', $line) ) {
@@ -117,7 +117,7 @@ for ( $i = 1; $i <= $count; $i++ ) {
 			 * Set the author using the email address (From or Reply-To, the last used)
 			 * otherwise use the site admin.
 			 */
-			if ( ! $author_found && preg_match( '/^(From|Reply-To): /', $line ) ) {
+			if ( ! isset($author_found) && preg_match( '/^(From|Reply-To): /', $line ) ) {
 				if ( preg_match('|[a-z0-9_.-]+@[a-z0-9_.-]+(?!.*<)|i', $line, $matches) )
 					$author = $matches[0];
 				else
@@ -154,7 +154,7 @@ HTML;
 	}
 
 	// Set $post_status based on $author_found and on author's publish_posts capability
-	if ( $author_found ) {
+	if ( isset($author_found) ) {
 		$user = new WP_User($post_author);
 		$post_status = ( $user->has_cap('publish_posts') ) ? 'publish' : 'pending';
 	} else {

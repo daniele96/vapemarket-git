@@ -127,7 +127,7 @@ function login_header( $title = 'Log In', $message = '', $wp_error = '' ) {
 	$classes = array( 'login-action-' . $action, 'wp-core-ui' );
 	if ( is_rtl() )
 		$classes[] = 'rtl';
-	if ( $interim_login ) {
+	if ( isset($interim_login) ) {
 		$classes[] = 'interim-login';
 		?>
 		<style type="text/css">html{background-color: transparent;}</style>
@@ -242,7 +242,7 @@ function login_footer($input_id = '') {
     $interim_login;
 
 	// Don't allow interim logins to navigate away from the page.
-	if ( ! $interim_login ): ?>
+	if ( ! isset($interim_login)): ?>
 	<p id="backtoblog"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php
 		/* translators: %s: site title */
 		printf( _x( '&larr; Back to %s', 'site' ), get_bloginfo( 'title', 'display' ) );
@@ -328,7 +328,7 @@ function retrieve_password() {
 	if ( $errors->get_error_code() )
 		return $errors;
 
-	if ( !$user_data ) {
+	if ( !isset($user_data) ) {
 		$errors->add('invalidcombo', __('<strong>ERROR</strong>: Invalid username or email.'));
 		return $errors;
 	}
@@ -471,7 +471,7 @@ case 'postpass' :
 	 */
 	$expire = apply_filters( 'post_password_expires', time() + 10 * DAY_IN_SECONDS );
 	$referer = wp_get_referer();
-	if ( $referer ) {
+	if ( isset($referer) ) {
 		$secure = ( 'https' === parse_url( $referer, PHP_URL_SCHEME ) );
 	} else {
 		$secure = false;
@@ -516,7 +516,7 @@ case 'logout' :
 case 'lostpassword' :
 case 'retrievepassword' :
 
-	if ( $http_post ) {
+	if ( isset($http_post) ) {
 		$errors = retrieve_password();
 		if ( !is_wp_error($errors) ) {
 			$redirect_to = !empty( $_POST['redirect_to'] ) ? $_POST['redirect_to'] : 'wp-login.php?checkemail=confirm';
@@ -614,7 +614,7 @@ case 'rp' :
 		$user = false;
 	}
 
-	if ( ! $user || is_wp_error( $user ) ) {
+	if ( !isset( $user) || is_wp_error( $user )) {
 		setcookie( $rp_cookie, ' ', time() - YEAR_IN_SECONDS, $rp_path, COOKIE_DOMAIN, is_ssl(), true );
 		if ( $user && $user->get_error_code() === 'expired_key' )
 			wp_redirect( site_url( 'wp-login.php?action=lostpassword&error=expiredkey' ) );
@@ -726,7 +726,7 @@ case 'register' :
 
 	$user_login = '';
 	$user_email = '';
-	if ( $http_post ) {
+	if ( isset($http_post )) {
 		$user_login = isset( $_POST['user_login'] ) ? $_POST['user_login'] : '';
 		$user_email = isset( $_POST['user_email'] ) ? wp_unslash( $_POST['user_email'] ) : '';
 		$errors = register_new_user($user_login, $user_email);
@@ -784,7 +784,7 @@ case 'login' :
 default:
 	$secure_cookie = '';
 	$customize_login = isset( $_POST['customize-login'] );
-	if ( $customize_login )
+	if ( isset($customize_login ))
 		wp_enqueue_script( 'customize-base' );
 
 	// If the user wants ssl but the session is not ssl, force a secure cookie.
@@ -792,11 +792,11 @@ default:
 		$user_name = sanitize_user($_POST['log']);
 		$user = get_user_by( 'login', $user_name );
 
-		if ( ! $user && strpos( $user_name, '@' ) ) {
+		if ( ! isset($user) && strpos( $user_name, '@' ))  {
 			$user = get_user_by( 'email', $user_name );
 		}
 
-		if ( $user ) {
+		if ( isset($user )) {
 			if ( get_user_option('use_ssl', $user->ID) ) {
 				$secure_cookie = true;
 				force_ssl_admin(true);
@@ -843,7 +843,7 @@ default:
 	$redirect_to = apply_filters( 'login_redirect', $redirect_to, $requested_redirect_to, $user );
 
 	if ( !is_wp_error($user) && !$reauth ) {
-		if ( $interim_login ) {
+		if ( isset($interim_login )) {
 			$message = '<p class="message">' . __('You have logged in successfully.') . '</p>';
 			$interim_login = 'success';
 			login_header( '', $message ); ?>
@@ -851,7 +851,7 @@ default:
 			<?php
 			/** This action is documented in wp-login.php */
 			do_action( 'login_footer' ); ?>
-			<?php if ( $customize_login ) : ?>
+			<?php if ( isset($customize_login )) : ?>
 				<script type="text/javascript">setTimeout( function(){ new wp.customize.Messenger({ url: '<?php echo wp_customize_url(); ?>', channel: 'login' }).send('login') }, 1000 );</script>
 			<?php endif; ?>
 			</body></html>
@@ -879,7 +879,7 @@ default:
 	if ( !empty($_GET['loggedout']) || $reauth )
 		$errors = new WP_Error();
 
-	if ( $interim_login ) {
+	if ( isset($interim_login )) {
 		if ( ! $errors->get_error_code() )
 			$errors->add( 'expired', __( 'Your session has expired. Please log in to continue where you left off.' ), 'message' );
 	} else {
@@ -909,7 +909,7 @@ default:
 	$errors = apply_filters( 'wp_login_errors', $errors, $redirect_to );
 
 	// Clear any stale cookies.
-	if ( $reauth )
+	if ( isset($reauth ))
 		wp_clear_auth_cookie();
 
 	login_header(__('Log In'), '', $errors);
@@ -945,19 +945,19 @@ default:
 	<p class="forgetmenot"><label for="rememberme"><input name="rememberme" type="checkbox" id="rememberme" value="forever" <?php checked( $rememberme ); ?> /> <?php esc_html_e( 'Remember Me' ); ?></label></p>
 	<p class="submit">
 		<input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="<?php esc_attr_e('Log In'); ?>" />
-<?php	if ( $interim_login ) { ?>
+<?php	if ( isset($interim_login )) { ?>
 		<input type="hidden" name="interim-login" value="1" />
 <?php	} else { ?>
 		<input type="hidden" name="redirect_to" value="<?php echo esc_attr($redirect_to); ?>" />
 <?php 	} ?>
-<?php   if ( $customize_login ) : ?>
+<?php   if ( isset($customize_login )) : ?>
 		<input type="hidden" name="customize-login" value="1" />
 <?php   endif; ?>
 		<input type="hidden" name="testcookie" value="1" />
 	</p>
 </form>
 
-<?php if ( ! $interim_login ) { ?>
+<?php if ( ! isset($interim_login )) { ?>
 <p id="nav">
 <?php if ( ! isset( $_GET['checkemail'] ) || ! in_array( $_GET['checkemail'], array( 'confirm', 'newpass' ) ) ) :
 	if ( get_option( 'users_can_register' ) ) :
@@ -975,7 +975,7 @@ default:
 <script type="text/javascript">
 function wp_attempt_focus(){
 setTimeout( function(){ try{
-<?php if ( $user_login ) { ?>
+<?php if ( isset($user_login )) { ?>
 d = document.getElementById('user_pass');
 d.value = '';
 <?php } else { ?>
@@ -1003,7 +1003,7 @@ d.select();
 wp_attempt_focus();
 <?php } ?>
 if(typeof wpOnload=='function')wpOnload();
-<?php if ( $interim_login ) { ?>
+<?php if ( isset($interim_login )) { ?>
 (function(){
 try {
 	var i, links = document.getElementsByTagName('a');

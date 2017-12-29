@@ -9,12 +9,12 @@
 /** WordPress Administration Bootstrap */
 require_once dirname( __FILE__ ) . '/admin.php' ;
 
-if ( ! $taxnow )
+if ( ! isset($taxnow) )
 	wp_die( __( 'Invalid taxonomy.' ) );
 
 $tax = get_taxonomy( $taxnow );
 
-if ( ! $tax )
+if ( ! isset($tax) )
 	wp_die( __( 'Invalid taxonomy.' ) );
 
 if ( ! in_array( $tax->name, get_taxonomies( array( 'show_ui' => true ) ) ) ) {
@@ -61,7 +61,7 @@ get_current_screen()->set_screen_reader_content( array(
 
 $location = false;
 $referer = wp_get_referer();
-if ( ! $referer ) { // For POST requests.
+if ( ! isset($referer) ) { // For POST requests.
 	$referer = wp_unslash( $_SERVER['REQUEST_URI'] );
 }
 $referer = remove_query_arg( array( '_wp_http_referer', '_wpnonce', 'error', 'message', 'paged' ), $referer );
@@ -159,7 +159,7 @@ case 'editedtag':
 	}
 
 	$tag = get_term( $tag_ID, $taxonomy );
-	if ( ! $tag )
+	if ( ! isset($tag) )
 		wp_die( __( 'You attempted to edit an item that doesn&#8217;t exist. Perhaps it was deleted?' ) );
 
 	$ret = wp_update_term( $tag_ID, $taxonomy, $_POST );
@@ -181,11 +181,11 @@ default:
 	break;
 }
 
-if ( ! $location && ! empty( $_POST['_wp_http_referer'] ) ) {
+if ( ! isset($location) && ! empty( $_POST['_wp_http_referer'] ) ) {
 	$location = remove_query_arg( array( '_wp_http_referer', '_wpnonce' ), wp_unslash( $_SERVER['REQUEST_URI'] ) );
 }
 
-if ( $location ) {
+if ( isset($location) ) {
 	if ( $pagenum > 1 ) {
 		$location = add_query_arg( 'paged', $pagenum, $location ); // $pagenum takes care of $total_pages.
 	}
@@ -303,7 +303,7 @@ if ( isset( $_GET['s'] ) && strlen( $_GET['s'] ) ) {
 
 <hr class="wp-header-end">
 
-<?php if ( $message ) : ?>
+<?php if ( isset($message) ) : ?>
 <div id="message" class="<?php echo $class; ?> notice is-dismissible"><p><?php echo $message; ?></p></div>
 <?php $_SERVER['REQUEST_URI'] = remove_query_arg( array( 'message', 'error' ), $_SERVER['REQUEST_URI'] );
 endif; ?>

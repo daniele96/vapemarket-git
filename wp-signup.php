@@ -247,11 +247,18 @@ function validate_blog_form() {
  * @param string          $user_email The entered email address.
  * @param WP_Error|string $errors     A WP_Error object containing existing errors. Defaults to empty string.
  */
-function show_user_form($user_name = '', $user_email = '', $errors = '') {
+function show_user_form($user_name , $user_email, $errors) {
 	if ( ! is_wp_error( $errors ) ) {
 		$errors = new WP_Error();
 	}
+   
 
+	$user_name = '';
+	echo $user_name;
+	$user_email = '';
+	echo $user_email = '';
+	$errors = '';
+	echo $errors = '';
 	// User name
 	
 	$str= <<<HTML
@@ -457,7 +464,7 @@ function validate_another_blog_signup() {
 		if ( in_array( $_POST['WPLANG'], $languages ) ) {
 			$language = wp_unslash( sanitize_text_field( $_POST['WPLANG'] ) );
 
-			if ( $language ) {
+			if ( isset($language) ) {
 				$blog_meta_defaults['WPLANG'] = $language;
 			}
 		}
@@ -514,7 +521,7 @@ function validate_another_blog_signup() {
  * @param array  $meta       Any additional meta from the {@see 'add_signup_meta'} filter in validate_blog_signup().
  * @param int    $blog_id    The site ID.
  */
-function confirm_another_blog_signup( $domain, $path, $blog_title, $user_name, $user_email = '', $meta = array(), $blog_id = 0 ) {
+function confirm_another_blog_signup( $domain, $path, $blog_title, $user_name, $blog_id = 0 ) {
 
 	if ( $blog_id ) {
 		switch_to_blog( $blog_id );
@@ -785,7 +792,7 @@ function validate_blog_signup() {
 		if ( in_array( $_POST['WPLANG'], $languages ) ) {
 			$language = wp_unslash( sanitize_text_field( $_POST['WPLANG'] ) );
 
-			if ( $language ) {
+			if ( isset($language )) {
 				$signup_meta['WPLANG'] = $language;
 			}
 		}
@@ -812,9 +819,10 @@ function validate_blog_signup() {
  * @param string $user_email The user's email address
  * @param array $meta Any additional meta from the {@see 'add_signup_meta'} filter in validate_blog_signup()
  */
-function confirm_blog_signup( $domain, $path, $blog_title, $user_name = '', $user_email = '', $meta = array() ) {
+function confirm_blog_signup( $domain, $path, $blog_title, $user_email) {
 	?>
 	<h2><?php /* translators: %s: site address */
+	$user_email = '';
 	printf( __( 'Congratulations! Your new site, %s, is almost ready.' ), htmlspecialchars("<a href='http://{$domain}{$path}'>{$blog_title}</a>" )) ?></h2>
 
 	<p><?php _e( 'But, before you can start using your site, <strong>you must activate it</strong>.' ) ?></p>
@@ -969,7 +977,7 @@ if ( $active_signup == 'none' ) {
 			else
 				_e( 'You are logged in already. No need to register again!' );
 
-			if ( $newblogname ) {
+			if ( isset($newblogname )) {
 				$newblog = get_blogaddress_by_name( $newblogname );
 
 				if ( $active_signup == 'blog' || $active_signup == 'all' )

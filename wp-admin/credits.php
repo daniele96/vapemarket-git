@@ -35,7 +35,7 @@ include ABSPATH . 'wp-admin/admin-header.php' ;
 $credits = null;
 $credits = wp_credits();
 
-if ( ! $credits ) {
+if ( ! isset( $credits) ) {
 	echo '<p class="about-description">';
 	/* translators: 1: https://wordpress.org/about/, 2: https://make.wordpress.org/ */
 	printf( __( 'WordPress is created by a <a href="%1$s">worldwide team</a> of passionate individuals. <a href="%2$s">Get involved in WordPress</a>.' ),
@@ -65,7 +65,7 @@ HTML;
 
 
 foreach ( $credits['groups'] as $group_slug => $group_data ) {
-	if ( $group_data['name'] ) {
+	if ( isset($group_data['name'] )) {
 		if ( 'Translators' == $group_data['name'] ) {
 			// Considered a special slug in the API response. (Also, will never be returned for en_US.)
 			$title = _x( 'Translators', 'Translate this to be the equivalent of English Translators in your language for the credits page Translators section' );

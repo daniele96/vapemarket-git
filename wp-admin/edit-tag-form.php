@@ -70,10 +70,10 @@ do_action( "{$taxonomy}_pre_edit_form", $tag, $taxonomy ); ?>
 <div class="wrap">
 <h1><?php echo $tax->labels->edit_item; ?></h1>
 
-<?php if ( $message ) : ?>
+<?php if ( isset($message) ) : ?>
 <div id="message" class="updated">
 	<p><strong><?php echo $message; ?></strong></p>
-	<?php if ( $wp_http_referer ) { ?>
+	<?php if ( isset($wp_http_referer) ) { ?>
 	<p><a href="<?php echo esc_url( wp_validate_redirect( esc_url_raw( $wp_http_referer ), admin_url( 'term.php?taxonomy=' . $taxonomy ) ) ); ?>"><?php
 		/* translators: %s: taxonomy name */
 		printf( _x( '&larr; Back to %s', 'admin screen' ), $tax->labels->name );

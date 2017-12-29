@@ -9,7 +9,7 @@
 /** WordPress Administration Bootstrap */
 require_once dirname( __FILE__ ) . '/admin.php' ;
 
-if ( ! $typenow )
+if ( ! isset($typenow) )
 	wp_die( __( 'Invalid post type.' ) );
 
 if ( ! in_array( $typenow, get_post_types( array( 'show_ui' => true ) ) ) ) {
@@ -31,7 +31,7 @@ global $post_type, $post_type_object;
 $post_type = $typenow;
 $post_type_object = get_post_type_object( $post_type );
 
-if ( ! $post_type_object )
+if ( !  isset($post_type_object) )
 	wp_die( __( 'Invalid post type.' ) );
 
 if ( ! current_user_can( $post_type_object->cap->edit_posts ) ) {
@@ -66,11 +66,11 @@ if ( 'post' != $post_type ) {
 
 $doaction = $wp_list_table->current_action();
 
-if ( $doaction ) {
+if ( isset($doaction )) {
 	check_admin_referer('bulk-posts');
 
 	$sendback = remove_query_arg( array('trashed', 'untrashed', 'deleted', 'locked', 'ids'), wp_get_referer() );
-	if ( ! $sendback )
+	if ( ! isset( $sendback) )
 		$sendback = admin_url( $parent_file );
 	$sendback = add_query_arg( 'paged', $pagenum, $sendback );
 	if ( strpos($sendback, 'post.php') !== false )
@@ -345,7 +345,7 @@ foreach ( $bulk_counts as $message => $count ) {
 	}
 }
 
-if ( $messages )
+if ( isset($messages ))
 
 
 	$var= join( ' ', $messages );

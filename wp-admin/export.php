@@ -64,10 +64,10 @@ if ( isset( $_GET['download'] ) ) {
 	} elseif ( 'posts' == $_GET['content'] ) {
 		$args['content'] = 'post';
 
-		if ( $_GET['cat'] )
+		if ( isset($_GET['cat']) )
 			$args['category'] = (int) $_GET['cat'];
 
-		if ( $_GET['post_author'] )
+		if ( isset($_GET['post_author']) )
 			$args['author'] = (int) $_GET['post_author'];
 
 		if ( $_GET['post_start_date'] || $_GET['post_end_date'] ) {
@@ -75,12 +75,12 @@ if ( isset( $_GET['download'] ) ) {
 			$args['end_date'] = $_GET['post_end_date'];
 		}
 
-		if ( $_GET['post_status'] )
+		if ( isset($_GET['post_status'] ))
 			$args['status'] = $_GET['post_status'];
 	} elseif ( 'pages' == $_GET['content'] ) {
 		$args['content'] = 'page';
 
-		if ( $_GET['page_author'] )
+		if ( isset($_GET['page_author'] ))
 			$args['author'] = (int) $_GET['page_author'];
 
 		if ( $_GET['page_start_date'] || $_GET['page_end_date'] ) {
@@ -88,7 +88,7 @@ if ( isset( $_GET['download'] ) ) {
 			$args['end_date'] = $_GET['page_end_date'];
 		}
 
-		if ( $_GET['page_status'] )
+		if (  isset($_GET['page_status']) )
 			$args['status'] = $_GET['page_status'];
 	} elseif ( 'attachment' == $_GET['content'] ) {
 		$args['content'] = 'attachment';
@@ -139,7 +139,7 @@ function export_date_options($wpdp,$wp_locale, $post_type = 'post') {
 	", $post_type ) );
 
 	$month_count = count( $months );
-	if ( !$month_count || ( 1 == $month_count && 0 == $months[0]->month ) )
+	if ( ! isset($month_count) || ( 1 == $month_count && 0 == $months[0]->month ) )
 		return;
 
 	foreach ( $months as $date ) {

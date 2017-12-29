@@ -164,7 +164,7 @@ HTML;
 			$is_plugin_installed = true;
 		}
 
-		if ( ! $is_plugin_installed && is_main_site() ) {
+		if ( ! isset($is_plugin_installed) && is_main_site() ) {
 			$url = add_query_arg( array(
 				'tab'       => 'plugin-information',
 				'plugin'    => $plugin_slug,

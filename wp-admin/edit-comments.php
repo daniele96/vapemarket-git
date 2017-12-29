@@ -21,7 +21,7 @@ $pagenum = $wp_list_table->get_pagenum();
 
 $doaction = $wp_list_table->current_action();
 
-if ( $doaction ) {
+if ( isset($doaction) ) {
 	check_admin_referer( 'bulk-comments' );
 
 	if ( 'delete_all' == $doaction && !empty( $_POST['pagegen_timestamp'] ) ) {
@@ -104,19 +104,19 @@ if ( $doaction ) {
 
 	wp_defer_comment_counting( false );
 
-	if ( $approved )
+	if ( isset($approved) )
 		$redirect_to = add_query_arg( 'approved', $approved, $redirect_to );
-	if ( $unapproved )
+	if ( isset($unapproved) )
 		$redirect_to = add_query_arg( 'unapproved', $unapproved, $redirect_to );
-	if ( $spammed )
+	if ( isset($spammed) )
 		$redirect_to = add_query_arg( 'spammed', $spammed, $redirect_to );
-	if ( $unspammed )
+	if ( isset($unspammed) )
 		$redirect_to = add_query_arg( 'unspammed', $unspammed, $redirect_to );
-	if ( $trashed )
+	if ( isset($trashed) )
 		$redirect_to = add_query_arg( 'trashed', $trashed, $redirect_to );
-	if ( $untrashed )
+	if ( isset($untrashed) )
 		$redirect_to = add_query_arg( 'untrashed', $untrashed, $redirect_to );
-	if ( $deleted )
+	if ( isset($deleted) )
 		$redirect_to = add_query_arg( 'deleted', $deleted, $redirect_to );
 	if ( $trashed || $spammed )
 		$redirect_to = add_query_arg( 'ids', join( ',', $comment_ids ), $redirect_to );
@@ -133,7 +133,7 @@ $wp_list_table->prepare_items();
 wp_enqueue_script('admin-comments');
 enqueue_comment_hotkeys_js();
 
-if ( $post_id ) {
+if ( isset($post_id) ) {
 	$comments_count = wp_count_comments( $post_id );
 	$draft_or_post_title = wp_html_excerpt( _draft_or_post_title( $post_id ), 50, '&hellip;' );
 	if ( $comments_count->moderated > 0 ) {
@@ -199,7 +199,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php' ;
 
 <div class="wrap">
 <h1 class="wp-heading-inline"><?php
-if ( $post_id ) {
+if ( isset($post_id) ) {
 	/* translators: %s: link to post */
 	printf( __( 'Comments on &#8220;%s&#8221;' ),
 		sprintf( '<a href="%1$s">%2$s</a>',
@@ -243,7 +243,7 @@ if ( isset( $_GET['error'] ) ) {
 			$error_msg = __( 'Sorry, you are not allowed to edit comments on this post.' );
 			break;
 	}
-	if ( $error_msg )
+	if ( isset( $error_msg) )
 
 		$str= <<<HTML
 	<div id="moderated" class="error"><p> $error_msg </p></div>
@@ -330,7 +330,7 @@ HTML;
 
 <?php $wp_list_table->search_box( __( 'Search Comments' ), 'comment' ); ?>
 
-<?php if ( $post_id ) : ?>
+<?php if ( isset($post_id) ) : ?>
 <input type="hidden" name="p" value="<?php echo esc_attr( intval( $post_id ) ); ?>" />
 <?php endif; ?>
 <input type="hidden" name="comment_status" value="<?php echo esc_attr($comment_status); ?>" />

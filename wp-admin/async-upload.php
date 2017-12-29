@@ -125,7 +125,7 @@ HTML;
 	return;
 }
 
-if ( $_GET['short'] ) {
+if ( isset($_GET['short']) ) {
 	// Short form response - attachment ID only.
 	echo $id;
 } else {

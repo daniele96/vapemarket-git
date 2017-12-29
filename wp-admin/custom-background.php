@@ -66,7 +66,7 @@ class Custom_Background {
 	 */
 	public function init() {
 		$page = add_theme_page( __( 'Background' ), __( 'Background' ), 'edit_theme_options', 'custom-background', array( $this, 'admin_page' ) );
-		if ( ! $page ) {
+		if ( ! isset($page) ) {
 			return;
 		}
 
@@ -261,7 +261,7 @@ class Custom_Background {
 			$background_styles .= 'background-color: #' . $bgcolor . ';';
 
 		$background_image_thumb = get_background_image();
-		if ( $background_image_thumb ) {
+		if ( isset($background_image_thumb) ) {
 			$background_image_thumb = esc_url( set_url_scheme( get_theme_mod( 'background_image_thumb', str_replace( '%', '%%', $background_image_thumb ) ) ) );
 			$background_position_x = get_theme_mod( 'background_position_x', get_theme_support( 'custom-background', 'default-position-x' ) );
 			$background_position_y = get_theme_mod( 'background_position_y', get_theme_support( 'custom-background', 'default-position-y' ) );
@@ -278,7 +278,7 @@ class Custom_Background {
 		}
 	?>
 	<div id="custom-background-image" style="<?php echo $background_styles; ?>"><?php // must be double quote, see above ?>
-		<?php if ( $background_image_thumb ) { ?>
+		<?php if ( isset($background_image_thumb) ) { ?>
 		<img class="custom-background-image" src="<?php echo $background_image_thumb; ?>" style="visibility:hidden;" alt="" /><br />
 		<img class="custom-background-image" src="<?php echo $background_image_thumb; ?>" style="visibility:hidden;" alt="" />
 		<?php } ?>

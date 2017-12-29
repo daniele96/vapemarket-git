@@ -81,7 +81,7 @@ Webmaster
 
 	wp_mail( get_option( 'admin_email' ), "[ " . wp_specialchars_decode( get_option( 'blogname' ) ) . " ] ".__( 'Delete My Site' ), $content );
 
-	if ( $switched_locale ) {
+	if ( isset($switched_locale )) {
 		restore_previous_locale();
 	}
 	?>

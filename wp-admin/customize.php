@@ -197,7 +197,7 @@ HTML;
 						}
 						$active = ! empty( $settings['default'] );
 						$class = 'preview-' . $device;
-						if ( $active ) {
+						if ( isset( $active) ) {
 							$class .= ' active';
 						}
 						?>

@@ -30,7 +30,7 @@ $opml=null;
  * @param string $tagName XML element name.
  * @param array $attrs XML element attributes.
  */
-function startElement($parser, $tagName, $attrs,$names, $urls, $targets, $descriptions, $feeds) {
+function startElement( $tagName, $attrs,$names, $urls, $targets, $descriptions, $feeds) {
 	 $names; $urls; $targets; $descriptions; $feeds;
 
 	if ( 'OUTLINE' === $tagName ) {
@@ -67,9 +67,7 @@ function startElement($parser, $tagName, $attrs,$names, $urls, $targets, $descri
  * @param mixed $parser XML Parser resource.
  * @param string $tagName XML tag name.
  */
-function endElement($parser, $tagName) {
-	// Nothing to do.
-}
+
 
 // Create an XML parser
 if ( ! function_exists( 'xml_parser_create' ) ) {

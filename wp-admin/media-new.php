@@ -24,7 +24,7 @@ if ( isset( $_GET['post_id'] ) ) {
 		$post_id = 0;
 }
 
-if ( $_POST ) {
+if ( isset($_POST )) {
 	if ( isset($_POST['html-upload']) && !empty($_FILES) ) {
 		check_admin_referer('media-form');
 		// Upload File button was clicked

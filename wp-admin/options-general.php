@@ -221,7 +221,7 @@ if ( empty($tzstring) ) { // Create a UTC+- zone if no timezone string exists
 	// Set TZ so localtime works.
 	date_default_timezone_set($tzstring);
 	$now = localtime(time(), true);
-	if ( $now['tm_isdst'] )
+	if ( isset($now['tm_isdst']) )
 		_e('This timezone is currently in daylight saving time.');
 	else
 		_e('This timezone is currently in standard time.');
@@ -242,7 +242,7 @@ if ( empty($tzstring) ) { // Create a UTC+- zone if no timezone string exists
 			}
 		}
 
-		if ( $found ) {
+		if ( isset($found) ) {
 			echo ' ';
 			$message = $tr['isdst'] ?
 				/* translators: %s: date and time  */

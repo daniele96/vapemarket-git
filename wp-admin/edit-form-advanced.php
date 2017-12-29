@@ -57,7 +57,7 @@ if ( $post_ID == get_option( 'page_for_posts' ) && empty( $post->post_content ) 
 }
 
 $thumbnail_support = current_theme_supports( 'post-thumbnails', $post_type ) && post_type_supports( $post_type, 'thumbnail' );
-if ( ! $thumbnail_support && 'attachment' === $post_type && $post->post_mime_type ) {
+if ( ! isset($thumbnail_support) && 'attachment' === $post_type && $post->post_mime_type ) {
 	if ( wp_attachment_is( 'audio', $post ) ) {
 		$thumbnail_support = post_type_supports( 'attachment:audio', 'thumbnail' ) || current_theme_supports( 'post-thumbnails', 'attachment:audio' );
 	} elseif ( wp_attachment_is( 'video', $post ) ) {
@@ -65,7 +65,7 @@ if ( ! $thumbnail_support && 'attachment' === $post_type && $post->post_mime_typ
 	}
 }
 
-if ( $thumbnail_support ) {
+if ( isset($thumbnail_support) ) {
 	add_thickbox();
 	wp_enqueue_media( array( 'post' => $post_ID ) );
 }
@@ -77,7 +77,7 @@ add_action( 'admin_footer', '_local_storage_notice' );
  * @todo Document the $messages array(s).
  */
 $permalink = get_permalink( $post_ID );
-if ( ! $permalink ) {
+if ( ! isset($permalink) ) {
 	$permalink = '';
 }
 
@@ -90,7 +90,7 @@ $preview_url = get_preview_post_link( $post );
 
 $viewable = is_post_type_viewable( $post_type_object );
 
-if ( $viewable ) {
+if (isset( $viewable) ) {
 
 	// Preview post link.
 	$preview_post_link_html = sprintf( ' <a target="_blank" href="%1$s">%2$s</a>',
@@ -205,7 +205,7 @@ if ( $autosave && mysql2date( 'U', $autosave->post_modified_gmt, false ) > mysql
 		}
 	}
 	// If this autosave isn't different from the current post, begone.
-	if ( ! $notice )
+	if ( ! isset($notice) )
 		wp_delete_post_revision( $autosave->ID );
 	unset($autosave_field, $_autosave_field);
 }
@@ -495,10 +495,10 @@ HTML;
 
 <hr class="wp-header-end">
 
-<?php if ( $notice ) : ?>
+<?php if ( isset( $notice) ) : ?>
 <div id="notice" class="notice notice-warning"><p id="has-newer-autosave"><?php echo $notice ?></p></div>
 <?php endif; ?>
-<?php if ( $message ) : ?>
+<?php if (isset( $message) ) : ?>
 <div id="message" class="updated notice notice-success is-dismissible"><p><?php echo $message; ?></p></div>
 <?php endif; ?>
 <div id="lost-connection-notice" class="error hidden">
@@ -584,7 +584,7 @@ do_action( 'edit_form_before_permalink', $post );
 ?>
 <div class="inside">
 <?php
-if ( $viewable ) :
+if ( isset($viewable) ) :
 $sample_permalink_html = $post_type_object->public ? get_sample_permalink_html($post->ID) : '';
 
 // As of 4.4, the Get Shortlink button is hidden by default.
@@ -601,7 +601,7 @@ if ( $post_type_object->public && ! ( 'pending' == get_post_status( $post ) && !
 ?>
 	<div id="edit-slug-box" class="hide-if-no-js">
 	<?php
-		if ( $has_sample_permalink )
+		if (isset( $has_sample_permalink) )
 			echo $sample_permalink_html;
 	?>
 	</div>

@@ -142,7 +142,7 @@ do_meta_boxes(null, 'advanced', $link);
 </div>
 <?php
 
-if ( $link_id ) : ?>
+if ( isset($link_id) ) : ?>
 <input type="hidden" name="action" value="save" />
 <input type="hidden" name="link_id" value="<?php echo (int) $link_id; ?>" />
 <input type="hidden" name="cat_id" value="<?php echo (int) $cat_id ?>" />

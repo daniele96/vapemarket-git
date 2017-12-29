@@ -75,7 +75,7 @@ class Custom_Image_Header {
 	 */
 	public function init() {
 		$page = add_theme_page( __( 'Header' ), __( 'Header' ), 'edit_theme_options', 'custom-header', array( $this, 'admin_page' ) );
-		if ( ! $page ) {
+		if ( ! isset($page) ) {
 			return;
 		}
 
@@ -217,7 +217,7 @@ class Custom_Image_Header {
 			$color = preg_replace('/[^0-9a-fA-F]/', '', $_POST['text-color']);
 			if ( strlen($color) == 6 || strlen($color) == 3 )
 				set_theme_mod('header_textcolor', $color);
-			elseif ( ! $color )
+			elseif ( ! isset($color) )
 				set_theme_mod( 'header_textcolor', 'blank' );
 		}
 
@@ -523,7 +523,7 @@ HTML;
 		$header_image_style = '';
 		echo $header_image_style;
 
-		if ( $header_image ) {
+		if ( isset($header_image) ) {
 			$header_image_style = 'background-image:url(' . esc_url( $header_image ) . ');';
 		}  else {
 			$header_image_style = '';
@@ -718,7 +718,7 @@ HTML;
 	}
 
 	echo '<input type="text" name="text-color" id="text-color" value="' . esc_attr( $header_textcolor ) . '"' . $default_color_attr . ' />';
-	if ( $default_color ) {
+	if ( isset($default_color) ) {
 
 
 		$var= sprintf( _x( 'Default: %s', 'color' ), esc_html( $default_color ) );
@@ -822,7 +822,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 		} elseif ( $width > $max_width ) {
 			$oitar = $width / $max_width;
 			$image = wp_crop_image($attachment_id, 0, 0, $width, $height, $max_width, $height / $oitar, false, str_replace(basename($file), 'midsize-'.basename($file), $file));
-			if ( ! $image || is_wp_error( $image ) )
+			if ( ! isset($image) || is_wp_error( $image ) )
 				wp_die( __( 'Image could not be processed. Please go back and try again.' ), __( 'Image Processing Error' ) );
 
 			/** This filter is documented in wp-admin/custom-header.php */
@@ -960,7 +960,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 		else
 			$cropped = get_attached_file( $attachment_id );
 
-		if ( ! $cropped || is_wp_error( $cropped ) )
+		if ( ! isset($cropped) || is_wp_error( $cropped ) )
 			wp_die( __( 'Image could not be processed. Please go back and try again.' ), __( 'Image Processing Error' ) );
 
 		/** This filter is documented in wp-admin/custom-header.php */
@@ -1125,7 +1125,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 		$this->process_default_headers();
 		$default = get_theme_support( 'custom-header', 'default-image' );
 
-		if ( ! $default ) {
+		if ( ! isset($default) ) {
 			$this->remove_header_image();
 			return;
 		}
@@ -1163,11 +1163,11 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 		$dst = array( 'dst_height' => null, 'dst_width' => null );
 
 		// For flex, limit size of image displayed to 1500px unless theme says otherwise
-		if ( $has_flex_width ) {
+		if ( isset($has_flex_width) ) {
 			$max_width = 1500;
 		}
 
-		if ( $has_max_width ) {
+		if ( isset( $has_max_width) ) {
 			$max_width = max( $max_width, get_theme_support( 'custom-header', 'max-width' ) );
 		}
 		$max_width = max( $max_width, $theme_width );
@@ -1285,7 +1285,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 			(int) $dimensions['dst_height']
 		);
 
-		if ( ! $cropped || is_wp_error( $cropped ) ) {
+		if ( ! isset($cropped) || is_wp_error( $cropped ) ) {
 			wp_send_json_error( array( 'message' => __( 'Image could not be processed. Please go back and try again.' ) ) );
 		}
 
@@ -1394,7 +1394,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 		// Get the default image if there is one.
 		$default = get_theme_support( 'custom-header', 'default-image' );
 
-		if ( ! $default ) { // If not,
+		if ( !  isset($default) ) { // If not,
 			return $this->default_headers; // easy peasy.
 		}
 
@@ -1408,7 +1408,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 			}
 		}
 
-		if ( $already_has_default ) {
+		if (  isset($already_has_default) ) {
 			return $this->default_headers;
 		}
 

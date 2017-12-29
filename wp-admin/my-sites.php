@@ -50,7 +50,7 @@ get_current_screen()->set_help_sidebar(
 
 require_once ABSPATH . 'wp-admin/admin-header.php' ;
 
-if ( $updated ) { ?>
+if ( isset($updated) ) { ?>
 	<div id="message" class="updated notice is-dismissible"><p><strong><?php _e( 'Settings saved.' ); ?></strong></p></div>
 <?php } ?>
 

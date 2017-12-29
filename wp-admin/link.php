@@ -105,7 +105,7 @@ switch ($action) {
 
 		$link_id = (int) $_GET['link_id'];
 
-		if (!$link = get_link_to_edit($link_id))
+		if ( $link != get_link_to_edit($link_id))
 			wp_die(__('Link not found.'));
 
 		include ABSPATH . 'wp-admin/edit-link-form.php' ;
