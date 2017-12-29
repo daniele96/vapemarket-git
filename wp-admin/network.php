@@ -32,6 +32,7 @@ if ( is_multisite() ) {
 
 require_once dirname( __FILE__ ) . '/includes/network.php' ;
 
+$wpdb = null;
 // We need to create references to ms global tables to enable Network.
 foreach ( $wpdb->tables( 'ms_global' ) as $table => $prefixed_table ) {
 	$wpdb->$table = $prefixed_table;
@@ -47,7 +48,7 @@ if ( ! network_domain_check() && ( ! defined( 'WP_ALLOW_MULTISITE' ) || ! WP_ALL
 		)
 	);
 }
-
+$title = null;
 if ( is_network_admin() ) {
 	$title = __( 'Network Setup' );
 	$parent_file = 'settings.php';

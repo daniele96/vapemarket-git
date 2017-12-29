@@ -12,6 +12,7 @@ require_once dirname( __FILE__ ) . '/includes/credits.php' ;
 
 $title = __( 'Credits' );
 
+$display_version = null;
 list( $display_version ) = explode( '-', get_bloginfo( 'version' ) );
 
 include ABSPATH . 'wp-admin/admin-header.php' ;
@@ -31,7 +32,7 @@ include ABSPATH . 'wp-admin/admin-header.php' ;
 </h2>
 
 <?php
-
+$credits = null;
 $credits = wp_credits();
 
 if ( ! $credits ) {

@@ -35,6 +35,7 @@ $out = '';
 
 $wp_scripts = new WP_Scripts();
 wp_default_scripts($wp_scripts);
+$wp_version = null;
 
 if ( isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) && stripslashes( $_SERVER['HTTP_IF_NONE_MATCH'] ) === $wp_version ) {
 	$protocol = $_SERVER['SERVER_PROTOCOL'];

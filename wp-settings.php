@@ -39,6 +39,8 @@ require ABSPATH . WPINC . '/version.php' ;
  */
 global $blog_id;
 
+$table_prefix = null;
+
 // Set initial default constants including WP_MEMORY_LIMIT, WP_MAX_MEMORY_LIMIT, WP_DEBUG, SCRIPT_DEBUG, WP_CONTENT_DIR and WP_CACHE.
 wp_initial_constants();
 
@@ -257,6 +259,7 @@ wp_plugin_directory_constants();
 
 $GLOBALS['wp_plugin_paths'] = array();
 
+$mu_plugin = null;
 // Load must-use plugins.
 foreach ( wp_get_mu_plugins() as $mu_plugin ) {
 	include_once $mu_plugin ;
@@ -299,6 +302,7 @@ create_initial_post_types();
 // Register the default theme directory root
 register_theme_directory( get_theme_root() );
 
+$plugin = null;
 // Load active plugins.
 foreach ( wp_get_active_and_valid_plugins() as $plugin ) {
 	wp_register_plugin_realpath( $plugin );
@@ -418,6 +422,7 @@ $GLOBALS['wp_locale'] = new WP_Locale();
 $GLOBALS['wp_locale_switcher'] = new WP_Locale_Switcher();
 $GLOBALS['wp_locale_switcher']->init();
 
+$pagenow = null;
 // Load the functions for the active theme, for both parent and child theme if applicable.
 if ( ! wp_installing() || 'wp-activate.php' === $pagenow ) {
 	if ( TEMPLATEPATH !== STYLESHEETPATH && file_exists( STYLESHEETPATH . '/functions.php' ) )

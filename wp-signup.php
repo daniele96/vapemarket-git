@@ -929,14 +929,22 @@ if ( $active_signup == 'none' ) {
 	$stage = isset( $_POST['stage'] ) ?  $_POST['stage'] : 'default';
 	switch ( $stage ) {
 		case 'validate-user-signup' :
-			if ( $active_signup == 'all' || $_POST[ 'signup_for' ] == 'blog' && $active_signup == 'blog' || $_POST[ 'signup_for' ] == 'user' && $active_signup == 'user' )
-				validate_user_signup();
+			if ( $active_signup == 'all' || $_POST[ 'signup_for' ] == 'blog' && $active_signup == 'blog' || $_POST[ 'signup_for' ] == 'user' && $active_signup == 'user' ) {
+				$validate = validate_user_signup();
+				if(!isset($validate)){
+					return;
+				}
+			}
 			else
 				_e( 'User registration has been disabled.' );
 		break;
 		case 'validate-blog-signup':
-			if ( $active_signup == 'all' || $active_signup == 'blog' )
-				validate_blog_signup();
+			if ( $active_signup == 'all' || $active_signup == 'blog' ) {
+				$validate = validate_blog_signup();
+				if(!isset($validate)){
+					return;
+				}
+			}
 			else
 				_e( 'Site registration has been disabled.' );
 			break;

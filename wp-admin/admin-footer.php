@@ -13,7 +13,7 @@ if ( !defined('ABSPATH') )
 /**
  * @global string $hook_suffix
  */
-global $hook_suffix;
+$hook_suffix=null;
 ?>
 
 <div class="clear"></div></div><!-- wpbody-content -->

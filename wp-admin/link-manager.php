@@ -11,6 +11,7 @@ require_once dirname( __FILE__ ) . '/admin.php' ;
 if ( ! current_user_can( 'manage_links' ) )
 	wp_die( __( 'Sorry, you are not allowed to edit the links for this site.' ) );
 
+$wp_list_table = null;
 $wp_list_table = _get_list_table('WP_Links_List_Table');
 
 // Handle bulk deletes
@@ -43,6 +44,7 @@ if ( $doaction && isset( $_POST['linkcheck'] ) ) {
 
 $wp_list_table->prepare_items();
 
+$title = null;
 $title = __('Links');
 $this_file = $parent_file = 'link-manager.php';
 

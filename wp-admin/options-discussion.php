@@ -11,6 +11,7 @@ require_once dirname( __FILE__ ) . '/admin.php' ;
 if ( ! current_user_can( 'manage_options' ) )
 	wp_die( __( 'Sorry, you are not allowed to manage options for this site.' ) );
 
+$title = null;
 $title = __('Discussion Settings');
 $parent_file = 'options-general.php';
 
@@ -181,7 +182,7 @@ printf( __('Comments should be displayed with the %s comments at the top of each
 
 <?php
 // the above would be a good place to link to codex documentation on the gravatar functions, for putting it in themes. anything like that?
-
+$show_avatars = null;
 $show_avatars = get_option( 'show_avatars' );
 ?>
 
@@ -200,6 +201,7 @@ $show_avatars = get_option( 'show_avatars' );
 <td><fieldset><legend class="screen-reader-text"><span><?php _e('Maximum Rating'); ?></span></legend>
 
 <?php
+$ratings = null;
 $ratings = array(
 	/* translators: Content suitability rating: https://en.wikipedia.org/wiki/Motion_Picture_Association_of_America_film_rating_system */
 	'G' => __('G &#8212; Suitable for all audiences'),
@@ -252,6 +254,7 @@ $avatar_defaults = array(
  *
  * @param array $avatar_defaults Array of default avatars.
  */
+$avatar_defaults = null;
 $avatar_defaults = apply_filters( 'avatar_defaults', $avatar_defaults );
 $default = get_option( 'avatar_default', 'mystery' );
 $avatar_list = '';

@@ -10,7 +10,7 @@
 require_once dirname( __FILE__ ) . '/admin.php' ;
 
 $title = __( 'Freedoms' );
-
+$display_version = null;
 list( $display_version ) = explode( '-', get_bloginfo( 'version' ) );
 
 include ABSPATH . 'wp-admin/admin-header.php' ;

@@ -23,8 +23,10 @@ if ( ! defined( 'WP_ADMIN' ) )
  * @global int       $total_update_count
  * @global string    $parent_file
  */
-global $title, $hook_suffix, $current_screen, $wp_locale, $pagenow,
-	$update_title, $total_update_count, $parent_file;
+global $title, $wp_locale, $pagenow, $update_title, $total_update_count, $parent_file;
+
+$current_screen = null;
+$hook_suffix = null;
 
 // Catch plugins that include admin-header.php before admin.php completes.
 if ( empty( $current_screen ) )
@@ -32,6 +34,8 @@ if ( empty( $current_screen ) )
 
 get_admin_page_title();
 $title = esc_html( strip_tags( $title ) );
+
+$admin_title = "";
 
 if ( is_network_admin() ) {
 	/* translators: Network admin screen title. 1: Network name */
@@ -73,17 +77,18 @@ wp_enqueue_style( 'ie' );
 wp_enqueue_script('utils');
 wp_enqueue_script( 'svg-painter' );
 
+$admin_body_class = null;
 $admin_body_class = preg_replace('/[^a-z0-9_-]+/i', '-', $hook_suffix);
 ?>
 <script type="text/javascript">
 addLoadEvent = function(func){if(typeof jQuery!="undefined")jQuery(document).ready(func);else if(typeof wpOnload!='function'){wpOnload=func;}else{var oldonload=wpOnload;wpOnload=function(){oldonload();func();}}};
-var ajaxurl = '<?php echo admin_url( 'admin-ajax.php', 'relative' ); ?>',
-	pagenow = '<?php echo $current_screen->id; ?>',
-	typenow = '<?php echo $current_screen->post_type; ?>',
-	adminpage = '<?php echo $admin_body_class; ?>',
-	thousandsSeparator = '<?php echo addslashes( $wp_locale->number_format['thousands_sep'] ); ?>',
-	decimalPoint = '<?php echo addslashes( $wp_locale->number_format['decimal_point'] ); ?>',
-	isRtl = <?php echo (int) is_rtl(); ?>;
+var ajaxurl = '<?php echo admin_url( 'admin-ajax.php', 'relative' ); ?>';
+var pagenow = '<?php echo $current_screen->id; ?>';
+var typenow = '<?php echo $current_screen->post_type; ?>';
+var adminpage = '<?php echo $admin_body_class; ?>';
+var thousandsSeparator = '<?php echo addslashes( $wp_locale->number_format['thousands_sep'] ); ?>';
+var decimalPoint = '<?php echo addslashes( $wp_locale->number_format['decimal_point'] ); ?>';
+var isRtl = <?php echo (int) is_rtl(); ?>;
 </script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <?php

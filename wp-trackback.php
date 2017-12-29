@@ -7,7 +7,7 @@
  * @package WordPress
  * @subpackage Trackbacks
  */
-
+$wp = null;
 if (empty($wp)) {
 	require_once dirname( __FILE__ ) . '/wp-load.php' ;
 	wp( array( 'tb' => '1' ) );
@@ -79,6 +79,7 @@ $title     = wp_slash($title);
 $excerpt   = wp_slash($excerpt);
 $blog_name = wp_slash($blog_name);
 
+$tb_id = 0;
 if ( is_single() || is_page() )
 	$tb_id = $posts[0]->ID;
 

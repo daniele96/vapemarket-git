@@ -12,7 +12,7 @@ if ( ! defined('ABSPATH') )
 /**
  * @global string $opml
  */
-global $opml;
+$opml=null;
 
 /**
  * XML callback function for the start of a new XML tag.
@@ -77,6 +77,7 @@ if ( ! function_exists( 'xml_parser_create' ) ) {
 	wp_die( __( "PHP's XML extension is not available. Please contact your hosting provider to enable PHP's XML extension." ) );
 }
 
+$xml_parser = null;
 $xml_parser = xml_parser_create();
 
 // Set the functions to handle opening and closing tags

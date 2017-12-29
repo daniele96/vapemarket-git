@@ -56,6 +56,7 @@ function _get_cron_lock() {
 	return $value;
 }
 
+$crons = null;
 if ( false === $crons = _get_cron_array() )
 	trigger_error("No crons available.", E_USER_NOTICE);
 
@@ -72,6 +73,7 @@ if ( isset($keys[0]) && $keys[0] > $gmt_time )
 $doing_cron_transient = get_transient( 'doing_cron' );
 
 // Use global $doing_wp_cron lock otherwise use the GET lock. If no lock, trying grabbing a new lock.
+$doing_wp_cron = null;
 if ( empty( $doing_wp_cron ) ) {
 	if ( empty( $_GET[ 'doing_wp_cron' ] ) ) {
 		// Called from external script/job. Try setting a lock.

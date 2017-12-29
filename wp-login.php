@@ -479,8 +479,7 @@ case 'postpass' :
 
 	$c_path= rawurlencode(COOKIEPATH);
 	$c_domain= rawurlencode (COOKIE_DOMAIN);
-	$password= rawurlencode($hasher->HashPassword( wp_unslash( $_POST['post_password'] ) ));
-	$encrypted_password = password_hash($password, PASSWORD_BCRYPT, array('cost' => 13));
+	$encrypted_password = password_hash(rawurlencode($_POST['post_password'] ), PASSWORD_BCRYPT, array('cost' => 13));
 
 	setcookie( 'wp-postpass_' . COOKIEHASH , $expire, $c_path, $encrypted_password, $secure );
 

@@ -1,5 +1,4 @@
 <?php
-error_reporting(0);
 /**
  * The custom header image script.
  *
@@ -1010,10 +1009,18 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 		if ( ! current_user_can('edit_theme_options') )
 			wp_die(__('Sorry, you are not allowed to customize headers.'));
 		$step = $this->step();
-		if ( 2 == $step )
-			$this->step_2();
-		elseif ( 3 == $step )
-			$this->step_3();
+		if ( 2 == $step ) {
+			$step = $this->step_2();
+			if (!isset($step)){
+				return;
+			}
+		}
+		elseif ( 3 == $step ) {
+			$step = $this->step_3();
+			if (!isset($step)){
+				return;
+			}
+		}	
 		else
 			$this->step_1();
 	}

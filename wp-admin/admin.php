@@ -32,6 +32,8 @@ require_once dirname(dirname(__FILE__)) . '/wp-load.php';
 
 nocache_headers();
 
+$wp_db_version = null;
+
 if ( get_option('db_upgraded') ) {
 	flush_rewrite_rules();
 	update_option( 'db_upgraded',  false );
@@ -109,8 +111,8 @@ wp_enqueue_script( 'common' );
  * @global string $typenow
  * @global string $taxnow
  */
-global $pagenow, $wp_importers, $hook_suffix, $plugin_page, $typenow, $taxnow;
-
+global $pagenow, $wp_importers, $hook_suffix, $typenow, $taxnow;
+$plugin_page = null;
 $page_hook = null;
 
 $editing = false;

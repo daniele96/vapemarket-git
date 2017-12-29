@@ -19,7 +19,7 @@
  *
  * @global array $menu
  */
-
+$tax = null;
 $menu[2] = array( __('Dashboard'), 'read', 'index.php', '', 'menu-top menu-top-first menu-icon-dashboard', 'menu-dashboard', 'dashicons-dashboard' );
 
 $submenu[ 'index.php' ][0] = array( __('Home'), 'read', 'index.php' );
@@ -28,6 +28,7 @@ if ( is_multisite() ) {
 	$submenu[ 'index.php' ][5] = array( __('My Sites'), 'read', 'my-sites.php' );
 }
 
+$update_data = null;
 if ( ! is_multisite() || current_user_can( 'update_core' ) ) {
 	$update_data = wp_get_update_data();
 }
@@ -90,6 +91,14 @@ $_wp_last_object_menu = 25; // The index of the last top-level menu in the objec
 
 $types = (array) get_post_types( array('show_ui' => true, '_builtin' => false, 'show_in_menu' => true ) );
 $builtin = array( 'post', 'page' );
+$ptype = null;
+$ptype_obj = null;
+$ptype_for_id=null;
+$ptype_menu_position=null;
+$menu_icon=null;
+$i=0; 
+$tax=null;
+$post_new_file=null;
 foreach ( array_merge( $builtin, $types ) as $ptype ) {
 	$ptype_obj = get_post_type_object( $ptype );
 	// Check if it should be a submenu.

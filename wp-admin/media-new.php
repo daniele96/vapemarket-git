@@ -37,6 +37,7 @@ if ( $_POST ) {
 	return;
 }
 
+$title = null;
 $title = __('Upload New Media');
 $parent_file = 'upload.php';
 
@@ -59,7 +60,9 @@ get_current_screen()->set_help_sidebar(
 
 require_once ABSPATH . 'wp-admin/admin-header.php' ;
 
+$form_class = '';
 $form_class = 'media-upload-form type-form validate';
+$post_id = 0;
 
 if ( get_user_setting('uploader') || isset( $_GET['browser-uploader'] ) )
 	$form_class .= ' html-uploader';

@@ -63,6 +63,7 @@ if ( isset($_GET['type']) ) {
 	$type = apply_filters( 'media_upload_default_type', 'file' );
 }
 
+$tab = null;
 // Tab: gallery, library, or type-specific.
 if ( isset($_GET['tab']) ) {
 	$tab = strval($_GET['tab']);
@@ -80,6 +81,7 @@ if ( isset($_GET['tab']) ) {
 $body_id = 'media-upload';
 
 // Let the action code decide how to handle the request.
+
 if ( $tab == 'type' || $tab == 'type_url' || ! array_key_exists( $tab , media_upload_tabs() ) ) {
 	/**
 	 * Fires inside specific upload-type views in the legacy (pre-3.5.0)
