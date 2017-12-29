@@ -163,9 +163,9 @@ class Custom_Image_Header {
 			wp_enqueue_script( 'custom-header' );
 			if ( current_theme_supports( 'custom-header', 'header-text' ) )
 				wp_enqueue_script( 'wp-color-picker' );
-		} elseif ( 2 == $step ) {
+		} else {if( 2 == $step ) {
 			wp_enqueue_script('imgareaselect');
-		}
+		}}
 	}
 
 	/**
@@ -178,7 +178,7 @@ class Custom_Image_Header {
 
 		if ( ( 1 == $step || 3 == $step ) && current_theme_supports( 'custom-header', 'header-text' ) )
 			wp_enqueue_style( 'wp-color-picker' );
-		elseif ( 2 == $step )
+		else if( 2 == $step )
 			wp_enqueue_style('imgareaselect');
 	}
 
@@ -211,15 +211,15 @@ class Custom_Image_Header {
 		if ( isset( $_POST['text-color'] ) && ! isset( $_POST['display-header-text'] ) ) {
 			check_admin_referer( 'custom-header-options', '_wpnonce-custom-header-options' );
 			set_theme_mod( 'header_textcolor', 'blank' );
-		} elseif ( isset( $_POST['text-color'] ) ) {
+		} else {if( isset( $_POST['text-color'] ) ) {
 			check_admin_referer( 'custom-header-options', '_wpnonce-custom-header-options' );
 			$_POST['text-color'] = str_replace( '#', '', $_POST['text-color'] );
 			$color = preg_replace('/[^0-9a-fA-F]/', '', $_POST['text-color']);
 			if ( strlen($color) == 6 || strlen($color) == 3 )
 				set_theme_mod('header_textcolor', $color);
-			elseif ( ! isset($color) )
-				set_theme_mod( 'header_textcolor', 'blank' );
-		}
+			else {if( ! isset($color) )
+				set_theme_mod( 'header_textcolor', 'blank' );}
+		}}
 
 		if ( isset( $_POST['default-header'] ) ) {
 			check_admin_referer( 'custom-header-options', '_wpnonce-custom-header-options' );
@@ -336,8 +336,8 @@ HTML;
 		$step = $this->step();
 		if ( ( 1 == $step || 3 == $step ) && current_theme_supports( 'custom-header', 'header-text' ) )
 			$this->js_1();
-		elseif ( 2 == $step )
-			$this->js_2();
+		else {if( 2 == $step )
+			$this->js_2();}
 	}
 
 	/**
@@ -557,7 +557,7 @@ HTML;
 	<?php
 	if ( ! current_theme_supports( 'custom-header', 'flex-height' ) && ! current_theme_supports( 'custom-header', 'flex-width' ) ) {
 		printf( __( 'Images of exactly <strong>%1$d &times; %2$d pixels</strong> will be used as-is.' ) . '<br />', get_theme_support( 'custom-header', 'width' ), get_theme_support( 'custom-header', 'height' ) );
-	} elseif ( current_theme_supports( 'custom-header', 'flex-height' ) ) {
+	} else {if( current_theme_supports( 'custom-header', 'flex-height' ) ) {
 		if ( ! current_theme_supports( 'custom-header', 'flex-width' ) )
 			printf(
 				/* translators: %s: size in pixels */
@@ -567,8 +567,8 @@ HTML;
 					'<strong>' . __( '%d pixels' ) . '</strong>',
 					get_theme_support( 'custom-header', 'width' )
 				)
-			);
-	} elseif ( current_theme_supports( 'custom-header', 'flex-width' ) ) {
+			);}
+	}  if ( current_theme_supports( 'custom-header', 'flex-width' ) ){
 		if ( ! current_theme_supports( 'custom-header', 'flex-height' ) )
 			printf(
 				/* translators: %s: size in pixels */
@@ -773,12 +773,12 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 			$file = get_attached_file( $attachment_id, true );
 			$url = wp_get_attachment_image_src( $attachment_id, 'full' );
 			$url = $url[0];
-		} elseif ( isset( $_POST ) ) {
+		} else {if ( isset( $_POST ) ) {
 			$data = $this->step_2_manage_upload();
 			$attachment_id = $data['attachment_id'];
 			$file = $data['file'];
 			$url = $data['url'];
-		}
+		}}
 
 		if ( file_exists( $file ) ) {
 			list( $width, $height, $type, $attr ) = getimagesize( $file );

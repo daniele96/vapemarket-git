@@ -256,9 +256,9 @@ function show_user_form($user_name , $user_email, $errors) {
 	$user_name = '';
 	echo $user_name;
 	$user_email = '';
-	echo $user_email = '';
+	echo $user_email ;
 	$errors = '';
-	echo $errors = '';
+	echo $errors ;
 	// User name
 	
 	$str= <<<HTML
@@ -503,7 +503,7 @@ function validate_another_blog_signup() {
 		return false;
 	}
 
-	confirm_another_blog_signup( $domain, $path, $blog_title, $current_user->user_login, $current_user->user_email, $meta, $blog_id );
+	confirm_another_blog_signup( $domain, $path, $blog_title, $current_user->user_login, $blog_id );
 	return true;
 }
 
@@ -803,7 +803,7 @@ function validate_blog_signup() {
 	$meta = apply_filters( 'add_signup_meta', $signup_meta );
 
 	wpmu_signup_blog($domain, $path, $blog_title, $user_name, $user_email, $meta);
-	confirm_blog_signup($domain, $path, $blog_title, $user_name, $user_email, $meta);
+	confirm_blog_signup($domain, $path, $blog_title, $user_email);
 	return true;
 }
 
