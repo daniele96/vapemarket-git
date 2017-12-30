@@ -9,7 +9,7 @@
 /** WordPress Administration Bootstrap */
 require_once dirname( __FILE__ ) . '/admin.php' ;
 
-if ( ! current_user_can( 'manage_options' ) )
+if ( current_user_can( 'manage_options' ) === false )
 	wp_die( __( 'Sorry, you are not allowed to manage options for this site.' ) );
 
 $title = __('Media Settings');
@@ -17,7 +17,7 @@ $parent_file = 'options-general.php';
 
 $media_options_help = '<p>' . __('You can set maximum sizes for images inserted into your written content; you can also insert an image as Full Size.') . '</p>';
 
-if ( ! is_multisite() && ( get_option('upload_url_path') || ( get_option('upload_path') != 'wp-content/uploads' && get_option('upload_path') ) ) ) {
+if ( is_multisite() === false && ( get_option('upload_url_path') || ( get_option('upload_path')!=='wp-content/uploads' && get_option('upload_path') ) ) ) {
 	$media_options_help .= '<p>' . __('Uploading Files allows you to choose the folder and path for storing your uploaded files.') . '</p>';
 }
 
@@ -88,19 +88,19 @@ include ABSPATH . 'wp-admin/admin-header.php' ;
 /**
  * @global array $wp_settings
  */
-if ( isset( $GLOBALS['wp_settings']['media']['embeds'] ) ) : ?>
+if ( isset( $GLOBALS['wp_settings']['media']['embeds'] ) === true ) : ?>
 <h2 class="title"><?php _e('Embeds') ?></h2>
 <table class="form-table">
 <?php do_settings_fields( 'media', 'embeds' ); ?>
 </table>
 <?php endif; ?>
 
-<?php if ( !is_multisite() ) : ?>
+<?php if ( is_multisite() === false ) : ?>
 <h2 class="title"><?php _e('Uploading Files'); ?></h2>
 <table class="form-table">
 <?php
 // If upload_url_path is not the default (empty), and upload_path is not the default ('wp-content/uploads' or empty)
-if ( get_option('upload_url_path') || ( get_option('upload_path') != 'wp-content/uploads' && get_option('upload_path') ) ) :
+if ( get_option('upload_url_path') || ( get_option('upload_path')!=='wp-content/uploads' && get_option('upload_path') ) ) :
 ?>
 <tr>
 <th scope="row"><label for="upload_path"><?php _e('Store uploads in this folder'); ?></label></th>

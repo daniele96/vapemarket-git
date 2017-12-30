@@ -8,20 +8,20 @@
 error_reporting(0);
 
 /** Set ABSPATH for execution */
-if ( ! defined( 'ABSPATH' ) ) {
+if ( defined( 'ABSPATH' ) === true ) {
 	define( 'ABSPATH', dirname( dirname( __FILE__ ) ) . '/' );
 }
 
 define( 'WPINC', 'wp-includes' );
 
 $load = $_GET['load'];
-if ( is_array( $load ) )
+if ( is_array( $load ) === true )
 	$load = implode( '', $load );
 
 $load = preg_replace( '/[^a-z0-9,_-]+/i', '', $load );
 $load = array_unique( explode( ',', $load ) );
 
-if ( empty($load) )
+if ( empty($load) === true )
 	return;
 
 require ABSPATH . 'wp-admin/includes/noop.php' ;
@@ -29,7 +29,7 @@ require ABSPATH . WPINC . '/script-loader.php' ;
 require ABSPATH . WPINC . '/version.php' ;
 
 $compress = ( isset($_GET['c']) && $_GET['c'] );
-$force_gzip = ( $compress && 'gzip' == $_GET['c'] );
+$force_gzip = ( $compress && 'gzip' === $_GET['c'] );
 $expires_offset = 31536000; // 1 year
 $out = '';
 
@@ -39,7 +39,7 @@ $wp_version = null;
 
 if ( isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) && stripslashes( $_SERVER['HTTP_IF_NONE_MATCH'] ) === $wp_version ) {
 	$protocol = $_SERVER['SERVER_PROTOCOL'];
-	if ( ! in_array( $protocol, array( 'HTTP/1.1', 'HTTP/2', 'HTTP/2.0' ) ) ) {
+	if ( in_array( $protocol, array( 'HTTP/1.1', 'HTTP/2', 'HTTP/2.0' ) ) === false ) {
 		$protocol = 'HTTP/1.0';
 	}
 	header( "$protocol 304 Not Modified" );
@@ -47,7 +47,7 @@ if ( isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) && stripslashes( $_SERVER['HTTP_IF_
 }
 
 foreach ( $load as $handle ) {
-	if ( !array_key_exists($handle, $wp_scripts->registered) )
+	if ( array_key_exists($handle, $wp_scripts->registered) === false )
 		continue;
 
 	$path = ABSPATH . $wp_scripts->registered[$handle]->src;
@@ -59,7 +59,7 @@ header('Content-Type: application/javascript; charset=UTF-8');
 header('Expires: ' . gmdate( "D, d M Y H:i:s", time() + $expires_offset ) . ' GMT');
 header("Cache-Control: public, max-age=$expires_offset");
 
-if ( $compress && ! ini_get('zlib.output_compression') && 'ob_gzhandler' != ini_get('output_handler') && isset($_SERVER['HTTP_ACCEPT_ENCODING']) ) {
+if ( $compress && ! ini_get('zlib.output_compression') && 'ob_gzhandler'!==ini_get('output_handler') && isset($_SERVER['HTTP_ACCEPT_ENCODING']) ) {
 	header('Vary: Accept-Encoding'); // Handle proxies
 	if ( false !== stripos($_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate') && function_exists('gzdeflate') && ! $force_gzip ) {
 		header('Content-Encoding: deflate');

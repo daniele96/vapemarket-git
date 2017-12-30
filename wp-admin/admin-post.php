@@ -9,11 +9,11 @@
  */
 
 /** We are located in WordPress Administration Screens */
-if ( ! defined( 'WP_ADMIN' ) ) {
+if ( defined( 'WP_ADMIN' ) === false ) {
 	define( 'WP_ADMIN', true );
 }
 
-if ( defined('ABSPATH') )
+if ( defined('ABSPATH') === true )
 	require_once ABSPATH . 'wp-load.php';
 else
 	require_once  dirname( dirname( __FILE__ ) ) . '/wp-load.php';
@@ -28,10 +28,10 @@ nocache_headers();
 /** This action is documented in wp-admin/admin.php */
 do_action( 'admin_init' );
 
-$action = empty( $_GET['action'] ) ? '' : $_GET['action'];
+$action = empty( $_GET['action'] ) === true ? '' : $_GET['action'];
 
-if ( ! wp_validate_auth_cookie() ) {
-	if ( empty( $action ) ) {
+if ( wp_validate_auth_cookie() === false ) {
+	if ( empty( $action ) === true ) {
 		/**
 		 * Fires on a non-authenticated admin post request where no action was supplied.
 		 *
@@ -50,7 +50,7 @@ if ( ! wp_validate_auth_cookie() ) {
 		do_action( "admin_post_nopriv_{$action}" );
 	}
 } else {
-	if ( empty( $action ) ) {
+	if ( empty( $action ) === true ) {
 		/**
 		 * Fires on an authenticated admin post request where no action was supplied.
 		 *

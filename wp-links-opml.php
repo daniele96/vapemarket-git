@@ -16,9 +16,9 @@ require_once dirname( __FILE__ ) . '/wp-load.php' ;
 
 header('Content-Type: text/xml; charset=' . get_option('blog_charset'), true);
 $link_cat = '';
-if ( !empty($_GET['link_cat']) ) {
+if ( empty($_GET['link_cat']) === false ) {
 	$link_cat = $_GET['link_cat'];
-	if ( !in_array($link_cat, array('all', '0')) )
+	if ( in_array($link_cat, array('all', '0')) === false )
 		$link_cat = absint( (string)urldecode($link_cat) );
 }
 
@@ -42,7 +42,7 @@ echo '<?xml version="1.0"?'.">\n";
 	</head>
 	<body>
 <?php
-if ( empty($link_cat) )
+if ( empty($link_cat) === true )
 	$cats = get_categories(array('taxonomy' => 'link_category', 'hierarchical' => 0));
 else
 	$cats = get_categories(array('taxonomy' => 'link_category', 'hierarchical' => 0, 'include' => $link_cat));
@@ -71,7 +71,7 @@ foreach ( (array)$cats as $cat ) :
 		 */
 		$title = apply_filters( 'link_title', $bookmark->link_name );
 ?>
-	<outline text="<?php echo esc_attr($title); ?>" type="link" xmlUrl="<?php echo esc_attr($bookmark->link_rss); ?>" htmlUrl="<?php echo esc_attr($bookmark->link_url); ?>" updated="<?php if ('0000-00-00 00:00:00' != $bookmark->link_updated) echo $bookmark->link_updated; ?>" />
+	<outline text="<?php echo esc_attr($title); ?>" type="link" xmlUrl="<?php echo esc_attr($bookmark->link_rss); ?>" htmlUrl="<?php echo esc_attr($bookmark->link_url); ?>" updated="<?php if ('0000-00-00 00:00:00'!==$bookmark->link_updated) echo $bookmark->link_updated; ?>" />
 <?php
 	endforeach; // $bookmarks
 ?>

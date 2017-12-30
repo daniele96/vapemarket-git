@@ -13,7 +13,7 @@ define( 'IFRAME_REQUEST', true );
 /** Load WordPress Administration Bootstrap */
 require_once dirname( __FILE__ ) . '/admin.php' ;
 
-if ( ! current_user_can( 'customize' ) ) {
+if ( current_user_can( 'customize' ) === false ) {
 	wp_die(
 		'<h1>' . __( 'Cheatin&#8217; uh?' ) . '</h1>' .
 		'<p>' . __( 'Sorry, you are not allowed to customize this site.' ) . '</p>',
@@ -27,15 +27,15 @@ if ( ! current_user_can( 'customize' ) ) {
  */
 global $wp_scripts, $wp_customize;
 
-if ( $wp_customize->changeset_post_id() ) {
-	if ( ! current_user_can( get_post_type_object( 'customize_changeset' )->cap->edit_post, $wp_customize->changeset_post_id() ) ) {
+if ( $wp_customize->changeset_post_id() === true ) {
+	if ( current_user_can( get_post_type_object( 'customize_changeset' )->cap->edit_post, $wp_customize->changeset_post_id() ) === false ) {
 		wp_die(
 			'<h1>' . __( 'Cheatin&#8217; uh?' ) . '</h1>' .
 			'<p>' . __( 'Sorry, you are not allowed to edit this changeset.' ) . '</p>',
 			403
 		);
 	}
-	if ( in_array( get_post_status( $wp_customize->changeset_post_id() ), array( 'publish', 'trash' ), true ) ) {
+	if ( in_array( get_post_status( $wp_customize->changeset_post_id() ), array( 'publish', 'trash' ), true ) === true ) {
 		wp_die(
 			'<h1>' . __( 'Cheatin&#8217; uh?' ) . '</h1>' .
 			'<p>' . __( 'This changeset has already been published and cannot be further modified.' ) . '</p>' .
@@ -47,10 +47,10 @@ if ( $wp_customize->changeset_post_id() ) {
 
 
 wp_reset_vars( array( 'url', 'return', 'autofocus' ) );
-if ( ! empty( $url ) ) {
+if ( empty( $url ) === false ) {
 	$wp_customize->set_preview_url( wp_unslash( $url ) );
 }
-if ( ! empty( $return ) ) {
+if ( empty( $return ) === false ) {
 	$wp_customize->set_return_url( wp_unslash( $return ) );
 }
 if ( ! empty( $autofocus ) && is_array( $autofocus ) ) {
@@ -90,17 +90,17 @@ _wp_admin_html_begin();
 
 $body_class = 'wp-core-ui wp-customizer js';
 
-if ( wp_is_mobile() ) :
+if ( wp_is_mobile() === true ) :
 	$body_class .= ' mobile';
 
 	?><meta name="viewport" id="viewport-meta" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=1.2" /><?php
 endif;
 
-if ( $wp_customize->is_ios() ) {
+if ( $wp_customize->is_ios() === true ) {
 	$body_class .= ' ios';
 }
 
-if ( is_rtl() ) {
+if ( is_rtl() === true ) {
 	$body_class .= ' rtl';
 }
 $body_class .= ' locale-' . sanitize_html_class( strtolower( str_replace( '_', '-', get_user_locale() ) ) );
@@ -134,9 +134,9 @@ do_action( 'customize_controls_print_scripts' );
 	<form id="customize-controls" class="wrap wp-full-overlay-sidebar">
 		<div id="customize-header-actions" class="wp-full-overlay-header">
 			<?php
-			$save_text = $wp_customize->is_theme_active() ? __( 'Save &amp; Publish' ) : __( 'Save &amp; Activate' );
+			$save_text = $wp_customize->is_theme_active() === true ? __( 'Save &amp; Publish' ) : __( 'Save &amp; Activate' );
 			$save_attrs = array();
-			if ( ! current_user_can( get_post_type_object( 'customize_changeset' )->cap->publish_posts ) ) {
+			if ( current_user_can( get_post_type_object( 'customize_changeset' )->cap->publish_posts ) === true ) {
 				$save_attrs['style'] = 'display: none';
 			}
 			submit_button( $save_text, 'primary save', 'save', false, $save_attrs );
@@ -187,17 +187,17 @@ HTML;
 				<span class="collapse-sidebar-label"><?php _ex( 'Hide Controls', 'short (~12 characters) label for hide controls button' ); ?></span>
 			</button>
 			<?php $previewable_devices = $wp_customize->get_previewable_devices(); ?>
-			<?php if ( ! empty( $previewable_devices ) ) : ?>
+			<?php if ( empty( $previewable_devices ) === false ) : ?>
 			<div class="devices-wrapper">
 				<div class="devices">
 					<?php foreach ( (array) $previewable_devices as $device => $settings ) : ?>
 						<?php
-						if ( empty( $settings['label'] ) ) {
+						if ( empty( $settings['label'] ) === true ) {
 							continue;
 						}
 						$active = ! empty( $settings['default'] );
 						$class = 'preview-' . $device;
-						if ( isset( $active) ) {
+						if ( isset( $active) === true ) {
 							$class .= ' active';
 						}
 						?>

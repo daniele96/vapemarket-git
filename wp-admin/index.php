@@ -16,17 +16,17 @@ wp_dashboard_setup();
 
 wp_enqueue_script( 'dashboard' );
 
-if ( current_user_can( 'edit_theme_options' ) )
+if ( current_user_can( 'edit_theme_options' ) === true )
 	wp_enqueue_script( 'customize-loader' );
-if ( current_user_can( 'install_plugins' ) ) {
+if ( current_user_can( 'install_plugins' ) === true ) {
 	wp_enqueue_script( 'plugin-install' );
 	wp_enqueue_script( 'updates' );
 }
-if ( current_user_can( 'upload_files' ) )
+if ( current_user_can( 'upload_files' ) === true )
 	wp_enqueue_script( 'media-upload' );
 add_thickbox();
 
-if ( wp_is_mobile() )
+if ( wp_is_mobile() === true )
 	wp_enqueue_script( 'jquery-touch-punch' );
 
 $title = __('Dashboard');
@@ -65,7 +65,7 @@ $screen->add_help_tab( array(
 ) );
 
 $help  = '<p>' . __( 'The boxes on your Dashboard screen are:' ) . '</p>';
-if ( current_user_can( 'edit_posts' ) )
+if ( current_user_can( 'edit_posts' ) === true )
 	$help .= '<p>' . __( '<strong>At A Glance</strong> &mdash; Displays a summary of the content on your site and identifies which theme and version of WordPress you are using.' ) . '</p>';
 	$help .= '<p>' . __( '<strong>Activity</strong> &mdash; Shows the upcoming scheduled posts, recently published posts, and the most recent comments on your posts and allows you to moderate them.' ) . '</p>';
 if ( is_blog_admin() && current_user_can( 'edit_posts' ) )
@@ -82,7 +82,7 @@ else
 		__( '<strong>WordPress News</strong> &mdash; Latest news from the official WordPress project and the <a href="%s">WordPress Planet</a>.' ),
 		__( 'https://planet.wordpress.org/' )
 	) . '</p>';
-if ( current_user_can( 'edit_theme_options' ) )
+if ( current_user_can( 'edit_theme_options' ) === true )
 	$help .= '<p>' . __( '<strong>Welcome</strong> &mdash; Shows links for some of the most common tasks when setting up a new site.' ) . '</p>';
 
 $screen->add_help_tab( array(
@@ -110,8 +110,8 @@ include ABSPATH . 'wp-admin/admin-header.php' ;
 
 	$option = get_user_meta( get_current_user_id(), 'show_welcome_panel', true );
 	// 0 = hide, 1 = toggled to show or single site creator, 2 = multisite site owner
-	$hide = 0 == $option || ( 2 == $option && wp_get_current_user()->user_email != get_option( 'admin_email' ) );
-	if ( isset($hide ))
+	$hide = 0 === $option || ( 2 === $option && wp_get_current_user()->user_email!==get_option( 'admin_email' ) );
+	if ( isset($hide ) === true )
 		$classes .= ' hidden'; ?>
 
 	<div id="welcome-panel" class="<?php echo esc_attr( $classes ); ?>">

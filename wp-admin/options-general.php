@@ -12,7 +12,7 @@ require_once dirname( __FILE__ ) . '/admin.php' ;
 /** WordPress Translation Install API */
 require_once ABSPATH . 'wp-admin/includes/translation-install.php' ;
 
-if ( ! current_user_can( 'manage_options' ) )
+if ( current_user_can( 'manage_options' ) === false )
 	wp_die( __( 'Sorry, you are not allowed to manage options for this site.' ) );
 
 $title = __('General Settings');
@@ -25,7 +25,7 @@ add_action('admin_head', 'options_general_add_js');
 $options_help = '<p>' . __('The fields on this screen determine some of the basics of your site setup.') . '</p>' .
 	'<p>' . __('Most themes display the site title at the top of every page, in the title bar of the browser, and as the identifying name for syndicated feeds. The tagline is also displayed by many themes.') . '</p>';
 
-if ( ! is_multisite() ) {
+if ( is_multisite() === false ) {
 	$options_help .= '<p>' . __('The WordPress URL and the Site URL can be the same (example.com) or different; for example, having the WordPress core files (example.com/wordpress) in a subdirectory instead of the root directory.') . '</p>' .
 		'<p>' . __('If you want site visitors to be able to register themselves, as opposed to by the site administrator, check the membership box. A default user role can be set for all new users, whether self-registered or registered by the site admin.') . '</p>';
 }
@@ -65,7 +65,7 @@ include ABSPATH . 'wp-admin/admin-header.php' ;
 <td><input name="blogdescription" type="text" id="blogdescription" aria-describedby="tagline-description" value="<?php form_option('blogdescription'); ?>" class="regular-text" />
 <p class="description" id="tagline-description"><?php _e( 'In a few words, explain what this site is about.' ) ?></p></td>
 </tr>
-<?php if ( !is_multisite() ) { ?>
+<?php if ( is_multisite() === false ) { ?>
 <tr>
 <th scope="row"><label for="siteurl"><?php _e('WordPress Address (URL)') ?></label></th>
 <td><input name="siteurl" type="url" id="siteurl" value="<?php form_option( 'siteurl' ); ?>"<?php disabled( defined( 'WP_SITEURL' ) ); ?> class="regular-text code<?php if ( defined( 'WP_SITEURL' ) ) echo ' disabled' ?>" /></td>
@@ -73,7 +73,7 @@ include ABSPATH . 'wp-admin/admin-header.php' ;
 <tr>
 <th scope="row"><label for="home"><?php _e('Site Address (URL)') ?></label></th>
 <td><input name="home" type="url" id="home" aria-describedby="home-description" value="<?php form_option( 'home' ); ?>"<?php disabled( defined( 'WP_HOME' ) ); ?> class="regular-text code<?php if ( defined( 'WP_HOME' ) ) echo ' disabled' ?>" />
-<?php if ( ! defined( 'WP_HOME' ) ) : ?>
+<?php if ( defined( 'WP_HOME' ) === false ) : ?>
 <p class="description" id="home-description"><?php _e( 'Enter the address here if you <a href="https://codex.wordpress.org/Giving_WordPress_Its_Own_Directory">want your site home page to be different from your WordPress installation directory.</a>' ); ?></p></td>
 <?php endif; ?>
 </tr>
@@ -102,7 +102,7 @@ include ABSPATH . 'wp-admin/admin-header.php' ;
 <p class="description" id="new-admin-email-description"><?php _e( 'This address is used for admin purposes. If you change this we will send you an email at your new address to confirm it. <strong>The new address will not become active until confirmed.</strong>' ) ?></p>
 <?php
 $new_admin_email = get_option( 'new_admin_email' );
-if ( $new_admin_email && $new_admin_email != get_option('admin_email') ) : ?>
+if ( $new_admin_email && $new_admin_email!==get_option('admin_email') ) : ?>
 <div class="updated inline">
 <p><?php
 	printf(
@@ -134,7 +134,7 @@ if ( ! empty( $languages ) || ! empty( $translations ) ) {
 		<td>
 			<?php
 			$locale = get_locale();
-			if ( ! in_array( $locale, $languages ) ) {
+			if ( in_array( $locale, $languages ) === false ) {
 				$locale = '';
 			}
 
@@ -176,9 +176,9 @@ $check_zone_info = true;
 if ( false !== strpos($tzstring,'Etc/GMT') )
 	$tzstring = '';
 
-if ( empty($tzstring) ) { // Create a UTC+- zone if no timezone string exists
+if ( empty($tzstring) === true ) { // Create a UTC+- zone if no timezone string exists
 	$check_zone_info = false;
-	if ( 0 == $current_offset )
+	if ( 0 === $current_offset )
 		$tzstring = 'UTC+0';
 	elseif ($current_offset < 0)
 		$tzstring = 'UTC' . $current_offset;
@@ -221,7 +221,7 @@ if ( empty($tzstring) ) { // Create a UTC+- zone if no timezone string exists
 	// Set TZ so localtime works.
 	date_default_timezone_set($tzstring);
 	$now = localtime(time(), true);
-	if ( isset($now['tm_isdst']) )
+	if ( isset($now['tm_isdst']) === true )
 		_e('This timezone is currently in daylight saving time.');
 	else
 		_e('This timezone is currently in standard time.');
@@ -230,7 +230,7 @@ if ( empty($tzstring) ) { // Create a UTC+- zone if no timezone string exists
 	<?php
 	$allowed_zones = timezone_identifiers_list();
 
-	if ( in_array( $tzstring, $allowed_zones) ) {
+	if ( in_array( $tzstring, $allowed_zones) === true ) {
 		$found = false;
 		$date_time_zone_selected = new DateTimeZone($tzstring);
 		$tz_offset = timezone_offset_get($date_time_zone_selected, date_create());
@@ -242,9 +242,9 @@ if ( empty($tzstring) ) { // Create a UTC+- zone if no timezone string exists
 			}
 		}
 
-		if ( isset($found) ) {
+		if ( isset($found) === true ) {
 			echo ' ';
-			$message = $tr['isdst'] ?
+			$message = $tr['isdst'] === true ?
 				/* translators: %s: date and time  */
 				__( 'Daylight saving time begins on: %s.')  :
 				/* translators: %s: date and time  */
@@ -418,7 +418,7 @@ HTML;
 global $wp_locale;
 
 for ($day_index = 0; $day_index <= 6; $day_index++) :
-	$selected = (get_option('start_of_week') == $day_index) ? 'selected="selected"' : '';
+	$selected = (get_option('start_of_week') === $day_index) ? 'selected="selected"' : '';
 
 
     $var= esc_attr($day_index);

@@ -10,16 +10,16 @@ if ( isset( $_GET['action'] ) && 'upload-attachment' === $_GET['action'] ) {
 	define( 'DOING_AJAX', true );
 }
 
-if ( ! defined( 'WP_ADMIN' ) ) {
+if ( defined( 'WP_ADMIN' ) === false ) {
 	define( 'WP_ADMIN', true );
 }
 
-if ( defined('ABSPATH') )
+if ( defined('ABSPATH') === true )
 	require_once ABSPATH . 'wp-load.php';
 else
 	require_once dirname( dirname( __FILE__ ) ) . '/wp-load.php' ;
 
-if ( ! ( isset( $_GET['action'] ) && 'upload-attachment' == $_GET['action'] ) ) {
+if ( ( isset( $_GET['action'] ) && 'upload-attachment' === $_GET['action'] ) === false ) {
 	// Flash often fails to send cookies with the POST or upload, so we need to pass it in GET or POST instead
 	if ( is_ssl() && empty($_COOKIE[SECURE_AUTH_COOKIE]) && !empty($_POST['auth_cookie']) )
 		$_COOKIE[SECURE_AUTH_COOKIE] = $_POST['auth_cookie'];
@@ -44,16 +44,16 @@ if ( isset( $_GET['action'] ) && 'upload-attachment' === $_GET['action'] ) {
 	return 0;
 }
 
-if ( ! current_user_can( 'upload_files' ) ) {
+if ( current_user_can( 'upload_files' ) === false ) {
 	wp_die( __( 'Sorry, you are not allowed to upload files.' ) );
 }
 
 // just fetch the detail form for that attachment
 if ( isset($_GET['attachment_id']) && ($id = intval($_GET['attachment_id'])) && $_POST['fetch'] ) {
 	$post = get_post( $id );
-	if ( 'attachment' != $post->post_type )
+	if ( 'attachment'!==$post->post_type )
 		wp_die( __( 'Invalid post type.' ) );
-	if ( ! current_user_can( 'edit_post', $id ) )
+	if ( current_user_can( 'edit_post', $id ) === false )
 		wp_die( __( 'Sorry, you are not allowed to edit this item.' ) );
 
 	switch ( $_POST['fetch'] ) {
@@ -74,7 +74,7 @@ HTML;
 				
 			// Title shouldn't ever be empty, but use filename just in case.
 			$file = get_attached_file( $post->ID );
-			$title = $post->post_title ? $post->post_title : wp_basename( $file );
+			$title = $post->post_title === true ? $post->post_title : wp_basename( $file );
 
 
 			$var= esc_html( wp_html_excerpt( $title, 60, '&hellip;' ) );
@@ -101,14 +101,14 @@ HTML;
 check_admin_referer('media-form');
 
 $post_id = 0;
-if ( isset( $_GET['post_id'] ) ) {
+if ( isset( $_GET['post_id'] ) === true ) {
 	$post_id = absint( $_GET['post_id'] );
 	if ( ! get_post( $post_id ) || ! current_user_can( 'edit_post', $post_id ) )
 		$post_id = 0;
 }
 
 $id = media_handle_upload( 'async-upload', $post_id );
-if ( is_wp_error($id) ) {
+if ( is_wp_error($id) === true ) {
 
 	$var=sprintf(__('&#8220;%s&#8221; has failed to upload.'), $_FILES['async-upload']['name']);
 	$var2= $id->get_error_message();
@@ -125,7 +125,7 @@ HTML;
 	return;
 }
 
-if ( isset($_GET['short']) ) {
+if ( isset($_GET['short']) === true ) {
 	// Short form response - attachment ID only.
 	echo $id;
 } else {

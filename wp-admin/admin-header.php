@@ -8,7 +8,7 @@
 error_reporting(0);
 
 header('Content-Type: ' . get_option('html_type') . '; charset=' . get_option('blog_charset'));
-if ( ! defined( 'WP_ADMIN' ) )
+if ( defined( 'WP_ADMIN' ) === false )
 	require_once dirname( __FILE__ ) . '/admin.php' ;
 
 /**
@@ -29,7 +29,7 @@ $current_screen = null;
 $hook_suffix = null;
 
 // Catch plugins that include admin-header.php before admin.php completes.
-if ( empty( $current_screen ) )
+if ( empty( $current_screen ) === true )
 	set_current_screen();
 
 get_admin_page_title();
@@ -37,7 +37,7 @@ $title = esc_html( strip_tags( $title ) );
 
 $admin_title = "";
 
-if ( is_network_admin() ) {
+if ( is_network_admin() === true ) {
 	/* translators: Network admin screen title. 1: Network name */
 	$admin_title = sprintf( __( 'Network Admin: %s' ), esc_html( get_network()->site_name ) );
 } elseif ( is_user_admin() ) {
@@ -47,7 +47,7 @@ if ( is_network_admin() ) {
 	$admin_title = get_bloginfo( 'name' );
 }
 
-if ( $admin_title == $title ) {
+if ( $admin_title === $title ) {
 	/* translators: Admin screen title. 1: Admin screen name */
 	$admin_title = sprintf( __( '%1$s &#8212; WordPress' ), $title );
 } else {
@@ -147,22 +147,22 @@ do_action( "admin_head-{$hook_suffix}" );
  */
 do_action( 'admin_head' );
 
-if ( get_user_setting('mfold') == 'f' )
+if ( get_user_setting('mfold') === 'f' )
 	$admin_body_class .= ' folded';
 
-if ( !get_user_setting('unfold') )
+if ( get_user_setting('unfold') === false )
 	$admin_body_class .= ' auto-fold';
 
-if ( is_admin_bar_showing() )
+if ( is_admin_bar_showing() === true )
 	$admin_body_class .= ' admin-bar';
 
-if ( is_rtl() )
+if ( is_rtl() === true )
 	$admin_body_class .= ' rtl';
 
-if ( $current_screen->post_type )
+if ( $current_screen->post_type === true )
 	$admin_body_class .= ' post-type-' . $current_screen->post_type;
 
-if ( $current_screen->taxonomy )
+if ( $current_screen->taxonomy === true )
 	$admin_body_class .= ' taxonomy-' . $current_screen->taxonomy;
 
 $admin_body_class .= ' branch-' . str_replace( array( '.', ',' ), '-', floatval( get_bloginfo( 'version' ) ) );
@@ -170,13 +170,13 @@ $admin_body_class .= ' version-' . str_replace( '.', '-', preg_replace( '/^([.0-
 $admin_body_class .= ' admin-color-' . sanitize_html_class( get_user_option( 'admin_color' ), 'fresh' );
 $admin_body_class .= ' locale-' . sanitize_html_class( strtolower( str_replace( '_', '-', get_user_locale() ) ) );
 
-if ( wp_is_mobile() )
+if ( wp_is_mobile() === true )
 	$admin_body_class .= ' mobile';
 
-if ( is_multisite() )
+if ( is_multisite() === true )
 	$admin_body_class .= ' multisite';
 
-if ( is_network_admin() )
+if ( is_network_admin() === true )
 	$admin_body_class .= ' network-admin';
 
 $admin_body_class .= ' no-customize-support no-svg';
@@ -207,7 +207,7 @@ $admin_body_classes = apply_filters( 'admin_body_class', '' );
 
 <?php
 // Make sure the customize body classes are correct as early as possible.
-if ( current_user_can( 'customize' ) ) {
+if ( current_user_can( 'customize' ) === true ) {
 	wp_customize_support_script();
 }
 ?>
@@ -238,7 +238,7 @@ $current_screen->set_parentage( $parent_file );
 
 $current_screen->render_screen_meta();
 
-if ( is_network_admin() ) {
+if ( is_network_admin() === true ) {
 	/**
 	 * Prints network admin screen notices.
 	 *
@@ -268,5 +268,5 @@ if ( is_network_admin() ) {
  */
 do_action( 'all_admin_notices' );
 
-if ( $parent_file == 'options-general.php' )
+if ( $parent_file === 'options-general.php' )
 	require ABSPATH . 'wp-admin/options-head.php';

@@ -9,7 +9,7 @@
 /** WordPress Administration Bootstrap */
 require_once dirname( __FILE__ ) . '/admin.php' ;
 
-if ( ! wp_is_mobile() ) {
+if ( wp_is_mobile() === false ) {
 	wp_enqueue_style( 'wp-mediaelement' );
 	wp_enqueue_script( 'wp-mediaelement' );
 	wp_localize_script( 'mediaelement', '_wpmejsSettings', array(
@@ -227,10 +227,10 @@ include ABSPATH . 'wp-admin/admin-header.php' ;
 		<div class="return-to-dashboard">
 			<?php if ( current_user_can( 'update_core' ) && isset( $_GET['updated'] ) ) : ?>
 				<a href="<?php echo esc_url( self_admin_url( 'update-core.php' ) ); ?>">
-					<?php is_multisite() ? _e( 'Return to Updates' ) : _e( 'Return to Dashboard &rarr; Updates' ); ?>
+					<?php is_multisite() === true ? _e( 'Return to Updates' ) : _e( 'Return to Dashboard &rarr; Updates' ); ?>
 				</a> |
 			<?php endif; ?>
-			<a href="<?php echo esc_url( self_admin_url() ); ?>"><?php is_blog_admin() ? _e( 'Go to Dashboard &rarr; Home' ) : _e( 'Go to Dashboard' ); ?></a>
+			<a href="<?php echo esc_url( self_admin_url() ); ?>"><?php is_blog_admin() === true ? _e( 'Go to Dashboard &rarr; Home' ) : _e( 'Go to Dashboard' ); ?></a>
 		</div>
 
 	</div>

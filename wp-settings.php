@@ -85,10 +85,10 @@ wp_debug_mode();
  */
 if ( WP_CACHE && apply_filters( 'enable_loading_advanced_cache_dropin', true ) ) {
 	// For an advanced caching plugin to use. Uses a static drop-in because you would only want one.
-	WP_DEBUG ? include WP_CONTENT_DIR . '/advanced-cache.php'  : include WP_CONTENT_DIR . '/advanced-cache.php' ;
+	WP_DEBUG === true ? include WP_CONTENT_DIR . '/advanced-cache.php'  : include WP_CONTENT_DIR . '/advanced-cache.php' ;
 
 	// Re-initialize any hooks added manually by advanced-cache.php
-	if (isset( $wp_filter )) {
+	if (isset( $wp_filter ) === true ) {
 		$wp_filter = WP_Hook::build_preinitialized_hooks( $wp_filter );
 	}
 }
@@ -120,7 +120,7 @@ wp_start_object_cache();
 require ABSPATH . WPINC . '/default-filters.php' ;
 
 // Initialize multisite if enabled.
-if ( is_multisite() ) {
+if ( is_multisite() === true ) {
 	require ABSPATH . WPINC . '/class-wp-site-query.php' ;
 	require ABSPATH . WPINC . '/class-wp-network-query.php' ;
 	require ABSPATH . WPINC . '/ms-blogs.php' ;
@@ -132,7 +132,7 @@ if ( is_multisite() ) {
 register_shutdown_function( 'shutdown_action_hook' );
 
 // Stop most of WordPress from being loaded if we just want the basics.
-if ( SHORTINIT )
+if ( SHORTINIT === true )
 	return false;
 
 // Load the L10n library.
@@ -247,7 +247,7 @@ require ABSPATH . WPINC . '/rest-api/fields/class-wp-rest-user-meta-fields.php' 
 $GLOBALS['wp_embed'] = new WP_Embed();
 
 // Load multisite-specific files.
-if ( is_multisite() ) {
+if ( is_multisite() === true ) {
 	require ABSPATH . WPINC . '/ms-functions.php' ;
 	require ABSPATH . WPINC . '/ms-default-filters.php' ;
 	require ABSPATH . WPINC . '/ms-deprecated.php' ;
@@ -267,7 +267,7 @@ foreach ( wp_get_mu_plugins() as $mu_plugin ) {
 unset( $mu_plugin );
 
 // Load network activated plugins.
-if ( is_multisite() ) {
+if ( is_multisite() === true ) {
 	foreach ( wp_get_active_network_plugins() as $network_plugin ) {
 		wp_register_plugin_realpath( $network_plugin );
 		include_once $network_plugin ;
@@ -282,7 +282,7 @@ if ( is_multisite() ) {
  */
 do_action( 'muplugins_loaded' );
 
-if ( is_multisite() )
+if ( is_multisite() === true )
 	ms_cookie_constants(  );
 
 // Define constants after multisite is loaded.
@@ -427,7 +427,7 @@ $pagenow = null;
 if ( ! wp_installing() || 'wp-activate.php' === $pagenow ) {
 	if ( TEMPLATEPATH !== STYLESHEETPATH && file_exists( STYLESHEETPATH . '/functions.php' ) )
 		include STYLESHEETPATH . '/functions.php' ;
-	if ( file_exists( TEMPLATEPATH . '/functions.php' ) )
+	if ( file_exists( TEMPLATEPATH . '/functions.php' ) === true )
 		include TEMPLATEPATH . '/functions.php' ;
 }
 
@@ -455,7 +455,7 @@ $GLOBALS['wp']->init();
 do_action( 'init' );
 
 // Check site status
-if ( is_multisite() ) {
+if ( is_multisite() === true ) {
 	if ( true !== ( $file = ms_site_check() ) ) {
 		require $file ;
 		return;

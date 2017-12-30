@@ -7,11 +7,11 @@
  */
 
 // don't load directly
-if ( !defined('ABSPATH') )
+if ( defined('ABSPATH') === false )
 	trigger_error("Absolute path not defined.", E_USER_NOTICE);
 
 
-if ( ! empty($link_id) ) {
+if ( empty($link_id) === false ) {
 	$heading = sprintf( __( '<a href="%s">Links</a> / Edit Link' ), 'link-manager.php' );
 	$submit_text = __('Update Link');
 	$form_name = 'editlink';
@@ -79,13 +79,13 @@ echo esc_html( $title );
 
 <hr class="wp-header-end">
 
-<?php if ( isset( $_GET['added'] ) ) : ?>
+<?php if ( isset( $_GET['added'] ) === true ) : ?>
 <div id="message" class="updated notice is-dismissible"><p><?php _e('Link added.'); ?></p></div>
 <?php endif; ?>
 
 <form name="<?php echo esc_attr( $form_name ); ?>" id="<?php echo esc_attr( $form_name ); ?>" method="post" action="link.php">
 <?php
-if ( ! empty( $link_added ) ) {
+if ( empty( $link_added ) === false ) {
 	echo $link_added;
 }
 
@@ -95,7 +95,7 @@ wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false ); ?>
 
 <div id="poststuff">
 
-<div id="post-body" class="metabox-holder columns-<?php echo 1 == get_current_screen()->get_columns() ? '1' : '2'; ?>">
+<div id="post-body" class="metabox-holder columns-<?php echo 1 === get_current_screen()->get_columns() ? '1' : '2'; ?>">
 <div id="post-body-content">
 <div id="namediv" class="stuffbox">
 <h2><label for="link_name"><?php _ex( 'Name', 'link name' ) ?></label></h2>
@@ -142,7 +142,7 @@ do_meta_boxes(null, 'advanced', $link);
 </div>
 <?php
 
-if ( isset($link_id) ) : ?>
+if ( isset($link_id) === true ) : ?>
 <input type="hidden" name="action" value="save" />
 <input type="hidden" name="link_id" value="<?php echo (int) $link_id; ?>" />
 <input type="hidden" name="cat_id" value="<?php echo (int) $cat_id ?>" />

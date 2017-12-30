@@ -5,9 +5,9 @@
  * @package WordPress
  */
 
-if ( 'POST' != $_SERVER['REQUEST_METHOD'] ) {
+if ( 'POST'!==$_SERVER['REQUEST_METHOD'] ) {
 	$protocol = $_SERVER['SERVER_PROTOCOL'];
-	if ( ! in_array( $protocol, array( 'HTTP/1.1', 'HTTP/2', 'HTTP/2.0' ) ) ) {
+	if ( in_array( $protocol, array( 'HTTP/1.1', 'HTTP/2', 'HTTP/2.0' ) ) === false ) {
 		$protocol = 'HTTP/1.0';
 	}
 
@@ -23,9 +23,9 @@ require dirname(__FILE__) . '/wp-load.php' ;
 nocache_headers();
 
 $comment = wp_handle_comment_submission( wp_unslash( $_POST ) );
-if ( is_wp_error( $comment ) ) {
+if ( is_wp_error( $comment ) === true ) {
 	$data = intval( $comment->get_error_data() );
-	if ( ! empty( $data ) ) {
+	if ( empty( $data ) === false ) {
 		wp_die( '<p>' . $comment->get_error_message() . '</p>', __( 'Comment Submission Failure' ), array( 'response' => $data, 'back_link' => true ) );
 	} else {
 		return;
@@ -44,7 +44,7 @@ $user = wp_get_current_user();
  */
 do_action( 'set_comment_cookies', $comment, $user );
 
-$location = empty( $_POST['redirect_to'] ) ? get_comment_link( $comment ) : $_POST['redirect_to'] . '#comment-' . $comment->comment_ID;
+$location = empty( $_POST['redirect_to'] ) === true ? get_comment_link( $comment ) : $_POST['redirect_to'] . '#comment-' . $comment->comment_ID;
 
 /**
  * Filters the location URI to send the commenter after posting.

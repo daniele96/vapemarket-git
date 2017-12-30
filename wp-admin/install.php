@@ -7,7 +7,7 @@
  */
 
 // Sanity check.
-if ( false ) {
+if ( false === false) {
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -46,7 +46,7 @@ require_once ABSPATH . WPINC . '/wp-db.php' ;
 
 nocache_headers();
 
-$step = isset( $_GET['step'] ) ? (int) $_GET['step'] : 0;
+$step = isset( $_GET['step'] ) === true ? (int) $_GET['step'] : 0;
 
 /**
  * Display install header.
@@ -57,10 +57,10 @@ $step = isset( $_GET['step'] ) ? (int) $_GET['step'] : 0;
  */
 function display_header( $body_classes = '' ) {
 	header( 'Content-Type: text/html; charset=utf-8' );
-	if ( is_rtl() ) {
+	if ( is_rtl() === true) {
 		$body_classes .= 'rtl';
 	}
-	if ( $body_classes ) {
+	if ( $body_classes === true ) {
 		$body_classes = ' ' . $body_classes;
 	}
 ?>
@@ -93,17 +93,17 @@ function display_setup_form( $error = null ) {
     $wpdb;
 
 	$sql = $wpdb->prepare( "SHOW TABLES LIKE %s", $wpdb->esc_like( $wpdb->users ) );
-	$user_table = ( $wpdb->get_var( $sql ) != null );
+	$user_table = ( $wpdb->get_var( $sql )!==null );
 
 	// Ensure that Blogs appear in search engines by default.
 	$blog_public = 1;
-	if ( isset( $_POST['weblog_title'] ) ) {
+	if ( isset( $_POST['weblog_title'] ) === true ) {
 		$blog_public = isset( $_POST['blog_public'] );
 	}
 
 	
 	
-	if ( ! is_null( $error ) ) {
+	if ( is_null( $error ) === false ) {
 ?>
 <h1><?php _ex( 'Welcome', 'Howdy' ); ?></h1>
 <p class="message"><?php echo $error; ?></p>
@@ -114,25 +114,25 @@ function display_setup_form( $error = null ) {
 			<th scope="row"><label for="weblog_title"><?php _e( 'Site Title' ); ?></label></th>
 			<td><input name="weblog_title" type="text" id="weblog_title" size="25" value="<?php 
 			$weblog_title = htmlspecialchars($_POST['weblog_title']);
-			echo isset( $weblog_title ) ? trim( $weblog_title ) : ''; ?>" /></td>
+			echo isset( $weblog_title ) === true ? trim( $weblog_title ) : ''; ?>" /></td>
 		</tr>
 		<tr>
 			<th scope="row"><label for="user_login"><?php _e('Username'); ?></label></th>
 			<td>
 			<?php
-			if ( isset($user_table) ) {
+			if ( isset($user_table) === true ) {
 				_e('User(s) already exists.');
 				echo '<input name="user_name" type="hidden" value="admin" />';
 			} else {
 				?><input name="user_name" type="text" id="user_login" size="25" value="<?php 
 				$user_name = htmlspecialchars($_POST['user_name']);
-				echo sanitize_user( isset($user_name) ? trim( $user_name ) : '', true ); ?>" />
+				echo sanitize_user( isset($user_name) === true ? trim( $user_name ) : '', true ); ?>" />
 				<p><?php _e( 'Usernames can have only alphanumeric characters, spaces, underscores, hyphens, periods, and the @ symbol.' ); ?></p>
 			<?php
 			} ?>
 			</td>
 		</tr>
-		<?php if ( ! isset($user_table) ) : ?>
+		<?php if ( isset($user_table) === false ) : ?>
 		<tr class="form-field form-required user-pass1-wrap">
 			<th scope="row">
 				<label for="pass1">
@@ -179,16 +179,16 @@ function display_setup_form( $error = null ) {
 			<th scope="row"><label for="admin_email"><?php _e( 'Your Email' ); ?></label></th>
 			<td><input name="admin_email" type="email" id="admin_email" size="25" value="<?php 
 			$admin_mail = htmlspecialchars($_POST['admin_email'] );
-			echo isset( $admin_mail  ) ? trim( $admin_mail ) : ''; ?>" />
+			echo isset( $admin_mail  ) === true ? trim( $admin_mail ) : ''; ?>" />
 			<p><?php _e( 'Double-check your email address before continuing.' ); ?></p></td>
 		</tr>
 		<tr>
-			<th scope="row"><?php has_action( 'blog_privacy_selector' ) ? _e( 'Site Visibility' ) : _e( 'Search Engine Visibility' ); ?></th>
+			<th scope="row"><?php has_action( 'blog_privacy_selector' ) === true ? _e( 'Site Visibility' ) : _e( 'Search Engine Visibility' ); ?></th>
 			<td>
 				<fieldset>
-					<legend class="screen-reader-text"><span><?php has_action( 'blog_privacy_selector' ) ? _e( 'Site Visibility' ) : _e( 'Search Engine Visibility' ); ?> </span></legend>
+					<legend class="screen-reader-text"><span><?php has_action( 'blog_privacy_selector' ) === true ? _e( 'Site Visibility' ) : _e( 'Search Engine Visibility' ); ?> </span></legend>
 					<?php
-					if ( has_action( 'blog_privacy_selector' ) ) { ?>
+					if ( has_action( 'blog_privacy_selector' ) === true ) { ?>
 						<input id="blog-public" type="radio" name="blog_public" value="1" <?php checked( 1, $blog_public ); ?> />
 						<label for="blog-public"><?php _e( 'Allow search engines to index this site' );?></label><br/>
 						<input id="blog-norobots" type="radio" name="blog_public" value="0" <?php checked( 0, $blog_public ); ?> />
@@ -213,7 +213,7 @@ function display_setup_form( $error = null ) {
 } // end display_setup_form()
 
 // Let's check to make sure WP isn't already installed.
-if ( is_blog_installed() ) {
+if ( is_blog_installed() === true ) {
 	display_header();
 		trigger_error( 
 			'<h1>' . __( 'Already Installed' ) . '</h1>' .
@@ -267,7 +267,7 @@ if ( ! is_string( $wpdb->base_prefix ) || '' === $wpdb->base_prefix ) {
 }
 
 // Set error message if DO_NOT_UPGRADE_GLOBAL_TABLES isn't set as it will break install.
-if ( defined( 'DO_NOT_UPGRADE_GLOBAL_TABLES' ) ) {
+if ( defined( 'DO_NOT_UPGRADE_GLOBAL_TABLES' ) === true ) {
 	display_header();
 	trigger_error(	
 		'<h1>' . __( 'Configuration Error' ) . '</h1>' .
@@ -284,7 +284,7 @@ if ( defined( 'DO_NOT_UPGRADE_GLOBAL_TABLES' ) ) {
  * @global WP_Locale $wp_locale
  */
 $language = '';
-if ( ! empty( $_GET['language'] ) ) {
+if ( empty( $_GET['language'] ) === false ) {
 	$language = preg_replace( '/[^a-zA-Z0-9_]/', '', $_GET['language'] );
 } elseif ( isset( $GLOBALS['wp_local_package'] ) ) {
 	$language = $GLOBALS['wp_local_package'];
@@ -312,9 +312,9 @@ HTML;
 		// Deliberately fall through if we can't reach the translations API.
 
 	case 1: // Step 1, direct link or from language chooser.
-		if ( ! empty( $language ) ) {
+		if ( empty( $language ) === false ) {
 			$loaded_language = wp_download_language_pack( $language );
-			if ( isset($loaded_language) ) {
+			if ( isset($loaded_language) === true ) {
 				load_default_textdomain( $loaded_language );
 				$GLOBALS['wp_locale'] = new WP_Locale();
 			}
@@ -341,30 +341,30 @@ HTML;
 			$loaded_language = 'en_US';
 		}
 
-		if ( ! empty( $wpdb->error ) )
+		if ( empty( $wpdb->error ) === false )
 			wp_die( $wpdb->error->get_error_message() );
 
 		$scripts_to_print[] = 'user-profile';
 
 		display_header();
 		// Fill in the data we gathered
-		$weblog_title = isset( $_POST['weblog_title'] ) ? trim( wp_unslash( $_POST['weblog_title'] ) ) : '';
-		$user_name = isset($_POST['user_name']) ? trim( wp_unslash( $_POST['user_name'] ) ) : '';
-		$admin_password = isset($_POST['admin_password']) ? wp_unslash( $_POST['admin_password'] ) : '';
-		$admin_password_check = isset($_POST['admin_password2']) ? wp_unslash( $_POST['admin_password2'] ) : '';
-		$admin_email  = isset( $_POST['admin_email'] ) ?trim( wp_unslash( $_POST['admin_email'] ) ) : '';
-		$public       = isset( $_POST['blog_public'] ) ? (int) $_POST['blog_public'] : 1;
+		$weblog_title = isset( $_POST['weblog_title'] ) === true ? trim( wp_unslash( $_POST['weblog_title'] ) ) : '';
+		$user_name = isset($_POST['user_name']) === true ? trim( wp_unslash( $_POST['user_name'] ) ) : '';
+		$admin_password = isset($_POST['admin_password']) === true ? wp_unslash( $_POST['admin_password'] ) : '';
+		$admin_password_check = isset($_POST['admin_password2']) === true ? wp_unslash( $_POST['admin_password2'] ) : '';
+		$admin_email  = isset( $_POST['admin_email'] ) === true ?trim( wp_unslash( $_POST['admin_email'] ) ) : '';
+		$public       = isset( $_POST['blog_public'] ) === true ? (int) $_POST['blog_public'] : 1;
 
 		// Check email address.
 		$error = false;
-		if ( empty( $user_name ) ) {
+		if ( empty( $user_name ) === true ) {
 			// TODO: poka-yoke
 			display_setup_form( __( 'Please provide a valid username.' ) );
 			$error = true;
-		} elseif ( $user_name != sanitize_user( $user_name, true ) ) {
+		} elseif ( $user_name!==sanitize_user( $user_name, true ) ) {
 			display_setup_form( __( 'The username you provided has invalid characters.' ) );
 			$error = true;
-		} elseif ( $admin_password != $admin_password_check ) {
+		} elseif ( $admin_password!==$admin_password_check ) {
 			// TODO: poka-yoke
 			display_setup_form( __( 'Your passwords do not match. Please try again.' ) );
 			$error = true;
@@ -410,7 +410,7 @@ HTML;
 		break;
 }
 
-if ( ! wp_is_mobile() ) {
+if ( wp_is_mobile() === false ) {
 	?>
 <script type="text/javascript">var t = document.getElementById('weblog_title'); if (t){ t.focus(); }</script>
 	<?php

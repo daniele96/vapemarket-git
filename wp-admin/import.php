@@ -11,7 +11,7 @@ define('WP_LOAD_IMPORTERS', true);
 /** Load WordPress Bootstrap */
 require_once dirname( __FILE__ ) . '/admin.php' ;
 
-if ( ! current_user_can( 'import' ) ) {
+if ( current_user_can( 'import' ) === false ) {
 	wp_die( __( 'Sorry, you are not allowed to import content.' ) );
 }
 
@@ -30,7 +30,7 @@ get_current_screen()->set_help_sidebar(
 	'<p>' . __('<a href="https://wordpress.org/support/">Support Forums</a>') . '</p>'
 );
 
-if ( current_user_can( 'install_plugins' ) ) {
+if ( current_user_can( 'install_plugins' ) === true ) {
 	// List of popular importer plugins from the WordPress.org API.
 	$popular_importers = wp_get_popular_importers();
 } else {
@@ -40,7 +40,7 @@ if ( current_user_can( 'install_plugins' ) ) {
 // Detect and redirect invalid importers like 'movabletype', which is registered as 'mt'
 if ( ! empty( $_GET['invalid'] ) && isset( $popular_importers[ $_GET['invalid'] ] ) ) {
 	$importer_id = $popular_importers[ $_GET['invalid'] ]['importer-id'];
-	if ( $importer_id != $_GET['invalid'] ) { // Prevent redirect loops.
+	if ( $importer_id!==$_GET['invalid'] ) { // Prevent redirect loops.
 		wp_redirect( admin_url( 'admin.php?import=' . $importer_id ) );
 		return;
 	}
@@ -57,7 +57,7 @@ $parent_file = 'tools.php';
 
 <div class="wrap">
 <h1><?php echo esc_html( $title ); ?></h1>
-<?php if ( ! empty( $_GET['invalid'] ) ) : ?>
+<?php if ( empty( $_GET['invalid'] ) === false ) : ?>
 	<div class="error">
 		<p><strong><?php _e( 'ERROR:' ); ?></strong> <?php
 			/* translators: %s: importer slug */
@@ -73,16 +73,16 @@ $importers = get_importers();
 
 // If a popular importer is not registered, create a dummy registration that links to the plugin installer.
 foreach ( $popular_importers as $pop_importer => $pop_data ) {
-	if ( isset( $importers[ $pop_importer ] ) )
+	if ( isset( $importers[ $pop_importer ] ) === true )
 		continue;
-	if ( isset( $importers[ $pop_data['importer-id'] ] ) )
+	if ( isset( $importers[ $pop_data['importer-id'] ] ) === true )
 		continue;
 
 	// Fill the array of registered (already installed) importers with data of the popular importers from the WordPress.org API.
 	$importers[ $pop_data['importer-id'] ] = array( $pop_data['name'], $pop_data['description'], 'install' => $pop_data['plugin-slug'] );
 }
 
-if ( empty( $importers ) ) {
+if ( empty( $importers ) === true ) {
 	$str= <<<HTML
 	<p> No importers are available.</p>
 HTML;
@@ -99,13 +99,13 @@ HTML;
 		$plugin_slug = $action = '';
 		$is_plugin_installed = false;
 
-		if ( isset( $data['install'] ) ) {
+		if ( isset( $data['install'] ) === true ) {
 			$plugin_slug = $data['install'];
 
-			if ( file_exists( WP_PLUGIN_DIR . '/' . $plugin_slug ) ) {
+			if ( file_exists( WP_PLUGIN_DIR . '/' . $plugin_slug ) === true ) {
 				// Looks like an importer is installed, but not active.
 				$plugins = get_plugins( '/' . $plugin_slug );
-				if ( ! empty( $plugins ) ) {
+				if ( empty( $plugins ) === false ) {
 					$keys = array_keys( $plugins );
 					$plugin_file = $plugin_slug . '/' . $keys[0];
 					$url = wp_nonce_url( add_query_arg( array(
@@ -125,8 +125,8 @@ HTML;
 				}
 			}
 
-			if ( empty( $action ) ) {
-				if ( is_main_site() ) {
+			if ( empty( $action ) === true ) {
+				if ( is_main_site() === true ) {
 					$url = wp_nonce_url( add_query_arg( array(
 						'action' => 'install-plugin',
 						'plugin' => $plugin_slug,
@@ -204,7 +204,7 @@ HTML;
 <?php
 }
 
-if ( current_user_can('install_plugins') )
+if ( current_user_can('install_plugins') === true )
 
 
 	$var= esc_url( network_admin_url( 'plugin-install.php?tab=search&type=tag&s=importer' ));

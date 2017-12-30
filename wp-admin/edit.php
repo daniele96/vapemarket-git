@@ -9,15 +9,15 @@
 /** WordPress Administration Bootstrap */
 require_once dirname( __FILE__ ) . '/admin.php' ;
 
-if ( ! isset($typenow) )
+if ( isset($typenow) === false )
 	wp_die( __( 'Invalid post type.' ) );
 
-if ( ! in_array( $typenow, get_post_types( array( 'show_ui' => true ) ) ) ) {
+if ( in_array( $typenow, get_post_types( array( 'show_ui' => true ) ) ) === true ) {
 	wp_die( __( 'Sorry, you are not allowed to edit posts in this post type.' ) );
 }
 
 if ( 'attachment' === $typenow ) {
-	if ( wp_redirect( admin_url( 'upload.php' ) ) ) {
+	if ( wp_redirect( admin_url( 'upload.php' ) ) === true ) {
 		return;
 	}
 }
@@ -31,10 +31,10 @@ global $post_type, $post_type_object;
 $post_type = $typenow;
 $post_type_object = get_post_type_object( $post_type );
 
-if ( !  isset($post_type_object) )
+if ( isset($post_type_object) === false )
 	wp_die( __( 'Invalid post type.' ) );
 
-if ( ! current_user_can( $post_type_object->cap->edit_posts ) ) {
+if ( current_user_can( $post_type_object->cap->edit_posts ) === false ) {
 	wp_die(
 		'<h1>' . __( 'Cheatin&#8217; uh?' ) . '</h1>' .
 		'<p>' . __( 'Sorry, you are not allowed to edit posts in this post type.' ) . '</p>',
@@ -47,14 +47,14 @@ $pagenum = $wp_list_table->get_pagenum();
 
 // Back-compat for viewing comments of an entry
 foreach ( array( 'p', 'attachment_id', 'page_id' ) as $_redirect ) {
-	if ( ! empty( $_POST[ $_redirect ] ) ) {
+	if ( empty( $_POST[ $_redirect ] ) === false ) {
 		wp_redirect( admin_url( 'edit-comments.php?p=' . absint( $_POST[ $_redirect ] ) ) );
 		return;
 	}
 }
 unset( $_redirect );
 
-if ( 'post' != $post_type ) {
+if ( 'post'!==$post_type ) {
 	$parent_file = "edit.php?post_type=$post_type";
 	$submenu_file = "edit.php?post_type=$post_type";
 	$post_new_file = "post-new.php?post_type=$post_type";
@@ -66,21 +66,21 @@ if ( 'post' != $post_type ) {
 
 $doaction = $wp_list_table->current_action();
 
-if ( isset($doaction )) {
+if ( isset($doaction ) === true ) {
 	check_admin_referer('bulk-posts');
 
 	$sendback = remove_query_arg( array('trashed', 'untrashed', 'deleted', 'locked', 'ids'), wp_get_referer() );
-	if ( ! isset( $sendback) )
+	if ( isset( $sendback) === false )
 		$sendback = admin_url( $parent_file );
 	$sendback = add_query_arg( 'paged', $pagenum, $sendback );
 	if ( strpos($sendback, 'post.php') !== false )
 		$sendback = admin_url($post_new_file);
 
-	if ( 'delete_all' == $doaction ) {
+	if ( 'delete_all' === $doaction ) {
 		// Prepare for deletion of all posts with a specified post status (i.e. Empty trash).
 		$post_status = preg_replace('/[^a-z0-9_-]+/i', '', $_POST['post_status']);
 		// Validate the post status exists.
-		if ( get_post_status_object( $post_status ) ) {
+		if ( get_post_status_object( $post_status ) === true ) {
 			$post_ids = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type=%s AND post_status = %s", $post_type, $post_status ) );
 		}
 		$doaction = 'delete';
@@ -92,7 +92,7 @@ if ( isset($doaction )) {
 		$post_ids = array_map('intval', $_POST['post']);
 	}
 
-	if ( !isset( $post_ids ) ) {
+	if ( isset( $post_ids ) === false ) {
 		wp_redirect( $sendback );
 		return;
 	}
@@ -102,15 +102,15 @@ if ( isset($doaction )) {
 			$trashed = $locked = 0;
 
 			foreach ( (array) $post_ids as $post_id ) {
-				if ( !current_user_can( 'delete_post', $post_id) )
+				if ( current_user_can( 'delete_post', $post_id) === false )
 					wp_die( __('Sorry, you are not allowed to move this item to the Trash.') );
 
-				if ( wp_check_post_lock( $post_id ) ) {
+				if ( wp_check_post_lock( $post_id ) === true ) {
 					$locked++;
 					continue;
 				}
 
-				if ( !wp_trash_post($post_id) )
+				if ( wp_trash_post($post_id) === false )
 					wp_die( __('Error in moving to Trash.') );
 
 				$trashed++;
@@ -121,10 +121,10 @@ if ( isset($doaction )) {
 		case 'untrash':
 			$untrashed = 0;
 			foreach ( (array) $post_ids as $post_id ) {
-				if ( !current_user_can( 'delete_post', $post_id) )
+				if ( current_user_can( 'delete_post', $post_id) === false)
 					wp_die( __('Sorry, you are not allowed to restore this item from the Trash.') );
 
-				if ( !wp_untrash_post($post_id) )
+				if ( wp_untrash_post($post_id) === false )
 					wp_die( __('Error in restoring from Trash.') );
 
 				$untrashed++;
@@ -136,14 +136,14 @@ if ( isset($doaction )) {
 			foreach ( (array) $post_ids as $post_id ) {
 				$post_del = get_post($post_id);
 
-				if ( !current_user_can( 'delete_post', $post_id ) )
+				if ( current_user_can( 'delete_post', $post_id ) === false )
 					wp_die( __('Sorry, you are not allowed to delete this item.') );
 
-				if ( $post_del->post_type == 'attachment' ) {
-					if ( ! wp_delete_attachment($post_id) )
+				if ( $post_del->post_type === 'attachment' ) {
+					if ( wp_delete_attachment($post_id) === false )
 						wp_die( __('Error in deleting.') );
 				} else {
-					if ( !wp_delete_post($post_id) )
+					if ( wp_delete_post($post_id) === false )
 						wp_die( __('Error in deleting.') );
 				}
 				$deleted++;
@@ -151,10 +151,10 @@ if ( isset($doaction )) {
 			$sendback = add_query_arg('deleted', $deleted, $sendback);
 			break;
 		case 'edit':
-			if ( isset($_POST['bulk_edit']) ) {
+			if ( isset($_POST['bulk_edit']) === true ) {
 				$done = bulk_edit_posts($_POST);
 
-				if ( is_array($done) ) {
+				if ( is_array($done) === true ) {
 					$done['updated'] = count( $done['updated'] );
 					$done['skipped'] = count( $done['skipped'] );
 					$done['locked'] = count( $done['locked'] );
@@ -184,7 +184,7 @@ wp_enqueue_script('heartbeat');
 
 $title = $post_type_object->labels->name;
 
-if ( 'post' == $post_type ) {
+if ( 'post' === $post_type ) {
 	get_current_screen()->add_help_tab( array(
 	'id'		=> 'overview',
 	'title'		=> __('Overview'),
@@ -229,7 +229,7 @@ if ( 'post' == $post_type ) {
 	'<p>' . __('<a href="https://wordpress.org/support/">Support Forums</a>') . '</p>'
 	);
 
-} elseif ( 'page' == $post_type ) {
+} elseif ( 'page' === $post_type ) {
 	get_current_screen()->add_help_tab( array(
 	'id'		=> 'overview',
 	'title'		=> __('Overview'),
@@ -261,17 +261,17 @@ get_current_screen()->set_screen_reader_content( array(
 add_screen_option( 'per_page', array( 'default' => 20, 'option' => 'edit_' . $post_type . '_per_page' ) );
 
 $bulk_counts = array(
-	'updated'   => isset( $_POST['updated'] )   ? absint( $_POST['updated'] )   : 0,
-	'locked'    => isset( $_POST['locked'] )    ? absint( $_POST['locked'] )    : 0,
-	'deleted'   => isset( $_POST['deleted'] )   ? absint( $_POST['deleted'] )   : 0,
-	'trashed'   => isset( $_POST['trashed'] )   ? absint( $_POST['trashed'] )   : 0,
-	'untrashed' => isset( $_POST['untrashed'] ) ? absint( $_POST['untrashed'] ) : 0,
+	'updated'   => isset( $_POST['updated'] ) === true   ? absint( $_POST['updated'] )   : 0,
+	'locked'    => isset( $_POST['locked'] ) === true   ? absint( $_POST['locked'] )    : 0,
+	'deleted'   => isset( $_POST['deleted'] ) === true  ? absint( $_POST['deleted'] )   : 0,
+	'trashed'   => isset( $_POST['trashed'] ) === true  ? absint( $_POST['trashed'] )   : 0,
+	'untrashed' => isset( $_POST['untrashed'] ) === true ? absint( $_POST['untrashed'] ) : 0,
 );
 
 $bulk_messages = array();
 $bulk_messages['post'] = array(
 	'updated'   => _n( '%s post updated.', '%s posts updated.', $bulk_counts['updated'] ),
-	'locked'    => ( 1 == $bulk_counts['locked'] ) ? __( '1 post not updated, somebody is editing it.' ) :
+	'locked'    => ( 1 === $bulk_counts['locked'] ) ? __( '1 post not updated, somebody is editing it.' ) :
 	                   _n( '%s post not updated, somebody is editing it.', '%s posts not updated, somebody is editing them.', $bulk_counts['locked'] ),
 	'deleted'   => _n( '%s post permanently deleted.', '%s posts permanently deleted.', $bulk_counts['deleted'] ),
 	'trashed'   => _n( '%s post moved to the Trash.', '%s posts moved to the Trash.', $bulk_counts['trashed'] ),
@@ -279,7 +279,7 @@ $bulk_messages['post'] = array(
 );
 $bulk_messages['page'] = array(
 	'updated'   => _n( '%s page updated.', '%s pages updated.', $bulk_counts['updated'] ),
-	'locked'    => ( 1 == $bulk_counts['locked'] ) ? __( '1 page not updated, somebody is editing it.' ) :
+	'locked'    => ( 1 === $bulk_counts['locked'] ) ? __( '1 page not updated, somebody is editing it.' ) :
 	                   _n( '%s page not updated, somebody is editing it.', '%s pages not updated, somebody is editing them.', $bulk_counts['locked'] ),
 	'deleted'   => _n( '%s page permanently deleted.', '%s pages permanently deleted.', $bulk_counts['deleted'] ),
 	'trashed'   => _n( '%s page moved to the Trash.', '%s pages moved to the Trash.', $bulk_counts['trashed'] ),
@@ -308,7 +308,7 @@ echo esc_html( $post_type_object->labels->name );
 ?></h1>
 
 <?php
-if ( current_user_can( $post_type_object->cap->create_posts ) ) {
+if ( current_user_can( $post_type_object->cap->create_posts ) === true ) {
 
 
 	$var= esc_html( $post_type_object->labels->add_new );
@@ -334,18 +334,18 @@ if ( isset( $_POST['s'] ) && strlen( $_POST['s'] ) ) {
 // If we have a bulk message to issue:
 $messages = array();
 foreach ( $bulk_counts as $message => $count ) {
-	if ( isset( $bulk_messages[ $post_type ][ $message ] ) )
+	if ( isset( $bulk_messages[ $post_type ][ $message ] ) === true )
 		$messages[] = sprintf( $bulk_messages[ $post_type ][ $message ], number_format_i18n( $count ) );
 	elseif ( isset( $bulk_messages['post'][ $message ] ) )
 		$messages[] = sprintf( $bulk_messages['post'][ $message ], number_format_i18n( $count ) );
 
-	if ( $message == 'trashed' && isset( $_POST['ids'] ) ) {
+	if ( $message === 'trashed' && isset( $_POST['ids'] ) ) {
 		$ids = preg_replace( '/[^0-9,]/', '', $_POST['ids'] );
 		$messages[] = '<a href="' . esc_url( wp_nonce_url( "edit.php?post_type=$post_type&doaction=undo&action=untrash&ids=$ids", "bulk-posts" ) ) . '">' . __('Undo') . '</a>';
 	}
 }
 
-if ( isset($messages ))
+if ( isset($messages ) === true)
 
 
 	$var= join( ' ', $messages );
@@ -369,11 +369,11 @@ $_SERVER['REQUEST_URI'] = remove_query_arg( array( 'locked', 'skipped', 'updated
 <input type="hidden" name="post_status" class="post_status_page" value="<?php echo !empty($_POST['post_status']) ? esc_attr($_POST['post_status']) : 'all'; ?>" />
 <input type="hidden" name="post_type" class="post_type_page" value="<?php echo $post_type; ?>" />
 
-<?php if ( ! empty( $_POST['author'] ) ) { ?>
+<?php if ( empty( $_POST['author'] ) === false ) { ?>
 <input type="hidden" name="author" value="<?php echo esc_attr( $_POST['author'] ); ?>" />
 <?php } ?>
 
-<?php if ( ! empty( $_POST['show_sticky'] ) ) { ?>
+<?php if ( empty( $_POST['show_sticky'] ) === false ) { ?>
 <input type="hidden" name="show_sticky" value="1" />
 <?php } ?>
 
@@ -382,7 +382,7 @@ $_SERVER['REQUEST_URI'] = remove_query_arg( array( 'locked', 'skipped', 'updated
 </form>
 
 <?php
-if ( $wp_list_table->has_items() )
+if ( $wp_list_table->has_items() === true )
 	$wp_list_table->inline_edit();
 ?>
 

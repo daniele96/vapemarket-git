@@ -11,14 +11,14 @@
  *
  * @since 2.3.2
  */
-if ( ! defined( 'WP_ADMIN' ) ) {
+if ( defined( 'WP_ADMIN' ) === false ) {
 	define( 'WP_ADMIN', true );
 }
 
-if ( ! defined('WP_NETWORK_ADMIN') )
+if ( defined('WP_NETWORK_ADMIN') === false )
 	define('WP_NETWORK_ADMIN', false);
 
-if ( ! defined('WP_USER_ADMIN') )
+if ( defined('WP_USER_ADMIN') === false )
 	define('WP_USER_ADMIN', false);
 
 if ( ! WP_NETWORK_ADMIN && ! WP_USER_ADMIN ) {
@@ -34,7 +34,7 @@ nocache_headers();
 
 $wp_db_version = null;
 
-if ( get_option('db_upgraded') ) {
+if ( get_option('db_upgraded') === true ) {
 	flush_rewrite_rules();
 	update_option( 'db_upgraded',  false );
 
@@ -44,8 +44,8 @@ if ( get_option('db_upgraded') ) {
 	 * @since 2.8.0
 	 */
 	do_action( 'after_db_upgrade' );
-} elseif ( get_option('db_version') != $wp_db_version && empty($_POST) ) {
-	if ( !is_multisite() ) {
+} elseif ( get_option('db_version')!==$wp_db_version && empty($_POST) ) {
+	if ( is_multisite() === false ) {
 		wp_redirect( admin_url( 'upgrade.php?_wp_http_referer=' . urlencode( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) );
 		return;
 
@@ -70,7 +70,7 @@ if ( get_option('db_upgraded') ) {
 		 * If there are 50 or fewer sites, run every time. Otherwise, throttle to reduce load:
 		 * attempt to do no more than threshold value, with some +/- allowed.
 		 */
-		if ( $c <= 50 || ( $c > 50 && mt_rand( 0, (int)( $c / 50 ) ) == 1 ) ) {
+		if ( $c <= 50 || ( $c > 50 && mt_rand( 0, (int)( $c / 50 ) ) === 1 ) ) {
 			require_once ABSPATH . WPINC . '/http.php' ;
 			$response = wp_remote_get( admin_url( 'upgrade.php?step=1' ), array( 'timeout' => 120, 'httpversion' => '1.1' ) );
 			/** This action is documented in wp-admin/network/upgrade.php */
@@ -117,7 +117,7 @@ $page_hook = null;
 
 $editing = false;
 
-if ( isset($_GET['page']) ) {
+if ( isset($_GET['page']) === true ) {
 	$plugin_page = wp_unslash( $_GET['page'] );
 	$plugin_page = plugin_basename($plugin_page);
 }
@@ -132,14 +132,14 @@ if ( isset( $_POST['taxonomy'] ) && taxonomy_exists( $_POST['taxonomy'] ) )
 else
 	$taxnow = '';
 
-if ( WP_NETWORK_ADMIN )
+if ( WP_NETWORK_ADMIN === true )
 	require ABSPATH . 'wp-admin/network/menu.php';
 elseif ( WP_USER_ADMIN )
 	require ABSPATH . 'wp-admin/user/menu.php';
 else
 	require ABSPATH . 'wp-admin/menu.php';
 
-if ( current_user_can( 'manage_options' ) ) {
+if ( current_user_can( 'manage_options' ) === true ) {
 	wp_raise_memory_limit( 'admin' );
 }
 
@@ -155,18 +155,18 @@ if ( current_user_can( 'manage_options' ) ) {
  */
 do_action( 'admin_init' );
 
-if ( isset($plugin_page) ) {
-	if ( !empty($typenow) )
+if ( isset($plugin_page) === true ) {
+	if ( empty($typenow) === false )
 		$the_parent = $pagenow . '?post_type=' . $typenow;
 	else
 		$the_parent = $pagenow;
-	if (  isset($page_hook) != get_plugin_page_hook($plugin_page, $the_parent))  {
+	if (  isset($page_hook)!==get_plugin_page_hook($plugin_page, $the_parent))  {
 		$page_hook = get_plugin_page_hook($plugin_page, $plugin_page);
 
 		// Back-compat for plugins using add_management_page().
-		if ( empty( $page_hook ) && 'edit.php' == $pagenow && '' != get_plugin_page_hook($plugin_page, 'tools.php') ) {
+		if ( empty( $page_hook ) && 'edit.php' === $pagenow && ''!==get_plugin_page_hook($plugin_page, 'tools.php') ) {
 			// There could be plugin specific params on the URL, so we need the whole query string
-			if ( !empty($_SERVER[ 'QUERY_STRING' ]) )
+			if ( empty($_SERVER[ 'QUERY_STRING' ]) === false )
 				$query_string = $_SERVER[ 'QUERY_STRING' ];
 			else
 				$query_string = 'page=' . $plugin_page;
@@ -178,7 +178,7 @@ if ( isset($plugin_page) ) {
 }
 
 $hook_suffix = '';
-if ( isset( $page_hook ) ) {
+if ( isset( $page_hook ) === true ) {
 	$hook_suffix = $page_hook;
 } elseif ( isset( $plugin_page ) ) {
 	$hook_suffix = $plugin_page;
@@ -189,8 +189,8 @@ if ( isset( $page_hook ) ) {
 set_current_screen();
 
 // Handle plugin admin pages.
-if ( isset($plugin_page) ) {
-	if ( isset($page_hook) ) {
+if ( isset($plugin_page) === true ) {
+	if ( isset($page_hook) === true ) {
 		/**
 		 * Fires before a particular screen is loaded.
 		 *
@@ -212,7 +212,7 @@ if ( isset($plugin_page) ) {
 		 * @since 2.1.0
 		 */
 		do_action( "load-{$page_hook}" );
-		if (! isset($_GET['noheader']))
+		if ( isset($_GET['noheader']) === false )
 			require_once ABSPATH . 'wp-admin/admin-header.php';
 
 		/**
@@ -223,7 +223,7 @@ if ( isset($plugin_page) ) {
 		 */
 		do_action( $page_hook );
 	} else {
-		if ( validate_file( $plugin_page ) ) {
+		if ( validate_file( $plugin_page ) === true ) {
 			wp_die( __( 'Invalid plugin page.' ) );
 		}
 
@@ -244,10 +244,10 @@ if ( isset($plugin_page) ) {
 		 */
 		do_action( "load-{$plugin_page}" );
 
-		if ( !isset($_GET['noheader']))
+		if ( isset($_GET['noheader']) === false )
 			require_once ABSPATH . 'wp-admin/admin-header.php';
 
-		if ( file_exists(WPMU_PLUGIN_DIR . "/$plugin_page") )
+		if ( file_exists(WPMU_PLUGIN_DIR . "/$plugin_page") === true )
 			include WPMU_PLUGIN_DIR . "/$plugin_page";
 		else
 			include WP_PLUGIN_DIR . "/$plugin_page";
@@ -260,11 +260,11 @@ if ( isset($plugin_page) ) {
 
 	$importer = $_GET['import'];
 
-	if ( ! current_user_can( 'import' ) ) {
+	if ( current_user_can( 'import' ) === false ) {
 		wp_die( __( 'Sorry, you are not allowed to import content.' ) );
 	}
 
-	if ( validate_file($importer) ) {
+	if ( validate_file($importer) === true ) {
 		wp_redirect( admin_url( 'import.php?invalid=' . $importer ) );
 		return;
 	}
@@ -287,7 +287,7 @@ if ( isset($plugin_page) ) {
 	$submenu_file = 'import.php';
 	$title = __('Import');
 
-	if (! isset($_GET['noheader']))
+	if ( isset($_GET['noheader']) === false )
 		require_once ABSPATH . 'wp-admin/admin-header.php';
 
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
@@ -304,7 +304,7 @@ if ( isset($plugin_page) ) {
 	 *
 	 * @param bool $force Whether to force data to be filtered through kses. Default false.
 	 */
-	if ( apply_filters( 'force_filtered_html_on_import', false ) ) {
+	if ( apply_filters( 'force_filtered_html_on_import', false ) === true ) {
 		kses_init_filters();  // Always filter imported data with kses on multisite.
 	}
 
@@ -335,22 +335,22 @@ if ( isset($plugin_page) ) {
 	 * The following hooks are fired to ensure backward compatibility.
 	 * In all other cases, 'load-' . $pagenow should be used instead.
 	 */
-	if ( $typenow == 'page' ) {
-		if ( $pagenow == 'post-new.php' )
+	if ( $typenow === 'page' ) {
+		if ( $pagenow === 'post-new.php' )
 			do_action( 'load-page-new.php' );
-		elseif ( $pagenow == 'post.php' )
+		elseif ( $pagenow === 'post.php' )
 			do_action( 'load-page.php' );
-	}  elseif ( $pagenow == 'edit-tags.php' ) {
-		if ( $taxnow == 'category' )
+	}  elseif ( $pagenow === 'edit-tags.php' ) {
+		if ( $taxnow === 'category' )
 			do_action( 'load-categories.php' );
-		elseif ( $taxnow == 'link_category' )
+		elseif ( $taxnow === 'link_category' )
 			do_action( 'load-edit-link-categories.php' );
 	} elseif( 'term.php' === $pagenow ) {
 		do_action( 'load-edit-tags.php' );
 	}
 }
 
-if ( ! empty( $_GET['action'] ) ) {
+if ( empty( $_GET['action'] ) === false ) {
 	/**
 	 * Fires when an 'action' request variable is sent.
 	 *

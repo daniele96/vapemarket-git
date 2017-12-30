@@ -11,7 +11,7 @@
 require dirname(__FILE__) . '/wp-load.php';
 
 /** This filter is documented in wp-admin/options.php */
-if ( ! apply_filters( 'enable_post_by_email_configuration', true ) )
+if ( apply_filters( 'enable_post_by_email_configuration', true ) === false )
 	wp_die( __( 'This action has been disabled by the administrator.' ), 403 );
 
 $mailserver_url = get_option( 'mailserver_url' );
@@ -31,12 +31,12 @@ do_action( 'wp-mail.php' );
 require_once ABSPATH . WPINC . '/class-pop3.php' ;
 
 /** Only check at this interval for new messages. */
-if ( !defined('WP_MAIL_INTERVAL') )
+if ( defined('WP_MAIL_INTERVAL') === false )
 	define('WP_MAIL_INTERVAL', 300); // 5 minutes
 
 $last_checked = get_transient('mailserver_last_checked');
 
-if ( isset($last_checked) )
+if ( isset($last_checked) === true )
 	wp_die(__('Slow down cowboy, no need to check for new mails so often!'));
 
 set_transient('mailserver_last_checked', true, WP_MAIL_INTERVAL);
@@ -76,35 +76,35 @@ for ( $i = 1; $i <= $count; $i++ ) {
 		// Body signal.
 		if ( strlen($line) < 3 )
 			$bodysignal = true;
-		if ( isset($bodysignal) ) {
+		if ( isset($bodysignal) === true ) {
 			$content .= $line;
 		} else {
-			if ( preg_match('/Content-Type: /i', $line) ) {
+			if ( preg_match('/Content-Type: /i', $line) === true ) {
 				$content_type = trim($line);
 				$content_type = substr($content_type, 14, strlen($content_type) - 14);
 				$content_type = explode(';', $content_type);
-				if ( ! empty( $content_type[1] ) ) {
+				if ( empty( $content_type[1] ) === false ) {
 					$charset = explode('=', $content_type[1]);
-					$charset = ( ! empty( $charset[1] ) ) ? trim($charset[1]) : '';
+					$charset = ( empty( $charset[1] ) ) === false ? trim($charset[1]) : '';
 				}
 				$content_type = $content_type[0];
 			}
-			if ( preg_match('/Content-Transfer-Encoding: /i', $line) ) {
+			if ( preg_match('/Content-Transfer-Encoding: /i', $line) === true ) {
 				$content_transfer_encoding = trim($line);
 				$content_transfer_encoding = substr($content_transfer_encoding, 27, strlen($content_transfer_encoding) - 27);
 				$content_transfer_encoding = explode(';', $content_transfer_encoding);
 				$content_transfer_encoding = $content_transfer_encoding[0];
 			}
-			if ( ( $content_type == 'multipart/alternative' ) && ( false !== strpos($line, 'boundary="') ) && ( '' == $boundary ) ) {
+			if ( ( $content_type === 'multipart/alternative' ) && ( false !== strpos($line, 'boundary="') ) && ( '' === $boundary ) ) {
 				$boundary = trim($line);
 				$boundary = explode('"', $boundary);
 				$boundary = $boundary[1];
 			}
-			if (preg_match('/Subject: /i', $line)) {
+			if (preg_match('/Subject: /i', $line) === true ) {
 				$subject = trim($line);
 				$subject = substr($subject, 9, strlen($subject) - 9);
 				// Captures any text in the subject before $phone_delim as the subject
-				if ( function_exists('iconv_mime_decode') ) {
+				if ( function_exists('iconv_mime_decode') === true ) {
 					$subject = iconv_mime_decode($subject, 2, get_option('blog_charset'));
 				} else {
 					$subject = wp_iso_descrambler($subject);
@@ -118,12 +118,12 @@ for ( $i = 1; $i <= $count; $i++ ) {
 			 * otherwise use the site admin.
 			 */
 			if ( ! isset($author_found) && preg_match( '/^(From|Reply-To): /', $line ) ) {
-				if ( preg_match('|[a-z0-9_.-]+@[a-z0-9_.-]+(?!.*<)|i', $line, $matches) )
+				if ( preg_match('|[a-z0-9_.-]+@[a-z0-9_.-]+(?!.*<)|i', $line, $matches) === true )
 					$author = $matches[0];
 				else
 					$author = trim($line);
 				$author = sanitize_email($author);
-				if ( is_email($author) ) {
+				if ( is_email($author) === true ) {
 					/* translators: Post author email address */
 
 
@@ -136,14 +136,14 @@ HTML;
 		echo $str;
 					
 					$userdata = get_user_by('email', $author);
-					if ( ! empty( $userdata ) ) {
+					if ( empty( $userdata ) === false ) {
 						$post_author = $userdata->ID;
 						$author_found = true;
 					}
 				}
 			}
 
-			if ( preg_match( '/Date: /i', $line ) ) { // of the form '20 Mar 2002 20:32:37 +0100'
+			if ( preg_match( '/Date: /i', $line ) === true ) { // of the form '20 Mar 2002 20:32:37 +0100'
 				$ddate = str_replace( 'Date: ', '', trim( $line ) );
 				$ddate = preg_replace( '!\s*\(.+\)\s*$!', '', $ddate );	// remove parenthesised timezone string if it exists, as this confuses strtotime
 				$ddate_U = strtotime( $ddate );
@@ -154,9 +154,9 @@ HTML;
 	}
 
 	// Set $post_status based on $author_found and on author's publish_posts capability
-	if ( isset($author_found) ) {
+	if ( isset($author_found) === true ) {
 		$user = new WP_User($post_author);
-		$post_status = ( $user->has_cap('publish_posts') ) ? 'publish' : 'pending';
+		$post_status = ( $user->has_cap('publish_posts') ) === true ? 'publish' : 'pending';
 	} else {
 		// Author not found in DB, set status to pending. Author already set to admin.
 		$post_status = 'pending';
@@ -164,12 +164,12 @@ HTML;
 
 	$subject = trim($subject);
 
-	if ( $content_type == 'multipart/alternative' ) {
+	if ( $content_type === 'multipart/alternative' ) {
 		$content = explode('--'.$boundary, $content);
 		$content = $content[2];
 
 		// Match case-insensitive content-transfer-encoding.
-		if ( preg_match( '/Content-Transfer-Encoding: quoted-printable/i', $content, $delim) ) {
+		if ( preg_match( '/Content-Transfer-Encoding: quoted-printable/i', $content, $delim) === true ) {
 			$content = explode($delim[0], $content);
 			$content = $content[1];
 		}
@@ -199,7 +199,7 @@ HTML;
 
 	// Captures any text in the body after $phone_delim as the body
 	$content = explode($phone_delim, $content);
-	$content = empty( $content[1] ) ? $content[0] : $content[1];
+	$content = empty( $content[1] ) === true ? $content[0] : $content[1];
 
 	$content = trim($content);
 
@@ -214,7 +214,7 @@ HTML;
 
 	$post_title = xmlrpc_getposttitle($content);
 
-	if ($post_title == '') $post_title = $subject;
+	if ($post_title === '') $post_title = $subject;
 
 	$post_category = array(get_option('default_email_category'));
 
@@ -222,11 +222,11 @@ HTML;
 	$post_data = wp_slash($post_data);
 
 	$post_ID = wp_insert_post($post_data);
-	if ( is_wp_error( $post_ID ) )
+	if ( is_wp_error( $post_ID ) === true )
 		echo "\n" . $post_ID->get_error_message();
 
 	// We couldn't post, for whatever reason. Better move forward to the next email.
-	if ( empty( $post_ID ) )
+	if ( empty( $post_ID ) === true )
 		continue;
 
 	/**
@@ -250,7 +250,7 @@ HTML;
 
 
 
-	if(!$pop3->delete($i)) {
+	if($pop3->delete($i) === false ) {
 
 
 		    $var= sprintf(

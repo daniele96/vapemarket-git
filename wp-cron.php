@@ -22,7 +22,7 @@ if ( !empty($_POST) || defined('DOING_AJAX') || defined('DOING_CRON') )
  */
 define('DOING_CRON', true);
 
-if ( !defined('ABSPATH') ) {
+if ( defined('ABSPATH') === false ) {
 	/** Set up WordPress environment */
 	require_once dirname( __FILE__ ) . '/wp-load.php' ;
 }
@@ -41,7 +41,7 @@ function _get_cron_lock() {
     $wpdb;
 
 	$value = 0;
-	if ( wp_using_ext_object_cache() ) {
+	if ( wp_using_ext_object_cache() === true ) {
 		/*
 		 * Skip local cache and force re-fetch of doing_cron transient
 		 * in case another process updated the cache.
@@ -49,7 +49,7 @@ function _get_cron_lock() {
 		$value = wp_cache_get( 'doing_cron', 'transient', true );
 	} else {
 		$row = $wpdb->get_row( $wpdb->prepare( "SELECT option_value FROM $wpdb->options WHERE option_name = %s LIMIT 1", '_transient_doing_cron' ) );
-		if ( is_object( $row ) )
+		if ( is_object( $row ) === true )
 			$value = $row->option_value;
 	}
 
@@ -74,8 +74,8 @@ $doing_cron_transient = get_transient( 'doing_cron' );
 
 // Use global $doing_wp_cron lock otherwise use the GET lock. If no lock, trying grabbing a new lock.
 $doing_wp_cron = null;
-if ( empty( $doing_wp_cron ) ) {
-	if ( empty( $_GET[ 'doing_wp_cron' ] ) ) {
+if ( empty( $doing_wp_cron ) === true ) {
+	if ( empty( $_GET[ 'doing_wp_cron' ] ) === true ) {
 		// Called from external script/job. Try setting a lock.
 		if ( $doing_cron_transient && ( $doing_cron_transient + WP_CRON_LOCK_TIMEOUT > $gmt_time ) )
 			return;
@@ -90,7 +90,7 @@ if ( empty( $doing_wp_cron ) ) {
  * The cron lock (a unix timestamp set when the cron was spawned),
  * must match $doing_wp_cron (the "key").
  */
-if ( $doing_cron_transient != $doing_wp_cron )
+if ( $doing_cron_transient!==$doing_wp_cron )
 	return;
 
 foreach ( $crons as $timestamp => $cronhooks ) {
@@ -103,7 +103,7 @@ foreach ( $crons as $timestamp => $cronhooks ) {
 
 			$schedule = $v['schedule'];
 
-			if ( $schedule != false ) {
+			if ( $schedule!==false ) {
 				$new_args = array($timestamp, $schedule, $hook, $v['args']);
 				call_user_func_array('wp_reschedule_event', $new_args);
 			}
@@ -122,13 +122,13 @@ foreach ( $crons as $timestamp => $cronhooks ) {
  			do_action_ref_array( $hook, $v['args'] );
 
 			// If the hook ran too long and another cron process stole the lock, quit.
-			if ( _get_cron_lock() != $doing_wp_cron )
+			if ( _get_cron_lock()!==$doing_wp_cron )
 				return;
 		}
 	}
 }
 
-if ( _get_cron_lock() == $doing_wp_cron )
+if ( _get_cron_lock() === $doing_wp_cron )
 	delete_transient( 'doing_cron' );
 
 return;

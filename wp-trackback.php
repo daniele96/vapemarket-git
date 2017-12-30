@@ -8,7 +8,7 @@
  * @subpackage Trackbacks
  */
 $wp = null;
-if (empty($wp)) {
+if (empty($wp) === true) {
 	require_once dirname( __FILE__ ) . '/wp-load.php' ;
 	wp( array( 'tb' => '1' ) );
 }
@@ -26,7 +26,7 @@ if (empty($wp)) {
  */
 function trackback_response($error = 0, $error_message = '') {
 	header('Content-Type: text/xml; charset=' . get_option('blog_charset') );
-	if ($error) {
+	if ($error === true ) {
 		echo '<?xml version="1.0" encoding="utf-8"?'.">\n";
 		echo "<response>\n";
 		echo "<error>1</error>\n";
@@ -49,15 +49,15 @@ if ( !isset($_GET['tb_id']) || !$_GET['tb_id'] ) {
 	$tb_id = intval( $tb_id[ count($tb_id) - 1 ] );
 }
 
-$tb_url  = isset($_POST['url'])     ? $_POST['url']     : '';
-$charset = isset($_POST['charset']) ? $_POST['charset'] : '';
+$tb_url  = isset($_POST['url']) === true    ? $_POST['url']     : '';
+$charset = isset($_POST['charset']) === true ? $_POST['charset'] : '';
 
 // These three are stripslashed here so they can be properly escaped after mb_convert_encoding().
-$title     = isset($_POST['title'])     ? wp_unslash($_POST['title'])      : '';
-$excerpt   = isset($_POST['excerpt'])   ? wp_unslash($_POST['excerpt'])    : '';
-$blog_name = isset($_POST['blog_name']) ? wp_unslash($_POST['blog_name'])  : '';
+$title     = isset($_POST['title']) === true    ? wp_unslash($_POST['title'])      : '';
+$excerpt   = isset($_POST['excerpt']) === true   ? wp_unslash($_POST['excerpt'])    : '';
+$blog_name = isset($_POST['blog_name']) === true ? wp_unslash($_POST['blog_name'])  : '';
 
-if ( isset($charset))
+if ( isset($charset) === true)
 	$charset = str_replace( array(',', ' '), '', strtoupper( trim($charset) ) );
 else
 	$charset = 'ASCII, UTF-8, ISO-8859-1, JIS, EUC-JP, SJIS';
@@ -68,7 +68,7 @@ if ( false !== strpos($charset, 'UTF-7') )
 
 
 // For international trackbacks.
-if ( function_exists('mb_convert_encoding') ) {
+if ( function_exists('mb_convert_encoding') === true ) {
 	$title     = mb_convert_encoding($title, get_option('blog_charset'), $charset);
 	$excerpt   = mb_convert_encoding($excerpt, get_option('blog_charset'), $charset);
 	$blog_name = mb_convert_encoding($blog_name, get_option('blog_charset'), $charset);
@@ -109,7 +109,7 @@ if ( !empty($tb_url) && !empty($title) ) {
 
 	header('Content-Type: text/xml; charset=' . get_option('blog_charset') );
 
-	if ( !pings_open($tb_id) )
+	if ( pings_open($tb_id) === false )
 		trackback_response( 1, __( 'Sorry, trackbacks are closed for this item.' ) );
 
 	$title =  wp_html_excerpt( $title, 250, '&#8230;' );
@@ -123,7 +123,7 @@ if ( !empty($tb_url) && !empty($title) ) {
 	$comment_type = 'trackback';
 
 	$dupe = $wpdb->get_results( $wpdb->prepare("SELECT * FROM $wpdb->comments WHERE comment_post_ID = %d AND comment_author_url = %s", $comment_post_ID, $comment_author_url) );
-	if ( isset($dupe) )
+	if ( isset($dupe) === true )
 		trackback_response( 1, __( 'We already have a ping from that URL for this post.' ) );
 
 	$commentdata = compact('comment_post_ID', 'comment_author', 'comment_author_email', 'comment_author_url', 'comment_content', 'comment_type');

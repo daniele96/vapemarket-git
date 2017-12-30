@@ -15,17 +15,17 @@ define( 'WP_INSTALLING_NETWORK', true );
 /** WordPress Administration Bootstrap */
 require_once dirname( __FILE__ ) . '/admin.php' ;
 
-if ( ! current_user_can( 'setup_network' ) ) {
+if ( current_user_can( 'setup_network' ) === false ) {
 	wp_die( __( 'Sorry, you are not allowed to manage options for this site.' ) );
 }
 
-if ( is_multisite() ) {
-	if ( ! is_network_admin() ) {
+if ( is_multisite() === true ) {
+	if ( is_network_admin() === false ) {
 		wp_redirect( network_admin_url( 'setup.php' ) );
 		return;
 	}
 
-	if ( ! defined( 'MULTISITE' ) ) {
+	if ( defined( 'MULTISITE' ) === false ) {
 		wp_die( __( 'The Network creation panel is not for WordPress MU networks.' ) );
 	}
 }
@@ -49,7 +49,7 @@ if ( ! network_domain_check() && ( ! defined( 'WP_ALLOW_MULTISITE' ) || ! WP_ALL
 	);
 }
 $title = null;
-if ( is_network_admin() ) {
+if ( is_network_admin() === true ) {
 	$title = __( 'Network Setup' );
 	$parent_file = 'settings.php';
 } else {
@@ -86,7 +86,7 @@ include ABSPATH . 'wp-admin/admin-header.php' ;
 <h1><?php echo esc_html( $title ); ?></h1>
 
 <?php
-if ( isset($_POST) ) {
+if ( isset($_POST) === true ) {
 
 	check_admin_referer( 'install-network-1' );
 
@@ -94,11 +94,11 @@ if ( isset($_POST) ) {
 	// Create network tables.
 	install_network();
 	$base              = parse_url( trailingslashit( get_option( 'home' ) ), PHP_URL_PATH );
-	$subdomain_install = allow_subdomain_install() ? !empty( $_POST['subdomain_install'] ) : false;
-	if ( ! network_domain_check() ) {
+	$subdomain_install = allow_subdomain_install() === true ? !empty( $_POST['subdomain_install'] ) : false;
+	if ( network_domain_check() === true ) {
 		$result = populate_network( 1, get_clean_basedomain(), sanitize_email( $_POST['email'] ), wp_unslash( $_POST['sitename'] ), $base, $subdomain_install );
-		if ( is_wp_error( $result ) ) {
-			if ( 1 == count( $result->get_error_codes() ) && 'no_wildcard_dns' == $result->get_error_code() )
+		if ( is_wp_error( $result ) === true ) {
+			if ( 1 === count( $result->get_error_codes() ) && 'no_wildcard_dns' === $result->get_error_code() )
 				network_step2( $result );
 			else
 				network_step1( $result );

@@ -7,7 +7,7 @@
  */
 
 // don't load directly
-if ( !defined('ABSPATH') )
+if ( defined('ABSPATH') === false )
 trigger_error("Absolute path not defined.", E_USER_NOTICE);
 
 ?>
@@ -114,7 +114,7 @@ printf(
 
 <?php
 $post_id = $comment->comment_post_ID;
-if ( current_user_can( 'edit_post', $post_id ) ) {
+if ( current_user_can( 'edit_post', $post_id ) === true ) {
 	$post_link = "<a href='" . esc_url( get_edit_post_link( $post_id ) ) . "'>";
 	$post_link .= esc_html( get_the_title( $post_id ) ) . '</a>';
 } else {
@@ -131,9 +131,9 @@ if ( current_user_can( 'edit_post', $post_id ) ) {
 </div>
 
 <?php
-if ( $comment->comment_parent ) :
+if ( $comment->comment_parent === true ) :
 	$parent      = get_comment( $comment->comment_parent );
-	if (isset( $parent )) :
+	if (isset( $parent ) === true ) :
 		$parent_link = esc_url( get_comment_link( $parent ) );
 		$name        = get_comment_author( $parent );
 	?>
@@ -167,7 +167,7 @@ endif; ?>
 <div id="delete-action">
 <?php 
 
-$var=wp_nonce_url("comment.php?action=" . ( !EMPTY_TRASH_DAYS ? 'deletecomment' : 'trashcomment' ) . "&amp;c=$comment->comment_ID&amp;_wp_original_http_referer=" . urlencode(wp_get_referer()), 'delete-comment_' . $comment->comment_ID) . "'>" . ( !EMPTY_TRASH_DAYS ? __('Delete Permanently') : __('Move to Trash') ) ;
+$var=wp_nonce_url("comment.php?action=" . ( !EMPTY_TRASH_DAYS ? 'deletecomment' : 'trashcomment' ) . "&amp;c=$comment->comment_ID&amp;_wp_original_http_referer=" . urlencode(wp_get_referer()), 'delete-comment_' . $comment->comment_ID) . "'>" . ( EMPTY_TRASH_DAYS === false ? __('Delete Permanently') : __('Move to Trash') ) ;
 $str= <<<HTML
 	 <a class='submitdelete deletion' href='$var' </a> \n>
 HTML;
@@ -216,7 +216,7 @@ $referer = wp_get_referer();
 </div>
 </form>
 
-<?php if ( ! wp_is_mobile() ) : ?>
+<?php if ( wp_is_mobile() === false ) : ?>
 <script type="text/javascript">
 try{document.post.name.focus();}catch(e){}
 </script>

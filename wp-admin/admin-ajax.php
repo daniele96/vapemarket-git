@@ -16,7 +16,7 @@
 error_reporting(0);
 
 define( 'DOING_AJAX', true );
-if ( ! defined( 'WP_ADMIN' ) ) {
+if ( defined( 'WP_ADMIN' ) === false ) {
 	define( 'WP_ADMIN', true );
 }
 
@@ -27,7 +27,7 @@ require_once dirname( dirname( __FILE__ ) ) . '/wp-load.php' ;
 send_origin_headers();
 
 // Require an action parameter
-if ( empty( $_GET['action'] ) )
+if ( empty( $_GET['action'] ) === true )
 	return 0;
 
 /** Load WordPress Administration APIs */
@@ -81,7 +81,7 @@ if ( ! empty( $_POST['action'] ) && in_array( $_POST['action'], $core_actions_po
 
 add_action( 'wp_ajax_nopriv_heartbeat', 'wp_ajax_nopriv_heartbeat', 1 );
 
-if ( is_user_logged_in() ) {
+if ( is_user_logged_in() === true ) {
 	/**
 	 * Fires authenticated Ajax actions for logged-in users.
 	 *

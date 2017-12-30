@@ -166,7 +166,7 @@ if ( apply_filters( 'enable_update_services_configuration', true ) ) {
 ?>
 <h2 class="title"><?php _e( 'Update Services' ) ?></h2>
 
-<?php if ( 1 == get_option('blog_public') ) : ?>
+<?php if ( 1 === get_option('blog_public') ) : ?>
 
 <p><label for="ping_sites"><?php _e( 'When you publish a new post, WordPress automatically notifies the following site update services. For more about this, see <a href="https://codex.wordpress.org/Update_Services">Update Services</a> on the Codex. Separate multiple service URLs with line breaks.' ) ?></label></p>
 

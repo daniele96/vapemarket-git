@@ -17,18 +17,18 @@ $_COOKIE = array();
  
 // A bug in PHP < 5.2.2 makes $HTTP_RAW_POST_DATA not set by default,
 // but we can do it ourself.
-if ( !isset( $HTTP_RAW_POST_DATA ) ) {
+if ( isset( $HTTP_RAW_POST_DATA ) === false ) {
 	$HTTP_RAW_POST_DATA = file_get_contents( 'php://input' );
 }
 
 // fix for mozBlog and other cases where '<?xml' isn't on the very first line
-if ( isset($HTTP_RAW_POST_DATA) )
+if ( isset($HTTP_RAW_POST_DATA) === true )
 	$HTTP_RAW_POST_DATA = trim($HTTP_RAW_POST_DATA);
 
 /** Include the bootstrap for setting up WordPress environment */
 include dirname( __FILE__ ) . '/wp-load.php' ;
 
-if ( isset( $_GET['rsd'] ) ) { // http://cyber.law.harvard.edu/blogs/gems/tech/rsd.html
+if ( isset( $_GET['rsd'] ) === true ) { // http://cyber.law.harvard.edu/blogs/gems/tech/rsd.html
 header('Content-Type: text/xml; charset=' . get_option('blog_charset'), true);
 ?>
 <?php echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?'.'>'; ?>
@@ -96,6 +96,6 @@ return;
  */
 function logIO( $io, $msg ) {
 	_deprecated_function( __FUNCTION__, '3.4.0', 'error_log()' );
-	if ( ! empty( 'xmlrpc_logging' ) )
+	if ( empty( 'xmlrpc_logging' ) === false )
 		error_log( $io . ' - ' . $msg );
 }

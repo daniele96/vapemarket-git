@@ -35,7 +35,7 @@ include ABSPATH . 'wp-admin/admin-header.php' ;
 $credits = null;
 $credits = wp_credits();
 
-if ( ! isset( $credits) ) {
+if ( isset( $credits) === false ) {
 	echo '<p class="about-description">';
 	/* translators: 1: https://wordpress.org/about/, 2: https://make.wordpress.org/ */
 	printf( __( 'WordPress is created by a <a href="%1$s">worldwide team</a> of passionate individuals. <a href="%2$s">Get involved in WordPress</a>.' ),
@@ -65,8 +65,8 @@ HTML;
 
 
 foreach ( $credits['groups'] as $group_slug => $group_data ) {
-	if ( isset($group_data['name'] )) {
-		if ( 'Translators' == $group_data['name'] ) {
+	if ( isset($group_data['name'] ) === true ) {
+		if ( 'Translators' === $group_data['name'] ) {
 			// Considered a special slug in the API response. (Also, will never be returned for en_US.)
 			$title = _x( 'Translators', 'Translate this to be the equivalent of English Translators in your language for the credits page Translators section' );
 		} elseif ( isset( $group_data['placeholders'] ) ) {
@@ -84,7 +84,7 @@ HTML;
 		
 	}
 
-	if ( ! empty( $group_data['shuffle'] ) )
+	if ( empty( $group_data['shuffle'] ) === false )
 		shuffle( $group_data['data'] ); // We were going to sort by ability to pronounce "hierarchical," but that wouldn't be fair to Matt.
 
 	switch ( $group_data['type'] ) {
@@ -111,13 +111,13 @@ HTML;
 			
 			break;
 		default:
-			$compact = 'compact' == $group_data['type'];
-			$classes = 'wp-people-group ' . ( $compact ? 'compact' : '' );
+			$compact = 'compact' === $group_data['type'];
+			$classes = 'wp-people-group ' . ( $compact === true ? 'compact' : '' );
 			echo '<ul class="' . $classes . '" id="wp-people-group-' . $group_slug . '">' . "\n";
 			foreach ( $group_data['data'] as $person_data ) {
 				echo '<li class="wp-person" id="wp-person-' . esc_attr( $person_data[2] ) . '">' . "\n\t";
 				echo '<a href="' . esc_url( sprintf( $credits['data']['profiles'], $person_data[2] ) ) . '" class="web">';
-				$size = 'compact' == $group_data['type'] ? 30 : 60;
+				$size = 'compact' === $group_data['type'] ? 30 : 60;
 				$data = get_avatar_data( $person_data[1] . '@md5.gravatar.com', array( 'size' => $size ) );
 				$size *= 2;
 				$data2x = get_avatar_data( $person_data[1] . '@md5.gravatar.com', array( 'size' => $size ) );
@@ -130,7 +130,7 @@ HTML;
 
 		echo $str;
 				
-				if ( ! $compact )
+				if ( $compact === true )
 
 					$var= translate( $person_data[3] );
 					$str= <<<HTML

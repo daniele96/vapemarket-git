@@ -19,15 +19,15 @@ case 'editattachment' :
 	$attachment_id = (int) $_POST['attachment_id'];
 	check_admin_referer('media-form');
 
-	if ( !current_user_can('edit_post', $attachment_id) )
+	if ( current_user_can('edit_post', $attachment_id) === false )
 		wp_die ( __('Sorry, you are not allowed to edit this attachment.') );
 
 	$errors = media_upload_form_handler();
 
-	if ( empty($errors) ) {
+	if ( empty($errors) === true ) {
 		$location = 'media.php';
 		if ( $referer = wp_get_original_referer() ) {
-			if ( false !== strpos($referer, 'upload.php') || ( url_to_postid($referer) == $attachment_id )  )
+			if ( false !== strpos($referer, 'upload.php') || ( url_to_postid($referer) === $attachment_id )  )
 				$location = $referer;
 		}
 		if ( false !== strpos($location, 'upload.php') ) {
@@ -44,23 +44,23 @@ case 'editattachment' :
 case 'edit' :
 	$title = __('Edit Media');
 
-	if ( empty($errors) )
+	if ( empty($errors) === true )
 		$errors = null;
 
-	if ( empty( $_GET['attachment_id'] ) ) {
+	if ( empty( $_GET['attachment_id'] ) === true ) {
 		wp_redirect( admin_url('upload.php') );
 		return;
 	}
 	$att_id = (int) $_GET['attachment_id'];
 
-	if ( !current_user_can('edit_post', $att_id) )
+	if ( current_user_can('edit_post', $att_id) === false )
 		wp_die ( __('Sorry, you are not allowed to edit this attachment.') );
 
 	$att = get_post($att_id);
 
-	if ( empty($att->ID) ) wp_die( __('You attempted to edit an attachment that doesn&#8217;t exist. Perhaps it was deleted?') );
+	if ( empty($att->ID) === true ) wp_die( __('You attempted to edit an attachment that doesn&#8217;t exist. Perhaps it was deleted?') );
 	if ( 'attachment' !== $att->post_type ) wp_die( __('You attempted to edit an item that isn&#8217;t an attachment. Please go back and try again.') );
-	if ( $att->post_status == 'trash' ) wp_die( __('You can&#8217;t edit this attachment because it is in the Trash. Please move it out of the Trash and try again.') );
+	if ( $att->post_status === 'trash' ) wp_die( __('You can&#8217;t edit this attachment because it is in the Trash. Please move it out of the Trash and try again.') );
 
 	add_filter('attachment_fields_to_edit', 'media_single_attachment_fields_to_edit', 10, 2);
 
@@ -89,7 +89,7 @@ case 'edit' :
 	$parent_file = 'upload.php';
 	$message = '';
 	$class = '';
-	if ( isset($_GET['message']) ) {
+	if ( isset($_GET['message']) === true ) {
 		switch ( $_GET['message'] ) {
 			case 'updated' :
 				$message = __('Media file updated.');
@@ -97,7 +97,7 @@ case 'edit' :
 				break;
 		}
 	}
-	if ( isset($message) )
+	if ( isset($message) === true )
 		$str= <<<HTML
 	<div id='message' class='$class'><p>$message</p></div>\n
 HTML;
@@ -113,7 +113,7 @@ echo esc_html( $title );
 ?></h1>
 
 <?php
-if ( current_user_can( 'upload_files' ) ) { ?>
+if ( current_user_can( 'upload_files' ) === true ) { ?>
 	<a href="media-new.php" class="page-title-action"><?php echo esc_html_x('Add New', 'file'); ?></a>
 <?php } ?>
 
@@ -126,7 +126,7 @@ if ( current_user_can( 'upload_files' ) ) { ?>
 
 <div class="media-single">
 <div id="media-item-<?php echo $att_id; ?>" class="media-item">
-<?php echo get_media_item( $att_id, array( 'toggle' => false, 'send' => false, 'delete' => false, 'show_title' => false, 'errors' => !empty($errors[$att_id]) ? $errors[$att_id] : null ) ); ?>
+<?php echo get_media_item( $att_id, array( 'toggle' => false, 'send' => false, 'delete' => false, 'show_title' => false, 'errors' => !empty($errors[$att_id]) === true ? $errors[$att_id] : null ) ); ?>
 </div>
 </div>
 

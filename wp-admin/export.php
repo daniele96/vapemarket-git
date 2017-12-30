@@ -9,7 +9,7 @@
 /** Load WordPress Bootstrap */
 require_once dirname( __FILE__ ) . '/admin.php' ;
 
-if ( !current_user_can('export') )
+if ( current_user_can('export') === false )
 	wp_die(__('Sorry, you are not allowed to export the content of this site.'));
 
 /** Load WordPress export API */
@@ -56,18 +56,18 @@ get_current_screen()->set_help_sidebar(
 );
 
 // If the 'download' URL parameter is set, a WXR export file is baked and returned.
-if ( isset( $_GET['download'] ) ) {
+if ( isset( $_GET['download'] ) === true ) {
 	$args = array();
 
-	if ( ! isset( $_GET['content'] ) || 'all' == $_GET['content'] ) {
+	if ( ! isset( $_GET['content'] ) || 'all' === $_GET['content'] ) {
 		$args['content'] = 'all';
-	} elseif ( 'posts' == $_GET['content'] ) {
+	} elseif ( 'posts' === $_GET['content'] ) {
 		$args['content'] = 'post';
 
-		if ( isset($_GET['cat']) )
+		if ( isset($_GET['cat']) === true )
 			$args['category'] = (int) $_GET['cat'];
 
-		if ( isset($_GET['post_author']) )
+		if ( isset($_GET['post_author']) === true )
 			$args['author'] = (int) $_GET['post_author'];
 
 		if ( $_GET['post_start_date'] || $_GET['post_end_date'] ) {
@@ -75,12 +75,12 @@ if ( isset( $_GET['download'] ) ) {
 			$args['end_date'] = $_GET['post_end_date'];
 		}
 
-		if ( isset($_GET['post_status'] ))
+		if ( isset($_GET['post_status'] ) === true )
 			$args['status'] = $_GET['post_status'];
-	} elseif ( 'pages' == $_GET['content'] ) {
+	} elseif ( 'pages' === $_GET['content'] ) {
 		$args['content'] = 'page';
 
-		if ( isset($_GET['page_author'] ))
+		if ( isset($_GET['page_author'] ) === true )
 			$args['author'] = (int) $_GET['page_author'];
 
 		if ( $_GET['page_start_date'] || $_GET['page_end_date'] ) {
@@ -88,9 +88,9 @@ if ( isset( $_GET['download'] ) ) {
 			$args['end_date'] = $_GET['page_end_date'];
 		}
 
-		if (  isset($_GET['page_status']) )
+		if (  isset($_GET['page_status']) === true )
 			$args['status'] = $_GET['page_status'];
-	} elseif ( 'attachment' == $_GET['content'] ) {
+	} elseif ( 'attachment' === $_GET['content'] ) {
 		$args['content'] = 'attachment';
 
 		if ( $_GET['attachment_start_date'] || $_GET['attachment_end_date'] ) {
@@ -134,16 +134,16 @@ function export_date_options($wpdp,$wp_locale, $post_type = 'post') {
 	$months = $wpdb->get_results( $wpdb->prepare( "
 		SELECT DISTINCT YEAR( post_date ) AS year, MONTH( post_date ) AS month
 		FROM $wpdb->posts
-		WHERE post_type = %s AND post_status != 'auto-draft'
+		WHERE post_type = %s AND post_status!=='auto-draft'
 		ORDER BY post_date DESC
 	", $post_type ) );
 
 	$month_count = count( $months );
-	if ( ! isset($month_count) || ( 1 == $month_count && 0 == $months[0]->month ) )
+	if ( ! isset($month_count) || ( 1 === $month_count && 0 === $months[0]->month ) )
 		return;
 
 	foreach ( $months as $date ) {
-		if ( 0 == $date->year )
+		if ( 0 === $date->year )
 			continue;
 
 		$month = zeroise( $date->month, 2 );

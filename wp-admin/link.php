@@ -14,14 +14,14 @@ require_once dirname( __FILE__ ) . '/admin.php' ;
 
 wp_reset_vars( array( 'action', 'cat_id', 'link_id' ) );
 
-if ( ! current_user_can('manage_links') )
+if ( current_user_can('manage_links') === false )
 	wp_link_manager_disabled_message();
 
-if ( !empty($_POST['deletebookmarks']) )
+if ( empty($_POST['deletebookmarks']) === false )
 	$action = 'deletebookmarks';
-if ( !empty($_POST['move']) )
+if ( empty($_POST['move']) === false )
 	$action = 'move';
-if ( !empty($_POST['linkcheck']) )
+if ( empty($_POST['linkcheck']) === false )
 	$linkcheck = $_POST['linkcheck'];
 
 $this_file = admin_url('link-manager.php');
@@ -31,7 +31,7 @@ switch ($action) {
 		check_admin_referer('bulk-bookmarks');
 
 		// For each link id (in $linkcheck[]) change category to selected value.
-		if (count($linkcheck) == 0) {
+		if (count($linkcheck) === 0) {
 			wp_redirect($this_file);
 			return;
 		}
@@ -40,7 +40,7 @@ switch ($action) {
 		foreach ($linkcheck as $link_id) {
 			$link_id = (int) $link_id;
 
-			if ( wp_delete_link($link_id) )
+			if ( wp_delete_link($link_id) === true )
 				$deleted++;
 		}
 
@@ -51,7 +51,7 @@ switch ($action) {
 		check_admin_referer('bulk-bookmarks');
 
 		// For each link id (in $linkcheck[]) change category to selected value.
-		if (count($linkcheck) == 0) {
+		if (count($linkcheck) === 0) {
 			wp_redirect($this_file);
 			return;
 		}
@@ -68,7 +68,7 @@ switch ($action) {
 		check_admin_referer('add-bookmark');
 
 		$redir = wp_get_referer();
-		if ( add_link() )
+		if ( add_link() === true )
 			$redir = add_query_arg( 'added', 'true', $redir );
 
 		wp_redirect( $redir );
@@ -96,7 +96,7 @@ switch ($action) {
 		wp_enqueue_script('link');
 		wp_enqueue_script('xfn');
 
-		if ( wp_is_mobile() )
+		if ( wp_is_mobile() === true )
 			wp_enqueue_script( 'jquery-touch-punch' );
 
 		$parent_file = 'link-manager.php';
@@ -105,7 +105,7 @@ switch ($action) {
 
 		$link_id = (int) $_GET['link_id'];
 
-		if ( $link != get_link_to_edit($link_id))
+		if ( $link!==get_link_to_edit($link_id))
 			wp_die(__('Link not found.'));
 
 		include ABSPATH . 'wp-admin/edit-link-form.php' ;

@@ -8,7 +8,7 @@
 
 /** WordPress Administration Bootstrap */
 require_once dirname( __FILE__ ) . '/admin.php' ;
-if ( ! current_user_can( 'edit_posts' ) ) {
+if ( current_user_can( 'edit_posts' ) === false ) {
 	wp_die(
 		'<h1>' . __( 'Cheatin&#8217; uh?' ) . '</h1>' .
 		'<p>' . __( 'Sorry, you are not allowed to edit comments.' ) . '</p>',
@@ -21,17 +21,17 @@ $pagenum = $wp_list_table->get_pagenum();
 
 $doaction = $wp_list_table->current_action();
 
-if ( isset($doaction) ) {
+if ( isset($doaction) === true ) {
 	check_admin_referer( 'bulk-comments' );
 
-	if ( 'delete_all' == $doaction && !empty( $_POST['pagegen_timestamp'] ) ) {
+	if ( 'delete_all' === $doaction && !empty( $_POST['pagegen_timestamp'] ) ) {
 		$comment_status = wp_unslash( $_POST['comment_status'] );
 		$delete_time = wp_unslash( $_POST['pagegen_timestamp'] );
 		$comment_ids = $wpdb->get_col( $wpdb->prepare( "SELECT comment_ID FROM $wpdb->comments WHERE comment_approved = %s AND %s > comment_date_gmt", $comment_status, $delete_time ) );
 		$doaction = 'delete';
 	} elseif ( isset( $_POST['delete_comments'] ) ) {
 		$comment_ids = $_POST['delete_comments'];
-		$doaction = ( $_GET['action'] != -1 ) ? $_GET['action'] : $_GET['action2'];
+		$doaction = ( $_GET['action']!==-1 ) ? $_GET['action'] : $_GET['action2'];
 	} elseif ( isset( $_POST['ids'] ) ) {
 		$comment_ids = array_map( 'absint', explode( ',', $_POST['ids'] ) );
 	} elseif ( wp_get_referer() ) {
@@ -47,7 +47,7 @@ if ( isset($doaction) ) {
 	wp_defer_comment_counting( true );
 
 	foreach ( $comment_ids as $comment_id ) { // Check the permissions on each
-		if ( !current_user_can( 'edit_comment', $comment_id ) )
+		if ( current_user_can( 'edit_comment', $comment_id ) === false )
 			continue;
 
 		switch ( $doaction ) {
@@ -82,7 +82,7 @@ if ( isset($doaction) ) {
 		}
 	}
 
-	if ( ! in_array( $doaction, array( 'approve', 'unapprove', 'spam', 'unspam', 'trash', 'delete' ), true ) ) {
+	if ( in_array( $doaction, array( 'approve', 'unapprove', 'spam', 'unspam', 'trash', 'delete' ), true ) === false ) {
 		$screen = get_current_screen()->id;
 
 		/**
@@ -104,19 +104,19 @@ if ( isset($doaction) ) {
 
 	wp_defer_comment_counting( false );
 
-	if ( isset($approved) )
+	if ( isset($approved) === true )
 		$redirect_to = add_query_arg( 'approved', $approved, $redirect_to );
-	if ( isset($unapproved) )
+	if ( isset($unapproved) === true )
 		$redirect_to = add_query_arg( 'unapproved', $unapproved, $redirect_to );
-	if ( isset($spammed) )
+	if ( isset($spammed) === true )
 		$redirect_to = add_query_arg( 'spammed', $spammed, $redirect_to );
-	if ( isset($unspammed) )
+	if ( isset($unspammed) === true )
 		$redirect_to = add_query_arg( 'unspammed', $unspammed, $redirect_to );
-	if ( isset($trashed) )
+	if ( isset($trashed) === true )
 		$redirect_to = add_query_arg( 'trashed', $trashed, $redirect_to );
-	if ( isset($untrashed) )
+	if ( isset($untrashed) === true )
 		$redirect_to = add_query_arg( 'untrashed', $untrashed, $redirect_to );
-	if ( isset($deleted) )
+	if ( isset($deleted) === true )
 		$redirect_to = add_query_arg( 'deleted', $deleted, $redirect_to );
 	if ( $trashed || $spammed )
 		$redirect_to = add_query_arg( 'ids', join( ',', $comment_ids ), $redirect_to );
@@ -133,7 +133,7 @@ $wp_list_table->prepare_items();
 wp_enqueue_script('admin-comments');
 enqueue_comment_hotkeys_js();
 
-if ( isset($post_id) ) {
+if ( isset($post_id) === true ) {
 	$comments_count = wp_count_comments( $post_id );
 	$draft_or_post_title = wp_html_excerpt( _draft_or_post_title( $post_id ), 50, '&hellip;' );
 	if ( $comments_count->moderated > 0 ) {
@@ -199,7 +199,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php' ;
 
 <div class="wrap">
 <h1 class="wp-heading-inline"><?php
-if ( isset($post_id) ) {
+if ( isset($post_id) === true ) {
 	/* translators: %s: link to post */
 	printf( __( 'Comments on &#8220;%s&#8221;' ),
 		sprintf( '<a href="%1$s">%2$s</a>',
@@ -232,7 +232,7 @@ HTML;
 <hr class="wp-header-end">
 
 <?php
-if ( isset( $_GET['error'] ) ) {
+if ( isset( $_GET['error'] ) === true ) {
 	$error = (int) $_GET['error'];
 	$error_msg = '';
 	switch ( $error ) {
@@ -243,7 +243,7 @@ if ( isset( $_GET['error'] ) ) {
 			$error_msg = __( 'Sorry, you are not allowed to edit comments on this post.' );
 			break;
 	}
-	if ( isset( $error_msg) )
+	if ( isset( $error_msg) === true )
 
 		$str= <<<HTML
 	<div id="moderated" class="error"><p> $error_msg </p></div>
@@ -254,13 +254,13 @@ HTML;
 }
 
 if ( isset($_GET['approved']) || isset($_GET['deleted']) || isset($_GET['trashed']) || isset($_GET['untrashed']) || isset($_GET['spammed']) || isset($_GET['unspammed']) || isset($_GET['same']) ) {
-	$approved  = isset( $_GET['approved']  ) ? (int) $_GET['approved']  : 0;
-	$deleted   = isset( $_GET['deleted']   ) ? (int) $_GET['deleted']   : 0;
-	$trashed   = isset( $_GET['trashed']   ) ? (int) $_GET['trashed']   : 0;
-	$untrashed = isset( $_GET['untrashed'] ) ? (int) $_GET['untrashed'] : 0;
-	$spammed   = isset( $_GET['spammed']   ) ? (int) $_GET['spammed']   : 0;
-	$unspammed = isset( $_GET['unspammed'] ) ? (int) $_GET['unspammed'] : 0;
-	$same      = isset( $_GET['same'] )      ? (int) $_GET['same']      : 0;
+	$approved  = isset( $_GET['approved']  ) === true ? (int) $_GET['approved']  : 0;
+	$deleted   = isset( $_GET['deleted']   ) === true ? (int) $_GET['deleted']   : 0;
+	$trashed   = isset( $_GET['trashed']   ) === true ? (int) $_GET['trashed']   : 0;
+	$untrashed = isset( $_GET['untrashed'] ) === true ? (int) $_GET['untrashed'] : 0;
+	$spammed   = isset( $_GET['spammed']   ) === true ? (int) $_GET['spammed']   : 0;
+	$unspammed = isset( $_GET['unspammed'] ) === true ? (int) $_GET['unspammed'] : 0;
+	$same      = isset( $_GET['same'] )   === true   ? (int) $_GET['same']      : 0;
 
 	if ( $approved > 0 || $deleted > 0 || $trashed > 0 || $untrashed > 0 || $spammed > 0 || $unspammed > 0 || $same > 0 ) {
 		if ( $approved > 0 ) {
@@ -269,7 +269,7 @@ if ( isset($_GET['approved']) || isset($_GET['deleted']) || isset($_GET['trashed
 		}
 
 		if ( $spammed > 0 ) {
-			$ids = isset($_GET['ids']) ? $_GET['ids'] : 0;
+			$ids = isset($_GET['ids']) === true ? $_GET['ids'] : 0;
 			/* translators: %s: number of comments marked as spam */
 			$messages[] = sprintf( _n( '%s comment marked as spam.', '%s comments marked as spam.', $spammed ), $spammed ) . ' <a href="' . esc_url( wp_nonce_url( "edit-comments.php?doaction=undo&action=unspam&ids=$ids", "bulk-comments" ) ) . '">' . __('Undo') . '</a><br />';
 		}
@@ -280,7 +280,7 @@ if ( isset($_GET['approved']) || isset($_GET['deleted']) || isset($_GET['trashed
 		}
 
 		if ( $trashed > 0 ) {
-			$ids = isset($_GET['ids']) ? $_GET['ids'] : 0;
+			$ids = isset($_GET['ids']) === true ? $_GET['ids'] : 0;
 			/* translators: %s: number of comments moved to the Trash */
 			$messages[] = sprintf( _n( '%s comment moved to the Trash.', '%s comments moved to the Trash.', $trashed ), $trashed ) . ' <a href="' . esc_url( wp_nonce_url( "edit-comments.php?doaction=undo&action=untrash&ids=$ids", "bulk-comments" ) ) . '">' . __('Undo') . '</a><br />';
 		}
@@ -330,7 +330,7 @@ HTML;
 
 <?php $wp_list_table->search_box( __( 'Search Comments' ), 'comment' ); ?>
 
-<?php if ( isset($post_id) ) : ?>
+<?php if ( isset($post_id) === true ) : ?>
 <input type="hidden" name="p" value="<?php echo esc_attr( intval( $post_id ) ); ?>" />
 <?php endif; ?>
 <input type="hidden" name="comment_status" value="<?php echo esc_attr($comment_status); ?>" />
@@ -340,7 +340,7 @@ HTML;
 <input type="hidden" name="_per_page" value="<?php echo esc_attr( $wp_list_table->get_pagination_arg('per_page') ); ?>" />
 <input type="hidden" name="_page" value="<?php echo esc_attr( $wp_list_table->get_pagination_arg('page') ); ?>" />
 
-<?php if ( isset($_GET['paged']) ) { ?>
+<?php if ( isset($_GET['paged']) === true ) { ?>
 	<input type="hidden" name="paged" value="<?php echo esc_attr( absint( $_GET['paged'] ) ); ?>" />
 <?php } ?>
 

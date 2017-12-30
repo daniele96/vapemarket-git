@@ -24,7 +24,7 @@ $menu[2] = array( __('Dashboard'), 'read', 'index.php', '', 'menu-top menu-top-f
 
 $submenu[ 'index.php' ][0] = array( __('Home'), 'read', 'index.php' );
 
-if ( is_multisite() ) {
+if ( is_multisite() === true ) {
 	$submenu[ 'index.php' ][5] = array( __('My Sites'), 'read', 'my-sites.php' );
 }
 
@@ -33,8 +33,8 @@ if ( ! is_multisite() || current_user_can( 'update_core' ) ) {
 	$update_data = wp_get_update_data();
 }
 
-if ( ! is_multisite() ) {
-	if ( current_user_can( 'update_core' ) )
+if ( is_multisite() === false ) {
+	if ( current_user_can( 'update_core' ) === true )
 		$cap = 'update_core';
 	elseif ( current_user_can( 'update_plugins' ) )
 		$cap = 'update_plugins';
@@ -70,7 +70,7 @@ $menu[15] = array( __('Links'), 'manage_links', 'link-manager.php', '', 'menu-to
 // $menu[20] = Pages
 
 // Avoid the comment count query for users who cannot edit_posts.
-if ( current_user_can( 'edit_posts' ) ) {
+if ( current_user_can( 'edit_posts' ) === true ) {
 	$awaiting_mod = wp_count_comments();
 	$awaiting_mod = $awaiting_mod->moderated;
 	$menu[25] = array(
@@ -104,11 +104,11 @@ foreach ( array_merge( $builtin, $types ) as $ptype ) {
 	// Check if it should be a submenu.
 	if ( $ptype_obj->show_in_menu !== true )
 		continue;
-	$ptype_menu_position = is_int( $ptype_obj->menu_position ) ? $ptype_obj->menu_position : ++$_wp_last_object_menu; // If we're to use $_wp_last_object_menu, increment it first.
+	$ptype_menu_position = is_int( $ptype_obj->menu_position ) === true ? $ptype_obj->menu_position : ++$_wp_last_object_menu; // If we're to use $_wp_last_object_menu, increment it first.
 	$ptype_for_id = sanitize_html_class( $ptype );
 
 	$menu_icon = 'dashicons-admin-post';
-	if ( is_string( $ptype_obj->menu_icon ) ) {
+	if ( is_string( $ptype_obj->menu_icon ) === true ) {
 		// Special handling for data:image/svg+xml and Dashicons.
 		if ( 0 === strpos( $ptype_obj->menu_icon, 'data:image/svg+xml;base64,' ) || 0 === strpos( $ptype_obj->menu_icon, 'dashicons-' ) ) {
 			$menu_icon = $ptype_obj->menu_icon;
@@ -132,7 +132,7 @@ foreach ( array_merge( $builtin, $types ) as $ptype ) {
 		$edit_tags_file = "edit-tags.php?taxonomy=%s&amp;post_type=$ptype";
 	}
 
-	if ( in_array( $ptype, $builtin ) ) {
+	if ( in_array( $ptype, $builtin ) === true ) {
 		$ptype_menu_id = 'menu-' . $ptype_for_id . 's';
 	} else {
 		$ptype_menu_id = 'menu-posts-' . $ptype_for_id;
@@ -161,7 +161,7 @@ unset( $ptype, $ptype_obj, $ptype_for_id, $ptype_menu_position, $menu_icon, $i, 
 
 $menu[59] = array( '', 'read', 'separator2', '', 'wp-menu-separator' );
 
-$appearance_cap = current_user_can( 'switch_themes') ? 'switch_themes' : 'edit_theme_options';
+$appearance_cap = current_user_can( 'switch_themes') === true ? 'switch_themes' : 'edit_theme_options';
 
 $menu[60] = array( __( 'Appearance' ), $appearance_cap, 'themes.php', '', 'menu-top menu-icon-appearance', 'menu-appearance', 'dashicons-admin-appearance' );
 	$submenu['themes.php'][5] = array( __( 'Themes' ), $appearance_cap, 'themes.php' );
@@ -188,7 +188,7 @@ $menu[60] = array( __( 'Appearance' ), $appearance_cap, 'themes.php', '', 'menu-
 unset( $appearance_cap );
 
 // Add 'Editor' to the bottom of the Appearance menu.
-if ( ! is_multisite() ) {
+if ( is_multisite() === false ) {
 	add_action('admin_menu', '_add_themes_utility_last', 101);
 }
 /**
@@ -204,7 +204,7 @@ function _add_themes_utility_last() {
 
 $count = '';
 if ( ! is_multisite() && current_user_can( 'update_plugins' ) ) {
-	if ( ! isset( $update_data ) )
+	if ( isset( $update_data) === false )
 		$update_data = wp_get_update_data();
 	$count = "<span class='update-plugins count-{$update_data['counts']['plugins']}'><span class='plugin-count'>" . number_format_i18n($update_data['counts']['plugins']) . "</span></span>";
 }
@@ -213,7 +213,7 @@ $menu[65] = array( sprintf( __('Plugins %s'), $count ), 'activate_plugins', 'plu
 
 $submenu['plugins.php'][5]  = array( __('Installed Plugins'), 'activate_plugins', 'plugins.php' );
 
-	if ( ! is_multisite() ) {
+	if ( is_multisite() === false ) {
 		/* translators: add new plugin */
 		$submenu['plugins.php'][10] = array( _x('Add New', 'plugin'), 'install_plugins', 'plugin-install.php' );
 		$submenu['plugins.php'][15] = array( _x('Editor', 'plugin editor'), 'edit_plugins', 'plugin-editor.php' );
@@ -226,10 +226,10 @@ if ( current_user_can('list_users') )
 else
 	$menu[70] = array( __('Profile'), 'read', 'profile.php', '', 'menu-top menu-icon-users', 'menu-users', 'dashicons-admin-users' );
 
-if ( current_user_can('list_users') ) {
+if ( current_user_can('list_users') === true ) {
 	$_wp_real_parent_file['profile.php'] = 'users.php'; // Back-compat for plugins adding submenus to profile.php.
 	$submenu['users.php'][5] = array(__('All Users'), 'list_users', 'users.php');
-	if ( current_user_can( 'create_users' ) ) {
+	if ( current_user_can( 'create_users' ) === true ) {
 		$submenu['users.php'][10] = array(_x('Add New', 'user'), 'create_users', 'user-new.php');
 	} elseif ( is_multisite() ) {
 		$submenu['users.php'][10] = array(_x('Add New', 'user'), 'promote_users', 'user-new.php');
@@ -239,7 +239,7 @@ if ( current_user_can('list_users') ) {
 } else {
 	$_wp_real_parent_file['users.php'] = 'profile.php';
 	$submenu['profile.php'][5] = array(__('Your Profile'), 'read', 'profile.php');
-	if ( current_user_can( 'create_users' ) ) {
+	if ( current_user_can( 'create_users' ) === true ) {
 		$submenu['profile.php'][10] = array(__('Add New User'), 'create_users', 'user-new.php');
 	} elseif ( is_multisite() ) {
 		$submenu['profile.php'][10] = array(__('Add New User'), 'promote_users', 'user-new.php');
