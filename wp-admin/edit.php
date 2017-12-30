@@ -84,13 +84,13 @@ if ( isset($doaction ) === true ) {
 			$post_ids = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type=%s AND post_status = %s", $post_type, $post_status ) );
 		}
 		$doaction = 'delete';
-	} elseif ( isset( $_POST['media'] ) ) {
+	} else {if ( isset( $_POST['media'] ) ) {
 		$post_ids = $_POST['media'];
-	} elseif ( isset( $_POST['ids'] ) ) {
+	}} if ( isset( $_POST['ids'] ) ) {
 		$post_ids = explode( ',', $_POST['ids'] );
-	} elseif ( !empty( $_POST['post'] ) ) {
+	} else {if ( !empty( $_POST['post'] ) ) {
 		$post_ids = array_map('intval', $_POST['post']);
-	}
+	}}
 
 	if ( isset( $post_ids ) === false ) {
 		wp_redirect( $sendback );
@@ -172,10 +172,10 @@ if ( isset($doaction ) === true ) {
 
 	wp_redirect($sendback);
 	return;
-} elseif ( ! empty($_POST['_wp_http_referer']) ) {
+} else {if ( ! empty($_POST['_wp_http_referer']) ) {
 	 wp_redirect( remove_query_arg( array('_wp_http_referer', '_wpnonce'), wp_unslash($_SERVER['REQUEST_URI']) ) );
 	 return;
-}
+}}
 
 $wp_list_table->prepare_items();
 
@@ -229,7 +229,7 @@ if ( 'post' === $post_type ) {
 	'<p>' . __('<a href="https://wordpress.org/support/">Support Forums</a>') . '</p>'
 	);
 
-} elseif ( 'page' === $post_type ) {
+} else {if ( 'page' === $post_type ) {
 	get_current_screen()->add_help_tab( array(
 	'id'		=> 'overview',
 	'title'		=> __('Overview'),
@@ -250,7 +250,7 @@ if ( 'post' === $post_type ) {
 	'<p>' . __('<a href="https://wordpress.org/support/">Support Forums</a>') . '</p>'
 	);
 
-}
+}}
 
 get_current_screen()->set_screen_reader_content( array(
 	'heading_views'      => $post_type_object->labels->filter_items_list,
@@ -336,9 +336,9 @@ $messages = array();
 foreach ( $bulk_counts as $message => $count ) {
 	if ( isset( $bulk_messages[ $post_type ][ $message ] ) === true )
 		$messages[] = sprintf( $bulk_messages[ $post_type ][ $message ], number_format_i18n( $count ) );
-	elseif ( isset( $bulk_messages['post'][ $message ] ) )
+	else {if ( isset( $bulk_messages['post'][ $message ] ) )
 		$messages[] = sprintf( $bulk_messages['post'][ $message ], number_format_i18n( $count ) );
-
+	}
 	if ( $message === 'trashed' && isset( $_POST['ids'] ) ) {
 		$ids = preg_replace( '/[^0-9,]/', '', $_POST['ids'] );
 		$messages[] = '<a href="' . esc_url( wp_nonce_url( "edit.php?post_type=$post_type&doaction=undo&action=untrash&ids=$ids", "bulk-posts" ) ) . '">' . __('Undo') . '</a>';

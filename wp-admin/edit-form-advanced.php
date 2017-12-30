@@ -60,9 +60,9 @@ $thumbnail_support = current_theme_supports( 'post-thumbnails', $post_type ) && 
 if ( ! isset($thumbnail_support) && 'attachment' === $post_type && $post->post_mime_type ) {
 	if ( wp_attachment_is( 'audio', $post ) === true ) {
 		$thumbnail_support = post_type_supports( 'attachment:audio', 'thumbnail' ) || current_theme_supports( 'post-thumbnails', 'attachment:audio' );
-	} elseif ( wp_attachment_is( 'video', $post ) ) {
+	} else {if ( wp_attachment_is( 'video', $post ) ) {
 		$thumbnail_support = post_type_supports( 'attachment:video', 'thumbnail' ) || current_theme_supports( 'post-thumbnails', 'attachment:video' );
-	}
+	}}
 }
 
 if ( isset($thumbnail_support) === true ) {
@@ -177,8 +177,8 @@ if ( isset($_GET['message']) === true ) {
 	$_GET['message'] = absint( $_GET['message'] );
 	if ( isset($messages[$post_type][$_GET['message']]) === true )
 		$message = $messages[$post_type][$_GET['message']];
-	elseif ( !isset($messages[$post_type]) && isset($messages['post'][$_GET['message']]) )
-		$message = $messages['post'][$_GET['message']];
+	else {if ( !isset($messages[$post_type]) && isset($messages['post'][$_GET['message']]) )
+		$message = $messages['post'][$_GET['message']];}
 }
 
 $notice = false;
@@ -382,7 +382,7 @@ if ( 'post' === $post_type ) {
 			'<p>' . __('<a href="https://codex.wordpress.org/Posts_Add_New_Screen">Documentation on Writing and Editing Posts</a>') . '</p>' .
 			'<p>' . __('<a href="https://wordpress.org/support/">Support Forums</a>') . '</p>'
 	);
-} elseif ( 'page' === $post_type ) {
+} else {if ( 'page' === $post_type ) {
 	$about_pages = '<p>' . __('Pages are similar to posts in that they have a title, body text, and associated metadata, but they are different in that they are not part of the chronological blog stream, kind of like permanent posts. Pages are not categorized or tagged, but can have a hierarchy. You can nest pages under other pages by making one the &#8220;Parent&#8221; of the other, creating a group of pages.') . '</p>' .
 		'<p>' . __('Creating a Page is very similar to creating a Post, and the screens can be customized in the same way using drag and drop, the Screen Options tab, and expanding/collapsing boxes as you choose. This screen also has the distraction-free writing space, available in both the Visual and Text modes via the Fullscreen buttons. The Page editor mostly works the same as the Post editor, but there are some Page-specific features in the Page Attributes box.') . '</p>';
 
@@ -398,7 +398,7 @@ if ( 'post' === $post_type ) {
 			'<p>' . __('<a href="https://codex.wordpress.org/Pages_Screen#Editing_Individual_Pages">Documentation on Editing Pages</a>') . '</p>' .
 			'<p>' . __('<a href="https://wordpress.org/support/">Support Forums</a>') . '</p>'
 	);
-} elseif ( 'attachment' === $post_type ) {
+}} if ( 'attachment' === $post_type ) {
 	get_current_screen()->add_help_tab( array(
 		'id'      => 'overview',
 		'title'   => __('Overview'),
@@ -458,7 +458,7 @@ if ( 'post' === $post_type ) {
 		'title'   => __('Discussion Settings'),
 		'content' => $discussion_settings,
 	) );
-} elseif ( 'page' === $post_type ) {
+} else {if ( 'page' === $post_type ) {
 	$page_attributes = '<p>' . __('<strong>Parent</strong> &mdash; You can arrange your pages in hierarchies. For example, you could have an &#8220;About&#8221; page that has &#8220;Life Story&#8221; and &#8220;My Dog&#8221; pages under it. There are no limits to how many levels you can nest pages.') . '</p>' .
 		'<p>' . __('<strong>Template</strong> &mdash; Some themes have custom templates you can use for certain pages that might have additional features or custom layouts. If so, you&#8217;ll see them in this dropdown menu.') . '</p>' .
 		'<p>' . __('<strong>Order</strong> &mdash; Pages are usually ordered alphabetically, but you can choose your own order by entering a number (1 for first, etc.) in this field.') . '</p>';
@@ -468,7 +468,7 @@ if ( 'post' === $post_type ) {
 		'title' => __('Page Attributes'),
 		'content' => $page_attributes,
 	) );
-}
+}}
 
 require_once ABSPATH . 'wp-admin/admin-header.php' ;
 ?>

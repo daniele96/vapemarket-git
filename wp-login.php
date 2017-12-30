@@ -528,9 +528,9 @@ case 'retrievepassword' :
 	if ( isset( $_GET['error'] ) === true ) {
 		if ( 'invalidkey' === $_GET['error'] ) {
 			$errors->add( 'invalidkey', __( 'Your password reset link appears to be invalid. Please request a new link below.' ) );
-		} elseif ( 'expiredkey' === $_GET['error'] ) {
+		} else {if ( 'expiredkey' === $_GET['error'] ) {
 			$errors->add( 'expiredkey', __( 'Your password reset link has expired. Please request a new link below.' ) );
-		}
+		}}
 	}
 
 	$lostpassword_redirect = empty( $_POST['redirect_to'] ) === false ? $_POST['redirect_to'] : '';
@@ -822,12 +822,12 @@ default:
 			/* translators: 1: Browser cookie documentation URL, 2: Support forums URL */
 			$user = new WP_Error( 'test_cookie', sprintf( __( '<strong>ERROR</strong>: Cookies are blocked due to unexpected output. For help, please see <a href="%1$s">this documentation</a> or try the <a href="%2$s">support forums</a>.' ),
 				__( 'https://codex.wordpress.org/Cookies' ), __( 'https://wordpress.org/support/' ) ) );
-		} elseif ( isset( $_POST['testcookie'] ) && empty( $_COOKIE[ TEST_COOKIE ] ) ) {
+		} else {if ( isset( $_POST['testcookie'] ) && empty( $_COOKIE[ TEST_COOKIE ] ) ) {
 			// If cookies are disabled we can't log in even with a valid user+pass
 			/* translators: 1: Browser cookie documentation URL */
 			$user = new WP_Error( 'test_cookie', sprintf( __( '<strong>ERROR</strong>: Cookies are blocked or not supported by your browser. You must <a href="%s">enable cookies</a> to use WordPress.' ),
 				__( 'https://codex.wordpress.org/Cookies' ) ) );
-		}
+		}}
 	}
 
 	$requested_redirect_to = isset( $_POST['redirect_to'] ) === true ? $_POST['redirect_to'] : '';
@@ -862,11 +862,11 @@ default:
 			// If the user doesn't belong to a blog, send them to user admin. If the user can't edit posts, send them to their profile.
 			if ( is_multisite() && !get_active_blog_for_user($user->ID) && !is_super_admin( $user->ID ) )
 				$redirect_to = user_admin_url();
-			elseif ( is_multisite() && !$user->has_cap('read') )
-				$redirect_to = get_dashboard_url( $user->ID );
-			elseif ( !$user->has_cap('edit_posts') )
+			else {if ( is_multisite() && !$user->has_cap('read') )
+				$redirect_to = get_dashboard_url( $user->ID );}
+			{ if ( !$user->has_cap('edit_posts') )
 				$redirect_to = $user->has_cap( 'read' ) === true ? admin_url( 'profile.php' ) : home_url();
-
+			    }
 			wp_redirect( $redirect_to );
 			return;
 		}
@@ -894,9 +894,9 @@ default:
 			$errors->add('newpass', __('Check your email for your new password.'), 'message');
 		elseif	( isset($_GET['checkemail']) && 'registered' === $_GET['checkemail'] )
 			$errors->add('registered', __('Registration complete. Please check your email.'), 'message');
-		elseif ( strpos( $redirect_to, 'about.php?updated' ) )
+		else {if ( strpos( $redirect_to, 'about.php?updated' ) )
 			$errors->add('updated', __( '<strong>You have successfully updated WordPress!</strong> Please log back in to see what&#8217;s new.' ), 'message' );
-	}
+	}    }  
 
 	/**
 	 * Filters the login page errors.

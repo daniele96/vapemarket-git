@@ -23,8 +23,8 @@ if ( ( isset( $_GET['action'] ) && 'upload-attachment' === $_GET['action'] ) ===
 	// Flash often fails to send cookies with the POST or upload, so we need to pass it in GET or POST instead
 	if ( is_ssl() && empty($_COOKIE[SECURE_AUTH_COOKIE]) && !empty($_POST['auth_cookie']) )
 		$_COOKIE[SECURE_AUTH_COOKIE] = $_POST['auth_cookie'];
-	elseif ( empty($_COOKIE[AUTH_COOKIE]) && !empty($_POST['auth_cookie']) )
-		$_COOKIE[AUTH_COOKIE] = $_POST['auth_cookie'];
+	else {if ( empty($_COOKIE[AUTH_COOKIE]) && !empty($_POST['auth_cookie']) )
+		$_COOKIE[AUTH_COOKIE] = $_POST['auth_cookie'];}
 	if ( empty($_COOKIE[LOGGED_IN_COOKIE]) && !empty($_POST['logged_in_cookie']) )
 		$_COOKIE[LOGGED_IN_COOKIE] = $_POST['logged_in_cookie'];
 	unset($current_user);

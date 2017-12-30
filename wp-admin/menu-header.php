@@ -125,10 +125,10 @@ function _wp_menu_output( $menu, $submenu,$self, $parent_file, $submenu_file, $p
 				$img = '<br />';
 				$img_style = ' style="background-image:url(\'' . esc_attr( $item[6] ) . '\')"';
 				$img_class = ' svg';
-			} elseif ( 0 === strpos( $item[6], 'dashicons-' ) ) {
+			} else {if ( 0 === strpos( $item[6], 'dashicons-' ) ) {
 				$img = '<br />';
 				$img_class = ' dashicons-before ' . sanitize_html_class( $item[6] );
-			}
+			}}
 		}
 		$arrow = '<div class="wp-menu-arrow"><div></div></div>';
 
@@ -178,7 +178,7 @@ HTML;
 		echo $str;
 				
 			}
-		} elseif ( ! empty( $item[2] ) && current_user_can( $item[1] ) ) {
+		} else {if ( ! empty( $item[2] ) && current_user_can( $item[1] ) ) {
 			$menu_hook = get_plugin_page_hook( $item[2], 'admin.php' );
 			$menu_file = $item[2];
 			if ( false !== ( $pos = strpos( $menu_file, '?' ) ) )
@@ -201,7 +201,7 @@ HTML;
 		echo $str;
 				
 			}
-		}
+		}}
 
 		if ( empty( $submenu_items ) === false ) {
 			echo "\n\t<ul class='wp-submenu wp-submenu-wrap'>";
@@ -238,12 +238,12 @@ HTML;
 						$class[] = 'current';
 				// If plugin_page is set the parent must either match the current page or not physically exist.
 				// This allows plugin pages with the same hook to exist under different parents.
-				} elseif (
+				} else {if (
 					( ! isset( $plugin_page ) && $self === $sub_item[2] ) ||
 					( isset( $plugin_page ) && $plugin_page === $sub_item[2] && ( $item[2] === $self_type || $item[2] === $self || file_exists($menu_file) === false ) )
 				) {
 					$class[] = 'current';
-				}
+				}}
 
 				if ( empty( $sub_item[4] ) === false ) {
 					$class[] = esc_attr( $sub_item[4] );

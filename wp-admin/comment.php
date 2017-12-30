@@ -23,14 +23,14 @@ if ( isset( $_POST['deletecomment'] ) )
 
 if ( 'cdc' === $action )
 	$action = 'delete';
-elseif ( 'mac' === $action )
-	$action = 'approve';
+else {if ( 'mac' === $action )
+	$action = 'approve';}
 
 if ( isset( $_GET['dt'] ) ) {
 	if ( 'spam' === $_GET['dt'] )
 		$action = 'spam';
-	elseif ( 'trash' === $_GET['dt'] )
-		$action = 'trash';
+	else {if ( 'trash' === $_GET['dt'] )
+		$action = 'trash';}
 }
 
 switch( $action ) {

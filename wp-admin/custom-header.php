@@ -178,8 +178,8 @@ class Custom_Image_Header {
 
 		if ( ( 1 === $step || 3 === $step ) && current_theme_supports( 'custom-header', 'header-text' ) )
 			wp_enqueue_style( 'wp-color-picker' );
-		else if( 2 === $step )
-			wp_enqueue_style('imgareaselect');
+		else {if( 2 === $step )
+			wp_enqueue_style('imgareaselect');}
 	}
 
 	/**

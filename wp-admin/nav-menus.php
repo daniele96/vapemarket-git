@@ -68,8 +68,8 @@ switch ( $action ) {
 		check_admin_referer( 'add-menu_item', 'menu-settings-column-nonce' );
 		if ( isset( $_POST['nav-menu-locations'] ) === true )
 			set_theme_mod( 'nav_menu_locations', array_map( 'absint', $_POST['menu-locations'] ) );
-		elseif ( isset( $_POST['menu-item'] ) )
-			wp_save_nav_menu_items( $nav_menu_selected_id, $_POST['menu-item'] );
+		else {if ( isset( $_POST['menu-item'] ) )
+			wp_save_nav_menu_items( $nav_menu_selected_id, $_POST['menu-item'] );}
 		break;
 	case 'move-down-menu-item' :
 
@@ -135,13 +135,13 @@ switch ( $action ) {
 					}
 
 				// The item is last but still has a parent, so bubble up.
-				} elseif (
+				} else {if (
 					! empty( $menu_item_data['menu_item_parent'] ) &&
 					in_array( $menu_item_data['menu_item_parent'], $orders_to_dbids )
 				) {
 					$menu_item_data['menu_item_parent'] = (int) get_post_meta( $menu_item_data['menu_item_parent'], '_menu_item_menu_item_parent', true);
 					update_post_meta( $menu_item_data['ID'], '_menu_item_menu_item_parent', (int) $menu_item_data['menu_item_parent'] );
-				}
+				}}
 			}
 		}
 
@@ -226,7 +226,7 @@ switch ( $action ) {
 						}
 
 					// Else this menu item is not a child of the previous.
-					} elseif (
+					} else {if (
 						empty( $menu_item_data['menu_order'] ) ||
 						empty( $menu_item_data['menu_item_parent'] ) ||
 						! in_array( $menu_item_data['menu_item_parent'], array_keys( $dbids_to_orders ) ) ||
@@ -237,7 +237,7 @@ switch ( $action ) {
 						$menu_item_data['menu_item_parent'] = (int) $orders_to_dbids[$dbids_to_orders[$menu_item_id] - 1];
 						update_post_meta( $menu_item_data['ID'], '_menu_item_menu_item_parent', (int) $menu_item_data['menu_item_parent'] );
 						wp_update_post($menu_item_data);
-					}
+					}}
 				}
 			}
 		}
@@ -462,10 +462,10 @@ if ( ! isset($add_new_screen) && 0 < $menu_count && isset( $_GET['action'] ) && 
 // Set $nav_menu_selected_id to 0 if no menus.
 if ( isset($one_theme_location_no_menus) === true ) {
 	$nav_menu_selected_id = 0;
-} elseif ( empty( $nav_menu_selected_id ) && ! empty( $nav_menus ) && ! $add_new_screen ) {
+} else {if ( empty( $nav_menu_selected_id ) && ! empty( $nav_menus ) && ! $add_new_screen ) {
 	// if we have no selection yet, and we have menus, set to the first one in the list.
 	$nav_menu_selected_id = $nav_menus[0]->term_id;
-}
+}}
 
 // Update the user's setting.
 if ( $nav_menu_selected_id!==$recently_edited && is_nav_menu( $nav_menu_selected_id ) )

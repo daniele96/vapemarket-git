@@ -115,9 +115,9 @@ foreach ( array_merge( $builtin, $types ) as $ptype ) {
 		} else {
 			$menu_icon = esc_url( $ptype_obj->menu_icon );
 		}
-	} elseif ( in_array( $ptype, $builtin ) ) {
+	} else {if ( in_array( $ptype, $builtin ) ) {
 		$menu_icon = 'dashicons-admin-' . $ptype;
-	}
+	}}
 
 	$menu_class = 'menu-top menu-icon-' . $ptype_for_id;
 	// 'post' special case
@@ -231,9 +231,9 @@ if ( current_user_can('list_users') === true ) {
 	$submenu['users.php'][5] = array(__('All Users'), 'list_users', 'users.php');
 	if ( current_user_can( 'create_users' ) === true ) {
 		$submenu['users.php'][10] = array(_x('Add New', 'user'), 'create_users', 'user-new.php');
-	} elseif ( is_multisite() ) {
+	} else {if ( is_multisite() ) {
 		$submenu['users.php'][10] = array(_x('Add New', 'user'), 'promote_users', 'user-new.php');
-	}
+	}}
 
 	$submenu['users.php'][15] = array(__('Your Profile'), 'read', 'profile.php');
 } else {
@@ -241,9 +241,9 @@ if ( current_user_can('list_users') === true ) {
 	$submenu['profile.php'][5] = array(__('Your Profile'), 'read', 'profile.php');
 	if ( current_user_can( 'create_users' ) === true ) {
 		$submenu['profile.php'][10] = array(__('Add New User'), 'create_users', 'user-new.php');
-	} elseif ( is_multisite() ) {
+	} else {if ( is_multisite() ) {
 		$submenu['profile.php'][10] = array(__('Add New User'), 'promote_users', 'user-new.php');
-	}
+	}}
 }
 
 $menu[75] = array( __('Tools'), 'edit_posts', 'tools.php', '', 'menu-top menu-icon-tools', 'menu-tools', 'dashicons-admin-tools' );

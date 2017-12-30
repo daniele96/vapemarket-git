@@ -64,10 +64,10 @@ if ( $compress && ! ini_get('zlib.output_compression') && 'ob_gzhandler'!==ini_g
 	if ( false !== stripos($_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate') && function_exists('gzdeflate') && ! $force_gzip ) {
 		header('Content-Encoding: deflate');
 		$out = gzdeflate( $out, 3 );
-	} elseif ( false !== stripos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') && function_exists('gzencode') ) {
+	} else {if ( false !== stripos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') && function_exists('gzencode') ) {
 		header('Content-Encoding: gzip');
 		$out = gzencode( $out, 3 );
-	}
+	}}
 }
 
 echo $out;

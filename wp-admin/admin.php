@@ -44,7 +44,7 @@ if ( get_option('db_upgraded') === true ) {
 	 * @since 2.8.0
 	 */
 	do_action( 'after_db_upgrade' );
-} elseif ( get_option('db_version')!==$wp_db_version && empty($_POST) ) {
+} else {if ( get_option('db_version')!==$wp_db_version && empty($_POST) ) {
 	if ( is_multisite() === false ) {
 		wp_redirect( admin_url( 'upgrade.php?_wp_http_referer=' . urlencode( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) );
 		return;
@@ -63,7 +63,7 @@ if ( get_option('db_upgraded') === true ) {
 	 *
 	 * @param bool $do_mu_upgrade Whether to perform the Multisite upgrade routine. Default true.
 	 */
-	} elseif ( apply_filters( 'do_mu_upgrade', true ) ) {
+	} else {if ( apply_filters( 'do_mu_upgrade', true ) ) {
 		$c = get_blog_count();
 
 		/*
@@ -78,8 +78,8 @@ if ( get_option('db_upgraded') === true ) {
 			unset($response);
 		}
 		unset($c);
-	}
-}
+	}}
+}}
 
 require_once ABSPATH . 'wp-admin/includes/admin.php';
 
@@ -180,11 +180,11 @@ if ( isset($plugin_page) === true ) {
 $hook_suffix = '';
 if ( isset( $page_hook ) === true ) {
 	$hook_suffix = $page_hook;
-} elseif ( isset( $plugin_page ) ) {
+} else {if ( isset( $plugin_page ) ) {
 	$hook_suffix = $plugin_page;
-} elseif ( isset( $pagenow ) ) {
+} else {if ( isset( $pagenow ) ) {
 	$hook_suffix = $pagenow;
-}
+}}}
 
 set_current_screen();
 
@@ -338,14 +338,14 @@ if ( isset($plugin_page) === true ) {
 	if ( $typenow === 'page' ) {
 		if ( $pagenow === 'post-new.php' )
 			do_action( 'load-page-new.php' );
-		elseif ( $pagenow === 'post.php' )
-			do_action( 'load-page.php' );
-	}  elseif ( $pagenow === 'edit-tags.php' ) {
+		else {if ( $pagenow === 'post.php' )
+			do_action( 'load-page.php' );}
+	}  else {if ( $pagenow === 'edit-tags.php' ) {
 		if ( $taxnow === 'category' )
 			do_action( 'load-categories.php' );
-		elseif ( $taxnow === 'link_category' )
-			do_action( 'load-edit-link-categories.php' );
-	} elseif( 'term.php' === $pagenow ) {
+		else {if ( $taxnow === 'link_category' )
+			do_action( 'load-edit-link-categories.php' );}
+	}}  if( 'term.php' === $pagenow ) {
 		do_action( 'load-edit-tags.php' );
 	}
 }

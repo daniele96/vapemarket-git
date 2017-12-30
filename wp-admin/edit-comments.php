@@ -34,9 +34,9 @@ if ( isset($doaction) === true ) {
 		$doaction = ( $_GET['action']!==-1 ) ? $_GET['action'] : $_GET['action2'];
 	} elseif ( isset( $_POST['ids'] ) ) {
 		$comment_ids = array_map( 'absint', explode( ',', $_POST['ids'] ) );
-	} elseif ( wp_get_referer() ) {
+	} else {if ( wp_get_referer() ) {
 		wp_safe_redirect( wp_get_referer() );
-		return;
+		return;}
 	}
 
 	$approved = $unapproved = $spammed = $unspammed = $trashed = $untrashed = $deleted = 0;
@@ -123,10 +123,10 @@ if ( isset($doaction) === true ) {
 
 	wp_safe_redirect( $redirect_to );
 	return;
-} elseif ( ! empty( $_GET['_wp_http_referer'] ) ) {
+} else {if ( ! empty( $_GET['_wp_http_referer'] ) ) {
 	 wp_redirect( remove_query_arg( array( '_wp_http_referer', '_wpnonce' ), wp_unslash( $_SERVER['REQUEST_URI'] ) ) );
 	 return;
-}
+}}
 
 $wp_list_table->prepare_items();
 
