@@ -561,7 +561,8 @@ HTML;
 <?php elseif ( 'post_tag' === $taxonomy && current_user_can( 'import' ) ) : ?>
 <div class="form-wrap edit-term-notes">
 <p><?php printf( __( 'Tags can be selectively converted to categories using the <a href="%s">tag to category converter</a>.' ), esc_url( $import_link ) ) ;?></p>
-<?php else: echo 'positive life '; ?>
+<?php else: ?>
+<p> positive life </p>
 </div>
 
 
