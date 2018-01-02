@@ -125,7 +125,7 @@ if ( is_multisite() === true ) {
 	require ABSPATH . WPINC . '/class-wp-network-query.php' ;
 	require ABSPATH . WPINC . '/ms-blogs.php' ;
 	require ABSPATH . WPINC . '/ms-settings.php' ;
-} else {if ( ! defined( 'MULTISITE' ) ) {
+} else {if ( defined( 'MULTISITE' ) === false ) {
 	define( 'MULTISITE', false );
 }}
 

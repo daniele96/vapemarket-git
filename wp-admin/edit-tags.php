@@ -139,7 +139,7 @@ case 'edit':
 	$term_id = (int) $_GET['tag_ID'];
 	$term    = get_term( $term_id );
 
-	if ( $term instanceof WP_Term === false ) {
+	if ( ($term instanceof WP_Term) === false ) {
 		wp_die( __( 'You attempted to edit an item that doesn&#8217;t exist. Perhaps it was deleted?' ) );
 	}
 
@@ -304,8 +304,8 @@ if ( isset( $_GET['s'] ) && strlen( $_GET['s'] ) ) {
 <hr class="wp-header-end">
 
 <?php if ( isset($message) === true ) : ?>
-<div id="message" class="<?php echo $class; ?> notice is-dismissible"><p><?php echo $message; ?></p></div>
-<?php $_SERVER['REQUEST_URI'] = remove_query_arg( array( 'message', 'error' ), $_SERVER['REQUEST_URI'] );
+	<div id="message" class="<?php echo $class; ?> notice is-dismissible"><p><?php echo $message; ?></p></div>
+	<?php $_SERVER['REQUEST_URI'] = remove_query_arg( array( 'message', 'error' ), $_SERVER['REQUEST_URI'] );
 endif; ?>
 <div id="ajax-response"></div>
 
@@ -554,18 +554,18 @@ HTML;
 	);
 	?>
 </p>
-<?php if ( current_user_can( 'import' ) === true ) : ?>
-<p><?php printf( __( 'Categories can be selectively converted to tags using the <a href="%s">category to tag converter</a>.' ), esc_url( $import_link ) ) ?></p>
-<?php endif; ?>
-</div>
-<?php elseif ( 'post_tag' === $taxonomy && current_user_can( 'import' ) ) : ?>
-<div class="form-wrap edit-term-notes">
-<p><?php printf( __( 'Tags can be selectively converted to categories using the <a href="%s">tag to category converter</a>.' ), esc_url( $import_link ) ) ;?></p>
+<?php if( current_user_can( 'import' ) === true ): ?>
+	<p>
+		<?php printf( __( 'Categories can be selectively converted to tags using the <a href="%s">category to tag converter</a>.' ), esc_url( $import_link ) ); ?>
+	</p>
+	</div>
 <?php else: ?>
-<p> positive life </p>
-</div>
-
-
+	<div class="form-wrap edit-term-notes">
+	<p>
+		<?php printf( __( 'Tags can be selectively converted to categories using the <a href="%s">tag to category converter</a>.' ), esc_url( $import_link ) ) ;?>
+	</p>
+	</div>
+<?php endif; ?>
 <?php endif;
 
 /**

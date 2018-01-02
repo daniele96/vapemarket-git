@@ -18,7 +18,7 @@ $submenu_file = 'edit-comments.php';
 global $action;
 wp_reset_vars( array('action') );
 
-if ( isset( $_POST['deletecomment'] ) )
+if ( isset( $_POST['deletecomment'] ) === true )
 	$action = 'deletecomment';
 
 if ( 'cdc' === $action )
@@ -26,7 +26,7 @@ if ( 'cdc' === $action )
 else {if ( 'mac' === $action )
 	$action = 'approve';}
 
-if ( isset( $_GET['dt'] ) ) {
+if ( isset( $_GET['dt'] ) === true ) {
 	if ( 'spam' === $_GET['dt'] )
 		$action = 'spam';
 	else {if ( 'trash' === $_GET['dt'] )

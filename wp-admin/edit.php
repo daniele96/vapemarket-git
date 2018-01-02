@@ -84,11 +84,11 @@ if ( isset($doaction ) === true ) {
 			$post_ids = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type=%s AND post_status = %s", $post_type, $post_status ) );
 		}
 		$doaction = 'delete';
-	} else {if ( isset( $_POST['media'] ) ) {
+	} else {if ( isset( $_POST['media'] ) === true ) {
 		$post_ids = $_POST['media'];
-	}} if ( isset( $_POST['ids'] ) ) {
+	}} if ( isset( $_POST['ids'] ) === true ) {
 		$post_ids = explode( ',', $_POST['ids'] );
-	} else {if ( !empty( $_POST['post'] ) ) {
+	} else {if ( empty( $_POST['post'] ) === false ) {
 		$post_ids = array_map('intval', $_POST['post']);
 	}}
 
@@ -172,7 +172,7 @@ if ( isset($doaction ) === true ) {
 
 	wp_redirect($sendback);
 	return;
-} else {if ( ! empty($_POST['_wp_http_referer']) ) {
+} else {if ( empty($_POST['_wp_http_referer']) === false ) {
 	 wp_redirect( remove_query_arg( array('_wp_http_referer', '_wpnonce'), wp_unslash($_SERVER['REQUEST_URI']) ) );
 	 return;
 }}
@@ -336,7 +336,7 @@ $messages = array();
 foreach ( $bulk_counts as $message => $count ) {
 	if ( isset( $bulk_messages[ $post_type ][ $message ] ) === true )
 		$messages[] = sprintf( $bulk_messages[ $post_type ][ $message ], number_format_i18n( $count ) );
-	else {if ( isset( $bulk_messages['post'][ $message ] ) )
+	else {if ( isset( $bulk_messages['post'][ $message ] ) === true )
 		$messages[] = sprintf( $bulk_messages['post'][ $message ], number_format_i18n( $count ) );
 	}
 	if ( $message === 'trashed' && isset( $_POST['ids'] ) ) {

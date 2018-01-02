@@ -115,7 +115,7 @@ foreach ( array_merge( $builtin, $types ) as $ptype ) {
 		} else {
 			$menu_icon = esc_url( $ptype_obj->menu_icon );
 		}
-	} else {if ( in_array( $ptype, $builtin ) ) {
+	} else {if ( in_array( $ptype, $builtin ) === true ) {
 		$menu_icon = 'dashicons-admin-' . $ptype;
 	}}
 
@@ -221,7 +221,7 @@ $submenu['plugins.php'][5]  = array( __('Installed Plugins'), 'activate_plugins'
 
 unset( $update_data );
 
-if ( current_user_can('list_users') )
+if ( current_user_can('list_users') === true )
 	$menu[70] = array( __('Users'), 'list_users', 'users.php', '', 'menu-top menu-icon-users', 'menu-users', 'dashicons-admin-users' );
 else
 	$menu[70] = array( __('Profile'), 'read', 'profile.php', '', 'menu-top menu-icon-users', 'menu-users', 'dashicons-admin-users' );
@@ -231,7 +231,7 @@ if ( current_user_can('list_users') === true ) {
 	$submenu['users.php'][5] = array(__('All Users'), 'list_users', 'users.php');
 	if ( current_user_can( 'create_users' ) === true ) {
 		$submenu['users.php'][10] = array(_x('Add New', 'user'), 'create_users', 'user-new.php');
-	} else {if ( is_multisite() ) {
+	} else {if ( is_multisite() === true ) {
 		$submenu['users.php'][10] = array(_x('Add New', 'user'), 'promote_users', 'user-new.php');
 	}}
 
@@ -241,7 +241,7 @@ if ( current_user_can('list_users') === true ) {
 	$submenu['profile.php'][5] = array(__('Your Profile'), 'read', 'profile.php');
 	if ( current_user_can( 'create_users' ) === true ) {
 		$submenu['profile.php'][10] = array(__('Add New User'), 'create_users', 'user-new.php');
-	} else {if ( is_multisite() ) {
+	} else {if ( is_multisite() === true ) {
 		$submenu['profile.php'][10] = array(__('Add New User'), 'promote_users', 'user-new.php');
 	}}
 }

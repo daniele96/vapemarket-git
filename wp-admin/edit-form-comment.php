@@ -167,7 +167,7 @@ endif; ?>
 <div id="delete-action">
 <?php 
 
-$var=wp_nonce_url("comment.php?action=" . ( !EMPTY_TRASH_DAYS ? 'deletecomment' : 'trashcomment' ) . "&amp;c=$comment->comment_ID&amp;_wp_original_http_referer=" . urlencode(wp_get_referer()), 'delete-comment_' . $comment->comment_ID) . "'>" . ( EMPTY_TRASH_DAYS === false ? __('Delete Permanently') : __('Move to Trash') ) ;
+$var=wp_nonce_url("comment.php?action=" . ( EMPTY_TRASH_DAYS === false ? 'deletecomment' : 'trashcomment' ) . "&amp;c=$comment->comment_ID&amp;_wp_original_http_referer=" . urlencode(wp_get_referer()), 'delete-comment_' . $comment->comment_ID) . "'>" . ( EMPTY_TRASH_DAYS === false ? __('Delete Permanently') : __('Move to Trash') ) ;
 $str= <<<HTML
 	 <a class='submitdelete deletion' href='$var' </a> \n>
 HTML;

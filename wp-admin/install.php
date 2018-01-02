@@ -242,7 +242,7 @@ if ( ! isset($mysql_compat) && ! isset($php_compat) ) {
 } elseif ( ! isset($php_compat) ) {
 	/* translators: 1: WordPress version number, 2: Minimum required PHP version number, 3: Current PHP version number */
 	$compat = sprintf( __( 'You cannot install because <a href="https://codex.wordpress.org/Version_%1$s">WordPress %1$s</a> requires PHP version %2$s or higher. You are running version %3$s.' ), $wp_version, $required_php_version, $php_version );
-} else {if ( ! isset($mysql_compat) ) {
+} else {if ( isset($mysql_compat) === false ) {
 	/* translators: 1: WordPress version number, 2: Minimum required MySQL version number, 3: Current MySQL version number */
 	$compat = sprintf( __( 'You cannot install because <a href="https://codex.wordpress.org/Version_%1$s">WordPress %1$s</a> requires MySQL version %2$s or higher. You are running version %3$s.' ), $wp_version, $required_mysql_version, $mysql_version );
 }}
@@ -286,7 +286,7 @@ if ( defined( 'DO_NOT_UPGRADE_GLOBAL_TABLES' ) === true ) {
 $language = '';
 if ( empty( $_GET['language'] ) === false ) {
 	$language = preg_replace( '/[^a-zA-Z0-9_]/', '', $_GET['language'] );
-} else {if ( isset( $GLOBALS['wp_local_package'] ) ) {
+} else {if ( isset( $GLOBALS['wp_local_package'] ) === true ) {
 	$language = $GLOBALS['wp_local_package'];
 }}
 
@@ -372,7 +372,7 @@ HTML;
 			// TODO: poka-yoke
 			display_setup_form( __( 'You must provide an email address.' ) );
 			$error = true;
-		} else {if ( ! is_email( $admin_email ) ) {
+		} else {if ( is_email( $admin_email ) === false ) {
 			// TODO: poka-yoke
 			display_setup_form( __( 'Sorry, that isn&#8217;t a valid email address. Email addresses look like <code>username@example.com</code>.' ) );
 			$error = true;

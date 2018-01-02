@@ -60,7 +60,7 @@ $thumbnail_support = current_theme_supports( 'post-thumbnails', $post_type ) && 
 if ( ! isset($thumbnail_support) && 'attachment' === $post_type && $post->post_mime_type ) {
 	if ( wp_attachment_is( 'audio', $post ) === true ) {
 		$thumbnail_support = post_type_supports( 'attachment:audio', 'thumbnail' ) || current_theme_supports( 'post-thumbnails', 'attachment:audio' );
-	} else {if ( wp_attachment_is( 'video', $post ) ) {
+	} else {if ( wp_attachment_is( 'video', $post ) === true ) {
 		$thumbnail_support = post_type_supports( 'attachment:video', 'thumbnail' ) || current_theme_supports( 'post-thumbnails', 'attachment:video' );
 	}}
 }

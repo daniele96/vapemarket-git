@@ -37,7 +37,7 @@ if ( $doaction && isset( $_POST['linkcheck'] ) ) {
 	}
 	wp_redirect( $redirect_to );
 	return;
-} else {if ( ! empty( $_GET['_wp_http_referer'] ) ) {
+} else {if ( empty( $_GET['_wp_http_referer'] ) === false ) {
 	 wp_redirect( remove_query_arg( array( '_wp_http_referer', '_wpnonce' ), wp_unslash( $_SERVER['REQUEST_URI'] ) ) );
 	 return;
 }}

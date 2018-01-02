@@ -31,7 +31,7 @@ wp_enqueue_script( 'nav-menu' );
 
 function chekthis($_possible_parent_id,$dbids_to_orders){
 
-									if ( in_array( $_possible_parent_id, array_keys( $dbids_to_orders ) ) )
+									if ( in_array( $_possible_parent_id, array_keys( $dbids_to_orders ) ) === true )
 									return $_possible_parent_id;
 									else
 									return 0;
@@ -68,7 +68,7 @@ switch ( $action ) {
 		check_admin_referer( 'add-menu_item', 'menu-settings-column-nonce' );
 		if ( isset( $_POST['nav-menu-locations'] ) === true )
 			set_theme_mod( 'nav_menu_locations', array_map( 'absint', $_POST['menu-locations'] ) );
-		else {if ( isset( $_POST['menu-item'] ) )
+		else {if ( isset( $_POST['menu-item'] ) === true )
 			wp_save_nav_menu_items( $nav_menu_selected_id, $_POST['menu-item'] );}
 		break;
 	case 'move-down-menu-item' :

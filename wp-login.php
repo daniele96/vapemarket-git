@@ -864,7 +864,7 @@ default:
 				$redirect_to = user_admin_url();
 			else {if ( is_multisite() && !$user->has_cap('read') )
 				$redirect_to = get_dashboard_url( $user->ID );}
-			{ if ( !$user->has_cap('edit_posts') )
+			{ if ( $user->has_cap('edit_posts') === false )
 				$redirect_to = $user->has_cap( 'read' ) === true ? admin_url( 'profile.php' ) : home_url();
 			    }
 			wp_redirect( $redirect_to );
@@ -894,7 +894,7 @@ default:
 			$errors->add('newpass', __('Check your email for your new password.'), 'message');
 		elseif	( isset($_GET['checkemail']) && 'registered' === $_GET['checkemail'] )
 			$errors->add('registered', __('Registration complete. Please check your email.'), 'message');
-		else {if ( strpos( $redirect_to, 'about.php?updated' ) )
+		else {if ( strpos( $redirect_to, 'about.php?updated' ) === true )
 			$errors->add('updated', __( '<strong>You have successfully updated WordPress!</strong> Please log back in to see what&#8217;s new.' ), 'message' );
 	}    }  
 

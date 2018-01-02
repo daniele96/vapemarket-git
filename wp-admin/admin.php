@@ -63,7 +63,7 @@ if ( get_option('db_upgraded') === true ) {
 	 *
 	 * @param bool $do_mu_upgrade Whether to perform the Multisite upgrade routine. Default true.
 	 */
-	} else {if ( apply_filters( 'do_mu_upgrade', true ) ) {
+	} else {if ( apply_filters( 'do_mu_upgrade', true ) === true ) {
 		$c = get_blog_count();
 
 		/*
@@ -180,9 +180,9 @@ if ( isset($plugin_page) === true ) {
 $hook_suffix = '';
 if ( isset( $page_hook ) === true ) {
 	$hook_suffix = $page_hook;
-} else {if ( isset( $plugin_page ) ) {
+} else {if ( isset( $plugin_page ) === true ) {
 	$hook_suffix = $plugin_page;
-} else {if ( isset( $pagenow ) ) {
+} else {if ( isset( $pagenow ) === true ) {
 	$hook_suffix = $pagenow;
 }}}
 
